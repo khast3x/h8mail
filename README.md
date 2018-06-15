@@ -39,7 +39,7 @@ If you're using Docker, make sure to add your `targets.txt` and your API keys in
 ####  Local env
 
 ```bash
-git clone <>
+git clone https://github.com/khast3x/h8mail.git
 cd h8mail
 pip install -r requirements.txt
 python h8mail.py -h
@@ -48,7 +48,7 @@ python h8mail.py -h
 #### Docker
 
 ```bash
-git clone <>
+git clone https://github.com/khast3x/h8mail.git
 cd h8mail
 docker build -t h8mail .
 docker run -ti h8mail -h

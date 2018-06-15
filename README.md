@@ -37,8 +37,10 @@
 
 If you're using Docker, make sure to add your `targets.txt` and your API keys in the configuration file **before** building
 ####  Local env
+NodeJS is required to ensure CloudFlare bypassing. You can find out how to install it for your distribution [here](https://nodejs.org/en/download/package-manager/)
 
 ```bash
+apt-get install nodejs
 git clone https://github.com/khast3x/h8mail.git
 cd h8mail
 pip install -r requirements.txt

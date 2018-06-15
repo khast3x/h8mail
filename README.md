@@ -1,4 +1,4 @@
-# :mailbox_with_no_mail: h8mail
+# :mailbox_with_no_mail: h8mail - Alpha Release
 
 > Email OSINT and password breach hunting.  
 > Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation!
@@ -6,12 +6,12 @@
 ##  :tangerine: Features
 
 *  :mag_right: Email pattern matching (reg exp), useful for all those raw HTML files
-* :whale: Available Alpine Dockerfile
-* :white_check_mark: STDIN or Bulk targeting
+* :whale: Small and fast Alpine Dockerfile available
+* :white_check_mark: CLI or Bulk file-reading targeting
 * :memo: Output to CSV file
 *  :loop: Reverse DNS
 * :cop:  CloudFlare rate throttling avoidance
-  - :heart: Execution flow remains synchronous and throttled according to API  usage guidelines written by service providers
+  - Execution flow remains synchronous and throttled according to API  usage guidelines written by service providers
 *  :fire: Query and group results from different breach service providers
 *  :fire: Query a local copy of the "Breached Compilation"
 *  :fire: Get related emails

@@ -105,5 +105,5 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/
 
 ## :tangerine: Notes
 
-* Service providers that wish being integrated can shoot me an at `k at khast3x dot club` (Protonmail encryption friendly)
+* Service providers that wish being integrated can shoot me an email at `k at khast3x dot club` (Protonmail encryption friendly)
 * Special thanks to [Snusbase](https://snusbase.com/) for being developer friendly

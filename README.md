@@ -1,3 +1,4 @@
+[![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
 # :mailbox_with_no_mail: h8mail - Alpha Release
 
 > Email OSINT and password breach hunting.  

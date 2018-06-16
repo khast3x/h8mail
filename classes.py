@@ -13,7 +13,7 @@ class Target():
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10136'}
 		self.email = email
 		self.pwnd = ""
-		self.breachedcomp_passw = []
+		self.breachcomp_passw = []
 		self.snusbase_passw = []
 		self.snusbase_hash_salt = {}
 		self.hostname = self.email.split("@")[1]

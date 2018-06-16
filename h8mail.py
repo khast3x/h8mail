@@ -59,12 +59,11 @@ def save_results_csv(dest_csv, target_obj_list):
 	with open(dest_csv, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile)
 
-		writer.writerow(["email", "breached", "num services", "services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachedcompilation_passwords"])
+		writer.writerow(["email", "breached", "num services", "services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
 		print("* Writing to CSV\n")
-# todo UNTESTED
 		for target in target_obj_list:
 			try:
-				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachedcomp_passw])
+				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
 			except Exception as ex:
 				ui.warning("Error writing to csv", ex)
 
@@ -78,8 +77,8 @@ def print_results(target_objs):
 			ui.info("Breaches found", ui.darkred, "HIBP:", ui.teal, len(target.services["hibp"]))
 			if target.services["weleakinfo"]:
 				ui.info("Breaches found", ui.darkred, "WeLeakInfo:", ui.teal, len(target.services["weleakinfo"]))
-			if target.breachedcomp_passw:
-				ui.info("Breaches found", ui.darkred, "BreachedCompilation:", ui.teal, len(target.breachedcomp_passw))
+			if target.breachcomp_passw:
+				ui.info("Breaches found", ui.darkred, "breachcompilation:", ui.teal, len(target.breachcomp_passw))
 
 			#  todo add Snusbase count of services
 			ui.debug("Breaches/Dumps:", ui.lightgray, target.services["hibp"])
@@ -112,9 +111,9 @@ def print_results(target_objs):
 		if target.snusbase_hash_salt:
 			ui.info(ui.darkred, "Snusbase", ui.reset, "hash/salt:", ui.lightgray, target.snusbase_hash_salt)
 		ui.info("\n")
-		if target.breachedcomp_passw:
+		if target.breachcomp_passw:
 			ui.info(ui.teal, "---")
-			ui.info(ui.darkred, "BreachedCompilation", ui.reset, "passwords:", ui.teal, ui.teal, *target.breachedcomp_passw)
+			ui.info(ui.darkred, "breachcompilation", ui.reset, "passwords:", ui.teal, ui.teal, *target.breachcomp_passw)
 			ui.info("-------------------------------")
 
 
@@ -163,10 +162,10 @@ def breachcomp_check(targets, breachcomp_path):
 					split_output = output.split("\n")
 					for line in split_output:
 						if line:
-							t.breachedcomp_passw.append(line.split(":")[1])
+							t.breachcomp_passw.append(line.split(":")[1])
 		return targets
 	except Exception as ex:
-			ui.warning("Breached compilation", ex)
+			ui.warning("Breach compilation", ex)
 
 
 def main(user_args):
@@ -193,7 +192,7 @@ def main(user_args):
 
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(description="Email information and breach notification tool")
+	parser = argparse.ArgumentParser(description="Email information and password finding tool")
 
 	parser.add_argument("-t", "--targets", required=True, dest="target_emails",
 						help="Either single email, or file (one email per line). REGEXP")
@@ -201,7 +200,7 @@ if __name__ == "__main__":
 	parser.add_argument("-c", "--config", dest="config_file", default="config.ini",
 						help="Configuration file for API keys")
 	parser.add_argument("-o", "--output", dest="output_file", help="File to write output")
-	parser.add_argument("-bc", "--breachedcomp", dest="bc_path", help="Path to the BreachedCompilation Torrent. https://ghostbin.com/paste/2cbdn")
+	parser.add_argument("-bc", "--breachcomp", dest="bc_path", help="Path to the breachcompilation Torrent. https://ghostbin.com/paste/2cbdn")
 
 	parser.add_argument("-v", "--verbose", dest="verbosity", help="Show debug information", action="store_true",
 						default=False)

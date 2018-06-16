@@ -45,12 +45,20 @@ def get_emails_from_file(targets_file):
 		ui.fatal("Problems occurred while trying to get emails from file", ex)
 
 
-def get_config_from_file(config_file):
+def get_config_from_file(user_args):
 	try:
+		config_file = user_args.config_file
 		config = configparser.ConfigParser()
-		# todo read config from cli using config.update to add K:V, kwargs in arparse?
 		config.read(config_file)
 		ui.debug(ui.check, "Correctly read config file")
+
+		if user_args.cli_apikeys:
+			user_cli_keys = user_args.cli_apikeys.split(",")
+			for user_key in user_cli_keys:
+				if user_key:
+					config.set("DEFAULT", user_key.split(":", maxsplit=1)[0], user_key.split(":", maxsplit=1)[1])
+					ui.debug("Added", user_key.split(":", maxsplit=1)[0], config.get('DEFAULT', option=user_key.split(":")[0]))
+
 		return config
 	except Exception as ex:
 		ui.fatal("Problems occurred while trying to get configuration file", ex)
@@ -171,7 +179,7 @@ def breachcomp_check(targets, breachcomp_path):
 
 def main(user_args):
 	targets = []
-	api_keys = get_config_from_file(user_args.config_file)
+	api_keys = get_config_from_file(user_args)
 	ui.info_section("\n", ui.darkteal, "Targets")
 	user_stdin_target = fetch_emails(args.target_emails)
 
@@ -209,7 +217,7 @@ if __name__ == "__main__":
 	parser.add_argument("-v", "--verbose", dest="verbosity", help="Show debug information", action="store_true",
 						default=False)
 	parser.add_argument("-l", "--local", dest="run_local", help="Run local actions only", action="store_true", default=False)
-
+	parser.add_argument("-k", "--apikey", dest="cli_apikeys", help="Pass config options. Format is \"K:V,K:V\"")
 
 
 	args = parser.parse_args()

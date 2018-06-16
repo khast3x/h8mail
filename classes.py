@@ -21,7 +21,7 @@ class Target():
 		self.rev_ports = []
 		self.related_emails = []
 		self.hunterio_mails = []
-		self.services = {"hibp": [], "weleakinfo": []}  # todo snusbase services + print
+		self.services = {"hibp": [], "weleakinfo": [], "snusbase": []}
 		self.ip = ""
 
 
@@ -145,6 +145,10 @@ class Target():
 				if result["hash"]:
 					ui.debug(self.email, ": hash found")
 					self.snusbase_hash_salt.update({result["hash"]: result["salt"]})
+				if result["tablenr"]:
+					if result["tablenr"] not in self.services["snusbase"]:
+						self.services["snusbase"].append(result["tablenr"])
+
 
 		except Exception as ex:
 			ui.warning(ui.yellow, "Snusbase error:", self.email, ex)

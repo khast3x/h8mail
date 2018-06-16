@@ -68,11 +68,11 @@ def save_results_csv(dest_csv, target_obj_list):
 	with open(dest_csv, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile)
 
-		writer.writerow(["email", "breached", "num services", "services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
+		writer.writerow(["email", "breached", "num services", "hibp_services", "weleakinfo_services","snusbase_services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
 		print("* Writing to CSV\n")
 		for target in target_obj_list:
 			try:
-				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
+				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.services["weleakinfo"],target.services["snusbase"],target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
 			except Exception as ex:
 				ui.warning("Error writing to csv", ex)
 
@@ -86,11 +86,15 @@ def print_results(target_objs):
 			ui.info("Breaches found", ui.darkred, "HIBP:", ui.teal, len(target.services["hibp"]))
 			if target.services["weleakinfo"]:
 				ui.info("Breaches found", ui.darkred, "WeLeakInfo:", ui.teal, len(target.services["weleakinfo"]))
+			if target.services["snusbase"]:
+				ui.info("Breaches found", ui.darkred, "Snusbase:", ui.teal, len(target.services["weleakinfo"]))
 			if target.breachcomp_passw:
 				ui.info("Breaches found", ui.darkred, "breachcompilation:", ui.teal, len(target.breachcomp_passw))
 
-			#  todo add Snusbase count of services
-			ui.debug("Breaches/Dumps:", ui.lightgray, target.services["hibp"])
+			ui.debug("Breaches/Dumps HIBP:", ui.lightgray, target.services["hibp"])
+			ui.debug("Breaches/Dumps WeLeakInfo:", ui.lightgray, target.services["weleakinfo"])
+			ui.debug("Breaches/Dumps Snusbase:", ui.lightgray, target.services["snusbase"])
+
 		else:
 			ui.info_2("not breached", ui.cross)
 

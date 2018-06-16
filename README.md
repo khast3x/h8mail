@@ -1,20 +1,20 @@
-[![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
 # :mailbox_with_no_mail: h8mail - Alpha Release
 
-> Email OSINT and password breach hunting.  
-> Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation!
+[![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
+> Email information and password finding tool.
+> Use h8mail to find passwords through different breach and reconnaissance services, or the infamous "Breach Compilation" torrent!
 
 ##  :tangerine: Features
 
 *  :mag_right: Email pattern matching (reg exp), useful for all those raw HTML files
 * :whale: Small and fast Alpine Dockerfile available
-* :white_check_mark: CLI or Bulk file-reading targeting
+* :white_check_mark: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
 *  :loop: Reverse DNS
 * :cop:  CloudFlare rate throttling avoidance
   - Execution flow remains synchronous and throttled according to API  usage guidelines written by service providers
 *  :fire: Query and group results from different breach service providers
-*  :fire: Query a local copy of the "Breached Compilation"
+*  :fire: Query a local copy of the "Breach Compilation"
 *  :fire: Get related emails
 *  :fire: Get target domain name open ports
 * :rainbow: Delicious colors
@@ -64,7 +64,7 @@ docker run -ti h8mail -h
 usage: h8mail.py [-h] -t TARGET_EMAILS [-c CONFIG_FILE] [-o OUTPUT_FILE]
                  [-bc BC_PATH] [-v]
 
-Email information and breach notification tool
+Email information and password finding tool
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -75,7 +75,7 @@ optional arguments:
                         Configuration file for API keys
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write output
-  -bc BC_PATH, --breachedcomp BC_PATH
+  -bc BC_PATH, --breachcomp BC_PATH
                         Path to the Breach Compilation Torrent.
                         https://ghostbin.com/paste/2cbdn
   -v, --verbose         Show debug information
@@ -108,5 +108,5 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/
 
 ## :tangerine: Notes
 
-* Service providers that wish being integrated can shoot me an email at `k at khast3x dot club` (Protonmail encryption friendly)
+* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
 * Special thanks to [Snusbase](https://snusbase.com/) for being developer friendly

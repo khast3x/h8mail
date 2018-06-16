@@ -48,6 +48,7 @@ def get_emails_from_file(targets_file):
 def get_config_from_file(config_file):
 	try:
 		config = configparser.ConfigParser()
+		# todo read config from cli using config.update to add K:V, kwargs in arparse?
 		config.read(config_file)
 		ui.debug(ui.check, "Correctly read config file")
 		return config
@@ -183,7 +184,10 @@ def main(user_args):
 		ui.warning("No targets found")
 
 # Launch
-	breached_targets = target_factory(targets, api_keys)
+	if not user_args.run_local:
+		breached_targets = target_factory(targets, api_keys)
+	elif user_args.run_local:
+		breached_targets = [Target(t) for t in targets]
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 	print_results(breached_targets)
@@ -204,6 +208,9 @@ if __name__ == "__main__":
 
 	parser.add_argument("-v", "--verbose", dest="verbosity", help="Show debug information", action="store_true",
 						default=False)
+	parser.add_argument("-l", "--local", dest="run_local", help="Run local actions only", action="store_true", default=False)
+
+
 
 	args = parser.parse_args()
 	ui.setup(verbose=args.verbosity)  # Show debug messages if -v True

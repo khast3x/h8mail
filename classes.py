@@ -22,11 +22,8 @@ class Target():
 		self.related_emails = []
 		self.hunterio_mails = []
 		self.services = {"hibp": [], "weleakinfo": []}  # todo snusbase services + print
-		try:
-			self.ip = socket.gethostbyname(self.hostname)
-		except Exception as ex:
-			ui.debug("Could not fetch host IP address", self.hostname, ex)
-			self.ip = ""
+		self.ip = ""
+
 
 	def make_request(self, url, cf=False, meth="GET", timeout=30, redirs=True, data=None, params=None):
 		if cf is False:
@@ -50,6 +47,10 @@ class Target():
 		return response
 
 	def get_shodan(self, api_key):
+		try:
+			self.ip = socket.gethostbyname(self.hostname)
+		except Exception as ex:
+			ui.debug("Could not fetch host IP address", self.hostname, ex)
 
 		if len(api_key) == 0:
 			ui.debug(self.email, "Setting default Shodan API KEY")

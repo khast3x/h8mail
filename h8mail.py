@@ -87,7 +87,7 @@ def print_results(target_objs):
 			if target.services["weleakinfo"]:
 				ui.info("Breaches found", ui.darkred, "WeLeakInfo:", ui.teal, len(target.services["weleakinfo"]))
 			if target.services["snusbase"]:
-				ui.info("Breaches found", ui.darkred, "Snusbase:", ui.teal, len(target.services["weleakinfo"]))
+				ui.info("Breaches found", ui.darkred, "Snusbase:", ui.teal, len(target.services["snusbase"]))
 			if target.breachcomp_passw:
 				ui.info("Breaches found", ui.darkred, "breachcompilation:", ui.teal, len(target.breachcomp_passw))
 

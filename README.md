@@ -27,7 +27,7 @@
 
 ###### :rocket: With API services
 
-![2](/doc/h8mail1.gif)
+![2](/doc/h8mail2.gif)
 
 ###### :minidisc: With the BreachedCompilation torrent
 ![3](/doc/h8mail3.gif)

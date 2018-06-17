@@ -2,7 +2,7 @@
 
 [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
 > Email information and password finding tool.
-> Use h8mail to find passwords through different breach and reconnaissance services, or the infamous "Breach Compilation" torrent!
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or the infamous "Breach Compilation" torrent!
 
 ##  :tangerine: Features
 
@@ -10,13 +10,12 @@
 * :whale: Small and fast Alpine Dockerfile available
 * :white_check_mark: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
-*  :loop: Reverse DNS
+*  :loop: Reverse DNS + Open Ports
 * :cop:  CloudFlare rate throttling avoidance
   - Execution flow remains synchronous and throttled according to API  usage guidelines written by service providers
-*  :fire: Query and group results from different breach service providers
+*  :fire: Query and group results from [different breach service](#apis) providers
 *  :fire: Query a local copy of the "Breach Compilation"
 *  :fire: Get related emails
-*  :fire: Get target domain name open ports
 * :rainbow: Delicious colors
 
 #### Demos

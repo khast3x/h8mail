@@ -1,8 +1,9 @@
-# :mailbox_with_no_mail: h8mail - Alpha Release
+# :mailbox_with_no_mail: h8mail  
 
 [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
-> Email information and password finding tool.
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or the infamous "Breach Compilation" torrent!
+> Email OSINT and password finder.  
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or the infamous "Breach Compilation" torrent.  
+> Early release, feedback and pull requests are welcomed :heart:
 
 ##  :tangerine: Features
 

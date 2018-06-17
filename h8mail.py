@@ -45,11 +45,20 @@ def get_emails_from_file(targets_file):
 		ui.fatal("Problems occurred while trying to get emails from file", ex)
 
 
-def get_config_from_file(config_file):
+def get_config_from_file(user_args):
 	try:
+		config_file = user_args.config_file
 		config = configparser.ConfigParser()
 		config.read(config_file)
 		ui.debug(ui.check, "Correctly read config file")
+
+		if user_args.cli_apikeys:
+			user_cli_keys = user_args.cli_apikeys.split(",")
+			for user_key in user_cli_keys:
+				if user_key:
+					config.set("DEFAULT", user_key.split(":", maxsplit=1)[0], user_key.split(":", maxsplit=1)[1])
+					ui.debug("Added", user_key.split(":", maxsplit=1)[0], config.get('DEFAULT', option=user_key.split(":")[0]))
+
 		return config
 	except Exception as ex:
 		ui.fatal("Problems occurred while trying to get configuration file", ex)
@@ -59,11 +68,11 @@ def save_results_csv(dest_csv, target_obj_list):
 	with open(dest_csv, 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile)
 
-		writer.writerow(["email", "breached", "num services", "services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
+		writer.writerow(["email", "breached", "num services", "hibp_services", "weleakinfo_services","snusbase_services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
 		print("* Writing to CSV\n")
 		for target in target_obj_list:
 			try:
-				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
+				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.services["weleakinfo"],target.services["snusbase"],target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
 			except Exception as ex:
 				ui.warning("Error writing to csv", ex)
 
@@ -77,11 +86,15 @@ def print_results(target_objs):
 			ui.info("Breaches found", ui.darkred, "HIBP:", ui.teal, len(target.services["hibp"]))
 			if target.services["weleakinfo"]:
 				ui.info("Breaches found", ui.darkred, "WeLeakInfo:", ui.teal, len(target.services["weleakinfo"]))
+			if target.services["snusbase"]:
+				ui.info("Breaches found", ui.darkred, "Snusbase:", ui.teal, len(target.services["weleakinfo"]))
 			if target.breachcomp_passw:
 				ui.info("Breaches found", ui.darkred, "breachcompilation:", ui.teal, len(target.breachcomp_passw))
 
-			#  todo add Snusbase count of services
-			ui.debug("Breaches/Dumps:", ui.lightgray, target.services["hibp"])
+			ui.debug("Breaches/Dumps HIBP:", ui.lightgray, target.services["hibp"])
+			ui.debug("Breaches/Dumps WeLeakInfo:", ui.lightgray, target.services["weleakinfo"])
+			ui.debug("Breaches/Dumps Snusbase:", ui.lightgray, target.services["snusbase"])
+
 		else:
 			ui.info_2("not breached", ui.cross)
 
@@ -170,7 +183,7 @@ def breachcomp_check(targets, breachcomp_path):
 
 def main(user_args):
 	targets = []
-	api_keys = get_config_from_file(user_args.config_file)
+	api_keys = get_config_from_file(user_args)
 	ui.info_section("\n", ui.darkteal, "Targets")
 	user_stdin_target = fetch_emails(args.target_emails)
 
@@ -183,7 +196,10 @@ def main(user_args):
 		ui.warning("No targets found")
 
 # Launch
-	breached_targets = target_factory(targets, api_keys)
+	if not user_args.run_local:
+		breached_targets = target_factory(targets, api_keys)
+	elif user_args.run_local:
+		breached_targets = [Target(t) for t in targets]
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 	print_results(breached_targets)
@@ -204,6 +220,9 @@ if __name__ == "__main__":
 
 	parser.add_argument("-v", "--verbose", dest="verbosity", help="Show debug information", action="store_true",
 						default=False)
+	parser.add_argument("-l", "--local", dest="run_local", help="Run local actions only", action="store_true", default=False)
+	parser.add_argument("-k", "--apikey", dest="cli_apikeys", help="Pass config options. Format is \"K:V,K:V\"")
+
 
 	args = parser.parse_args()
 	ui.setup(verbose=args.verbosity)  # Show debug messages if -v True

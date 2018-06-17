@@ -19,7 +19,18 @@
 *  :fire: Get target domain name open ports
 * :rainbow: Delicious colors
 
+#### Demos
 
+######  :unlock: Out of the box
+
+![1](/doc/h8mail1.gif)
+
+###### :rocket: With API services
+
+![2](/doc/h8mail1.gif)
+
+###### :minidisc: With the BreachedCompilation torrent
+![3](/doc/h8mail3.gif)
 
 ####  APIs
 
@@ -62,7 +73,7 @@ docker run -ti h8mail -h
 ```bash
 > python h8mail.py --help
 usage: h8mail.py [-h] -t TARGET_EMAILS [-c CONFIG_FILE] [-o OUTPUT_FILE]
-                 [-bc BC_PATH] [-v]
+                 [-bc BC_PATH] [-v] [-l] [-k CLI_APIKEYS]
 
 Email information and password finding tool
 
@@ -76,14 +87,16 @@ optional arguments:
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write output
   -bc BC_PATH, --breachcomp BC_PATH
-                        Path to the Breach Compilation Torrent.
+                        Path to the breachcompilation Torrent.
                         https://ghostbin.com/paste/2cbdn
   -v, --verbose         Show debug information
-
+  -l, --local           Run local actions only
+  -k CLI_APIKEYS, --apikey CLI_APIKEYS
+                        Pass config options. Format is "K:V,K:V"
 
 ```
 
-## :tangerine: Examples
+## :tangerine: Usage examples
 
 ###### Query for a single target
 
@@ -96,14 +109,16 @@ python h8mail.py -t target@example.com
 python h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
 ```
 
-###### Query a list of targets against local copy of the Breach Compilation
+###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/
+python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
 ```
 
-## :camera: Screenshot
+###### Query without making API calls against local copy of the Breach Compilation
+```bash
+python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
+```
 
-![sc](https://i.imgur.com/i5o0RPP.png)
 
 
 ## :tangerine: Notes

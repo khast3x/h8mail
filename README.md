@@ -119,6 +119,22 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase
 python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 ```
 
+## :checkered_flag: Roadmap
+
+- [x] Read API keys from CLI  
+- [ ] Integrate WeLeakInfo Service API  
+- [ ] Silent output (email:password only)  
+- [ ] JSON output  
+- [ ] Maltego Transform
+- [ ] BurpSuit Extension  
+- [ ] Update local Breach Compilation with new email:pass combos
+- [ ] Post-gathering modules capability  
+  - [ ] post-gathering: WeLeakInfo hash API
+  - [ ] post-gathering: Hashs to hashcat  
+  - [ ] post-gathering: SMTP credentials tests
+  - [ ] post-gathering: Generate dictionary for bruteforce + permutations
+  - [ ] post-gathering: Send email to victims with templated warning
+  - [ ] post-gathering: Re-run with hunterio related emails
 
 
 ## :tangerine: Notes

@@ -127,7 +127,6 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 - [ ] JSON output  
 - [ ] Maltego Transform
 - [ ] BurpSuit Extension  
-- [ ] Update local Breach Compilation with new email:pass combos
 - [ ] Post-gathering modules capability  
   - [ ] post-gathering: WeLeakInfo hash API
   - [ ] post-gathering: Hashs to hashcat  
@@ -135,6 +134,7 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
   - [ ] post-gathering: Generate dictionary for bruteforce + permutations
   - [ ] post-gathering: Send email to victims with templated warning
   - [ ] post-gathering: Re-run with hunterio related emails
+  - [ ] post-gathering: Update local Breach Compilation with new email:pass
 
 
 ## :tangerine: Notes

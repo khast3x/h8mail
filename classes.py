@@ -23,6 +23,7 @@ class Target():
 		self.hunterio_mails = []
 		self.services = {"hibp": [], "weleakinfo": [], "snusbase": []}
 		self.ip = ""
+		self.pastebin_urls = []
 
 
 	def make_request(self, url, cf=False, meth="GET", timeout=30, redirs=True, data=None, params=None):
@@ -129,6 +130,18 @@ class Target():
 				self.hunterio_mails.append(e["value"])
 		except Exception as ex:
 			ui.warning(ui.yellow, "HunterIO (private API) error:", self.email, ex, url)
+
+
+	def get_pastebin(self):
+		try:
+			ui.debug(self.email, "Getting pastebin private data")
+			url = "https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=en&prettyPrint=false&source=gcsc&gss=.com&cx=013305635491195529773:0ufpuq-fpt0&q=%22{email}%22&cse_tok=AF14hljK02r_xNhCjU6rz69O3mWFxQgr0w:1534517796222&sort=&googlehost=www.google.com".format(email=self.email)
+			req = self.make_request(url, cf=False)
+			response = req.json()
+			for e in response["results"]:
+				self.pastebin_urls.append(e["formattedUrl"])
+		except Exception as ex:
+			ui.warning(ui.yellow, "Google api error for pastebin.com:", self.email, ex, url)
 
 	def get_snusbase(self, api_url, api_key):
 		try:

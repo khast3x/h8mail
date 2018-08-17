@@ -128,7 +128,9 @@ def print_results(target_objs):
 			ui.info(ui.teal, "---")
 			ui.info(ui.darkred, "breachcompilation", ui.reset, "passwords:", ui.teal, ui.teal, *target.breachcomp_passw)
 			ui.info("-------------------------------")
-
+		if target.pastebin_urls:
+			ui.info(ui.teal, "---")
+			ui.info(ui.check, ui.darkred, "Pastebin", ui.reset, "Urls where first emails is related in:", ui.lightgray, "\n", target.pastebin_urls)
 
 def target_factory(targets, api_keys):
 	target_objs = []
@@ -139,6 +141,7 @@ def target_factory(targets, api_keys):
 		if t.split("@")[1] not in domains:
 			domains.append(t.split("@")[1])  # todo remove redundant shodan calls
 		current_target = Target(t)
+
 		# Shodan
 		if len(current_target.ip) != 0:
 			current_target.get_shodan(api_keys['DEFAULT']['shodan'])
@@ -154,6 +157,8 @@ def target_factory(targets, api_keys):
 		# Snusbase API
 		if len(api_keys['DEFAULT']['snusbase_token']) != 0:
 			current_target.get_snusbase(api_keys['DEFAULT']['snusbase_url'], api_keys['DEFAULT']['snusbase_token'])
+
+		current_target.get_pastebin()
 		ui.dot(last=True)
 
 		target_objs.append(current_target)

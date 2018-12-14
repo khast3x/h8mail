@@ -101,7 +101,7 @@ optional arguments:
 ###### Query for a single target
 
 ```bash
-f h8mail.py -t target@example.com
+python3 h8mail.py -t target@example.com
 ```
 
 ###### Query for list of targets, indicate config file for API keys, output to `pwned_targets.csv`

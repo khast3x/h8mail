@@ -55,8 +55,8 @@ NodeJS is required to ensure CloudFlare bypassing. You can find out how to insta
 apt-get install nodejs
 git clone https://github.com/khast3x/h8mail.git
 cd h8mail
-pip install -r requirements.txt
-python h8mail.py -h
+pip3 install -r requirements.txt
+python3 h8mail.py -h
 ```
 
 #### Docker
@@ -71,7 +71,7 @@ docker run -ti h8mail -h
 ##  :tangerine: Usage
 
 ```bash
-> python h8mail.py --help
+> python3 h8mail.py --help
 usage: h8mail.py [-h] -t TARGET_EMAILS [-c CONFIG_FILE] [-o OUTPUT_FILE]
                  [-bc BC_PATH] [-v] [-l] [-k CLI_APIKEYS]
 
@@ -101,22 +101,22 @@ optional arguments:
 ###### Query for a single target
 
 ```bash
-python h8mail.py -t target@example.com
+f h8mail.py -t target@example.com
 ```
 
 ###### Query for list of targets, indicate config file for API keys, output to `pwned_targets.csv`
 ```bash
-python h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
+python3 h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
 ```
 
 ###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
+python3 h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
 ```
 
 ###### Query without making API calls against local copy of the Breach Compilation
 ```bash
-python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
+python3 h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 ```
 
 ## :checkered_flag: Roadmap

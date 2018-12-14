@@ -119,22 +119,28 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase
 python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 ```
 
-## :checkered_flag: Roadmap
+## :tangerine: Troubleshooting
 
-- [x] Read API keys from CLI  
-- [ ] Integrate WeLeakInfo Service API  
-- [ ] Silent output (email:password only)  
-- [ ] JSON output  
-- [ ] Maltego Transform
-- [ ] BurpSuit Extension  
-- [ ] Post-gathering modules capability  
-  - [ ] post-gathering: WeLeakInfo hash API
-  - [ ] post-gathering: Hashs to hashcat  
-  - [ ] post-gathering: SMTP credentials tests
-  - [ ] post-gathering: Generate dictionary for bruteforce + permutations
-  - [ ] post-gathering: Send email to victims with templated warning
-  - [ ] post-gathering: Re-run with hunterio related emails
-  - [ ] post-gathering: Update local Breach Compilation with new email:pass
+### Python version and Older Kali systems
+
+The above instructions assume you are running python3 as default. If unsure, type:
+```bash
+python --version
+``` 
+
+in your terminal. It should be either `Python 3.*` or `Python 2.*`.  
+
+If you are running python2 as default :  
+Make sure you have python3 installed, then replace python commands with explicit python3 calls:
+
+```bash
+apt-get install nodejs
+git clone https://github.com/khast3x/h8mail.git
+cd h8mail
+pip3 install -r requirements.txt
+python3 h8mail.py -h
+```
+
 
 
 ## :tangerine: Notes

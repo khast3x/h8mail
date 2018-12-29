@@ -48,8 +48,10 @@
 ## :tangerine: Install
 
 If you're using Docker, make sure to add your `targets.txt` and your API keys in the configuration file **before** building
-####  Local env
-NodeJS is required to ensure CloudFlare bypassing. You can find out how to install it for your distribution [here](https://nodejs.org/en/download/package-manager/)
+####  Locally
+NodeJS is required to ensure CloudFlare bypassing. You can find out how to install it for your distribution [here](https://nodejs.org/en/download/package-manager/)  
+
+These instructions assume you are running Python3 as default. If unsure, please check the troubleshooting section  
 
 ```bash
 apt-get install nodejs
@@ -121,9 +123,9 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 
 ## :tangerine: Troubleshooting
 
-### Python version and Older Kali systems
+### Python version & Kali
 
-The above instructions assume you are running python3 as default. If unsure, type:
+The above instructions assume you are running **python3 as default**. If unsure, type:
 ```bash
 python --version
 ``` 
@@ -143,7 +145,8 @@ python3 h8mail.py -h
 
 
 
-## :tangerine: Notes
+## :tangerine: Notes & Links
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
 * Special thanks to [Snusbase](https://snusbase.com/) for being developer friendly
+* Special thanks to [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail

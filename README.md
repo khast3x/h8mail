@@ -36,7 +36,7 @@
 
 |       Service      |         Functions        |         Status        |
 |:--------------|:-----------------------:|:---------------------:|
-| [HaveIBeenPwned](https://haveibeenpwned.com/) |      Number of email breachs      |   :white_check_mark: |
+| [HaveIBeenPwned](https://haveibeenpwned.com/) |      Number of email breachs      |   :red_circle: |
 | [Shodan](https://www.shodan.io/)         | Reverse DNS, Open ports |   :white_check_mark: |
 |[Hunter.io](https://hunter.io/) - Public   |Number of related emails   | :white_check_mark:  |
 |[Hunter.io](https://hunter.io/) - Service (free tier)   |Cleartext related emails   | :white_check_mark:   |

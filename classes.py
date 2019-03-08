@@ -10,7 +10,7 @@ import socket
 class Target():
 	def __init__(self, email):
 		self.headers = {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10136'}
+			'User-Agent': 'h8mail-v.1.0 OSINT and Education Tool'}
 		self.email = email
 		self.pwnd = ""
 		self.breachcomp_passw = []
@@ -30,9 +30,13 @@ class Target():
 			try:
 				response = requests.request(url=url, headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
 				ui.debug(ui.purple, "REQUEST", response.url, ui.bold, response.status_code)
+				print(response.content)
+				print("---")
+				print(response.raw)
 
 			except Exception as ex:
 				ui.error("Request could not be made for", self.email, ex)
+		
 		else:  # cf is True
 			try:
 				import cfscrape

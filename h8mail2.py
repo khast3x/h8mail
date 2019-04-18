@@ -3,9 +3,8 @@ import re
 import os
 import configparser
 import csv
-from classes import Target
 from utils.colors import colors as c
-
+from utils.classes import target
 
 def print_banner(b_type="intro"):
 	if "intro" in b_type:
@@ -79,101 +78,6 @@ def save_results_csv(dest_csv, target_obj_list):
 				c.bad_news(c, "Error writing to csv")
 				print(ex)
 
-def save_results_csv(dest_csv, target_obj_list):
-	with open(dest_csv, 'w', newline='') as csvfile:
-		writer = csv.writer(csvfile)
-
-		writer.writerow(["email", "breached", "num services", "hibp_services", "weleakinfo_services","snusbase_services", "ip", "ports", "rev_dns", "related_emails", "snusbase_passwords", "snusbase_hash/salt", "breachcompilation_passwords"])
-		c.info_news(c, "* Writing to CSV\n")
-		for target in target_obj_list:
-			try:
-				writer.writerow([target.email, target.pwnd, len(target.services["hibp"]), target.services["hibp"], target.services["weleakinfo"],target.services["snusbase"],target.ip, target.rev_ports, target.rev_dns, target.related_emails, target.snusbase_passw, target.snusbase_hash_salt, target.breachcomp_passw])
-			except Exception as ex:
-				c.bad_news(c, "Error writing to csv")
-				print(ex)
-
-def print_results(target_objs):
-	for target in target_objs:
-		ui.info_section("\n", ui.bold, "Result", ui.reset, ui.yellow, target.email)
-		if target.pwnd:
-			ui.info_2("breached", ui.check)
-			ui.info(ui.teal, "---")
-			ui.info("Breaches found", ui.darkred, "HIBP:", ui.teal, len(target.services["hibp"]))
-			if target.services["weleakinfo"]:
-				ui.info("Breaches found", ui.darkred, "WeLeakInfo:", ui.teal, len(target.services["weleakinfo"]))
-			if target.services["snusbase"]:
-				ui.info("Breaches found", ui.darkred, "Snusbase:", ui.teal, len(target.services["snusbase"]))
-			if target.breachcomp_passw:
-				ui.info("Breaches found", ui.darkred, "breachcompilation:", ui.teal, len(target.breachcomp_passw))
-
-			ui.debug("Breaches/Dumps HIBP:", ui.lightgray, target.services["hibp"])
-			ui.debug("Breaches/Dumps WeLeakInfo:", ui.lightgray, target.services["weleakinfo"])
-			ui.debug("Breaches/Dumps Snusbase:", ui.lightgray, target.services["snusbase"])
-
-		else:
-			ui.info_2("not breached", ui.cross)
-
-		if target.related_emails:
-			ui.info("Related emails found", ui.darkred, "hunter.io:", ui.teal, target.related_emails)
-			ui.info(ui.teal, "---")
-
-		ui.info("Target hostname:", ui.teal, target.hostname)
-		if target.ip:
-			ui.info("Target domain IP:", ui.teal, target.ip)
-		if target.rev_dns:
-			ui.info("Target reverse DNS:", ui.teal, target.rev_dns)
-		if target.rev_ports:
-			ui.info("Open ports:", ui.teal, *target.rev_ports)
-
-		if len(target.hunterio_mails) != 0:
-			ui.info(ui.teal, "---")
-			ui.info(ui.check, ui.darkred, "hunter.io", ui.reset, "best related emails:", ui.lightgray, "\n", target.hunterio_mails)
-
-		if target.snusbase_passw:
-			ui.info(ui.teal, "---")
-			ui.info(ui.check, ui.darkred, "Snusbase:", ui.reset, "Passwords found", ui.teal, len(target.snusbase_passw))
-		if target.snusbase_hash_salt:
-			ui.info(ui.check, ui.darkred, "Snusbase:", ui.reset, "Hash/salts found", ui.teal, len(target.snusbase_hash_salt))
-		if target.snusbase_hash_salt:
-			ui.info(ui.darkred, "Snusbase", ui.reset, "passwords:", ui.teal, target.snusbase_passw)
-		if target.snusbase_hash_salt:
-			ui.info(ui.darkred, "Snusbase", ui.reset, "hash/salt:", ui.lightgray, target.snusbase_hash_salt)
-		ui.info("\n")
-		if target.breachcomp_passw:
-			ui.info(ui.teal, "---")
-			ui.info(ui.darkred, "breachcompilation", ui.reset, "passwords:", ui.teal, ui.teal, *target.breachcomp_passw)
-			ui.info("-------------------------------")
-
-
-def target_factory(targets, api_keys):
-	target_objs = []
-	domains = []
-	print("\n", c.fg.green, "Lookup Status")
-	for t in targets:
-		c.info_news(c, "=>> {}".format(t))
-		if t.split("@")[1] not in domains:
-			domains.append(t.split("@")[1])  # todo remove redundant shodan calls
-		current_target = Target(t)
-		# Shodan
-		if len(current_target.ip) != 0:
-			current_target.get_shodan(api_keys['DEFAULT']['shodan'])
-		# HaveIBeenPwned
-		current_target.get_hibp()
-		# WeLeakInfo Public API
-		# current_target.get_weleakinfo_public()  # Currently offline
-		# Hunter.io Public + Private API
-		current_target.get_hunterio_public()
-		if len(api_keys['DEFAULT']['hunterio']) != 0:
-			current_target.get_hunterio_private((api_keys['DEFAULT']['hunterio']))
-
-		# Snusbase API
-		if len(api_keys['DEFAULT']['snusbase_token']) != 0:
-			current_target.get_snusbase(api_keys['DEFAULT']['snusbase_url'], api_keys['DEFAULT']['snusbase_token'])
-
-		target_objs.append(current_target)
-	print("\n")
-	return target_objs
-
 
 def breachcomp_check(targets, breachcomp_path):
 	# https://gist.github.com/scottlinux/9a3b11257ac575e4f71de811322ce6b3
@@ -196,6 +100,36 @@ def breachcomp_check(targets, breachcomp_path):
 			print(ex)
 
 
+
+def print_results(results):
+	for t in results:
+		print()
+		c.good_news(c, "Showing results for {target}".format(target=t.email))
+		# HIBP Results
+		for i in range(len(t.data)):
+			if len(t.data[i]) == 2: # Contains data header + body
+				if "HIBP" in t.data[i][0]:
+					c.print_result(c, t.email, t.data[i][1], "HIBP")
+				if "HUNTER_PUB" in t.data[i][0]:
+					c.print_result(c, t.email, t.data[i][1], "HUNTER")
+
+
+
+def target_factory(targets, api_keys):
+	finished = []
+
+	for t in targets:
+		c.info_news(c, "Looking up {target}".format(target=t))
+		current_target = target(t)
+		current_target.get_hibp()
+		current_target.get_hunterio_public()
+		finished.append(current_target)
+
+	return finished
+
+
+
+
 def main(user_args):
 	targets = []
 	api_keys = get_config_from_file(user_args)
@@ -214,7 +148,7 @@ def main(user_args):
 	if not user_args.run_local:
 		breached_targets = target_factory(targets, api_keys)
 	elif user_args.run_local:
-		breached_targets = [Target(t) for t in targets]
+		breached_targets = [target(t) for t in targets]
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 	print_results(breached_targets)

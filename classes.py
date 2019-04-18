@@ -33,6 +33,13 @@ class Target():
 				print(response.content)
 				print("---")
 				print(response.raw)
+				if response.status_code == 404:
+					print("Got a 404, retrying just to be sure")
+					response = requests.request(url=url, headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
+					ui.debug(ui.purple, "REQUEST", response.url, ui.bold, response.status_code)
+					print(response.content)
+					print("---")
+					print(response.raw)
 
 			except Exception as ex:
 				ui.error("Request could not be made for", self.email, ex)

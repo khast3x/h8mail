@@ -70,42 +70,33 @@ class target():
 			c.bad_news(c, "HunterIO (pubic API) error: " + self.email)
 			print(ex)
 
-	# def get_hunterio_private(self, api_key):
-	# 	try:
-	# 		ui.debug(self.email, "Getting HunterIO private data on domain")
-	# 		url = "https://api.hunter.io/v2/domain-search?domain={target}&api_key={key}".format(target=self.hostname, key=api_key)
-	# 		req = self.make_request(url, cf=True)
-	# 		response = req.json()
-	# 		for e in response["data"]["emails"]:
-	# 			self.hunterio_mails.append(e["value"])
-	# 	except Exception as ex:
-	# 		ui.warning(ui.yellow, "HunterIO (private API) error:", self.email, ex, url)
+	def get_hunterio_private(self, api_key):
+		try:
+			target_domain = self.email.split("@")[1]
+			url = "https://api.hunter.io/v2/domain-search?domain={target}&api_key={key}".format(target=target_domain, key=api_key)
+			req = self.make_request(url)
+			response = req.json()
+			for e in response["data"]["emails"]:
+				self.data.append(("HUNTER_PRIV", e["value"]))
+		except Exception as ex:
+			c.bad_news(c, "HunterIO (private API) error for {target}:".format(target=self.email))
+			print(ex)
 
-	# def get_snusbase(self, api_url, api_key):
-	# 	try:
-	# 		ui.debug(self.email, "Getting snusbase data")
-	# 		url = api_url
-	# 		self.headers.update({"Authorization": api_key})
-	# 		payload = {"type": "email", "term": self.email}
-	# 		req = self.make_request(url, cf=False, meth="POST", data=payload)
-	# 		response = req.json()
-	# 		for result in response["result"]:
-	# 			if result["password"]:
-	# 				ui.debug(self.email, ":", result["password"])
-	# 				self.snusbase_passw.append(result["password"])
-	# 			if result["hash"]:
-	# 				ui.debug(self.email, ": hash found")
-	# 				self.snusbase_hash_salt.update({result["hash"]: result["salt"]})
-	# 			if result["tablenr"]:
-	# 				if result["tablenr"] not in self.services["snusbase"]:
-	# 					self.services["snusbase"].append(result["tablenr"])
-
-
-	# 	except Exception as ex:
-	# 		ui.warning(ui.yellow, "Snusbase error:", self.email, ex)
-
-	# def get_proxies(self):
-	# 	import proxify
-	# 	proxies = proxify.get(20)
-	# 	proto = "http"
-	# 	self.proxies = zip(proto, proxies)  # Should make a dict of {"http":"http://ip:port"} UNTESTED
+	def get_snusbase(self, api_url, api_key):
+		try:
+			url = api_url
+			self.headers.update({"Authorization": api_key})
+			payload = {"type": "email", "term": self.email}
+			req = self.make_request(url, meth="POST", data=payload)
+			response = req.json()
+			for result in response["result"]:
+				if result["password"]:
+					self.data.append(("SNUS_PASSWORD", result["password"]))
+				if result["hash"]:
+					if result["salt"]:
+						self.data.append(("SNUS_HASH_SALT", result["hash"] + " : " + result["salt"]))
+					else:
+						self.data.append(("SNUS_HASH", result["hash"]))
+		except Exception as ex:
+			c.bad_news(c, "Snusbase error with {target}".format(self.email))
+			print(ex)

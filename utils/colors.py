@@ -46,27 +46,38 @@ class colors:
         Print a Success
         '''
         print(self.bold + self.fg.green + "[>] " + self.reset + news)
+    
     @staticmethod
     def bad_news(self, news):
         '''
         Print a Failure, error
         '''
         print(self.bold + self.fg.red + "[!] " + self.reset + news)
+    
     @staticmethod
     def info_news(self, news):
         '''
         Print an information with grey text
         '''
         print(self.bold + self.fg.lightblue + "[~] " + self.reset + self.fg.lightgrey + news + self.reset)
+    
     @staticmethod
     def question_news(self, news):
         '''
         Print an information with yellow text
         '''
         print(self.bold + self.fg.blue + "[?] " + self.reset + self.fg.yellow + news + self.reset)
+    
     @staticmethod
     def print_result(self, target, data, source):
         '''
         Print Breach results
         '''
-        print(self.fg.lightblue, source, self.fg.lightgrey, "\t| ", self.fg.pink, target, self.fg.lightgrey, "\t> ", self.bold, self.fg.red, data, self.reset)
+        print(self.fg.lightblue, source, self.fg.lightgrey, "| ", self.fg.pink, target, self.fg.lightgrey, "> ", self.bold, self.fg.red, data, self.reset)
+    
+    @staticmethod
+    def print_res_header(self, target):
+        '''
+        Print Breach results
+        '''
+        print(self.bold + self.fg.green + "[>] " + self.reset + "Showing results for " + target + self.reset)

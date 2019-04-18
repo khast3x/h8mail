@@ -104,14 +104,21 @@ def breachcomp_check(targets, breachcomp_path):
 def print_results(results):
 	for t in results:
 		print()
-		c.good_news(c, "Showing results for {target}".format(target=t.email))
-		# HIBP Results
+		c.print_res_header(c, t.email)
 		for i in range(len(t.data)):
+			if len(t.data) == 1:
+				c.info_news(c, "No results founds")
+				continue
 			if len(t.data[i]) == 2: # Contains data header + body
 				if "HIBP" in t.data[i][0]:
 					c.print_result(c, t.email, t.data[i][1], "HIBP")
 				if "HUNTER_PUB" in t.data[i][0]:
-					c.print_result(c, t.email, t.data[i][1], "HUNTER")
+					c.print_result(c, t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB")
+				if "HUNTER_PRIV" in t.data[i][0]:
+					c.print_result(c, t.email, str(t.data[i][1]) + " RELATED", "HUNTERPRIV")
+				if "SNUS" in t.data[i][0]:
+					c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+
 
 
 
@@ -121,8 +128,10 @@ def target_factory(targets, api_keys):
 	for t in targets:
 		c.info_news(c, "Looking up {target}".format(target=t))
 		current_target = target(t)
-		current_target.get_hibp()
+		# current_target.get_hibp()
 		current_target.get_hunterio_public()
+		current_target.get_hunterio_private(api_keys['DEFAULT']['hunterio'])
+		current_target.get_snusbase(api_keys['DEFAULT']['snusbase_url'], api_keys['DEFAULT']['snusbase_token'])
 		finished.append(current_target)
 
 	return finished

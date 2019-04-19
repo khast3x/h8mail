@@ -73,7 +73,9 @@ class colors:
         '''
         Print Breach results
         '''
-        print(self.fg.lightblue, source, self.fg.lightgrey, "| ", self.fg.pink, target, self.fg.lightgrey, "> ", self.bold, self.fg.red, data, self.reset)
+        # print(self.fg.lightblue, source, self.fg.lightgrey, "| ", self.fg.pink, target, self.fg.lightgrey, "> ", self.bold, self.fg.red, data, self.reset)
+        print("{}{}{:15} | {}{}{:^20} > {}{}{:^40}{}".format(self.fg.lightblue, source, \
+            self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.bold, self.fg.red, data, self.reset))
     
     @staticmethod
     def print_res_header(self, target):

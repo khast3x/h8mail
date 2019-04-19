@@ -128,7 +128,7 @@ def target_factory(targets, api_keys):
 	for t in targets:
 		c.info_news(c, "Looking up {target}".format(target=t))
 		current_target = target(t)
-		# current_target.get_hibp()
+		current_target.get_hibp()
 		current_target.get_hunterio_public()
 		current_target.get_hunterio_private(api_keys['DEFAULT']['hunterio'])
 		current_target.get_snusbase(api_keys['DEFAULT']['snusbase_url'], api_keys['DEFAULT']['snusbase_token'])

@@ -4,11 +4,14 @@ from utils.colors import colors as c
 import requests
 import json
 import socket
+import sys
+import platform
 
 class target():
 	def __init__(self, email):
 		self.headers = {
-			'User-Agent': 'h8mail-v.1.0-OSINT-and-Education-Tool'}
+			'User-Agent': 'h8mail-v.1.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})'.format(pyver=sys.version.split(" ")[0], 
+			platfrm=platform.platform().split("-")[0])}
 		self.email = email
 		self.pwnd = False
 		self.data = [()]

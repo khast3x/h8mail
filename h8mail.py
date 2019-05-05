@@ -51,7 +51,7 @@ def print_results(results):
 
 
 
-def target_factory(targets, api_keys):
+def target_factory(targets, api_keys, user_args):
 	finished = []
 
 	for t in targets:
@@ -86,7 +86,7 @@ def main(user_args):
 
 # Launch
 	if not user_args.run_local:
-		breached_targets = target_factory(targets, api_keys)
+		breached_targets = target_factory(targets, api_keys, user_args)
 	elif user_args.run_local:
 		breached_targets = [target(t) for t in targets]
 	if user_args.bc_path:

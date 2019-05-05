@@ -105,3 +105,4 @@ venv.bak/
 .mypy_cache/
 targets.txt
 testoutput.csv
+targets.txt

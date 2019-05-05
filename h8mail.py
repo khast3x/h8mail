@@ -89,6 +89,8 @@ def main(user_args):
 		breached_targets = target_factory(targets, api_keys, user_args)
 	elif user_args.run_local:
 		breached_targets = [target(t) for t in targets]
+	
+	# These are not done inside the factory as the factory iterates over each target individually
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 	print_results(breached_targets)
@@ -100,7 +102,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Email information and password finding tool")
 
 	parser.add_argument("-t", "--targets", required=True, dest="target_emails",
-						help="Either single email, or file (one email per line). REGEXP")
+						help="Either single email, or file")
 
 	parser.add_argument("-c", "--config", dest="config_file", default="config.ini",
 						help="Configuration file for API keys")

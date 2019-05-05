@@ -91,7 +91,7 @@ class target():
 					self.data.append(("SNUS_PASSWORD", result["password"]))
 				if result["hash"]:
 					if result["salt"]:
-						self.data.append(("SNUS_HASH_SALT", result["hash"] + " : " + result["salt"]))
+						self.data.append(("SNUS_HASH_SALT", result["hash"].strip() + " : " + result["salt"].strip()))
 					else:
 						self.data.append(("SNUS_HASH", result["hash"]))
 		except Exception as ex:

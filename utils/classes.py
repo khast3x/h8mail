@@ -21,7 +21,7 @@ class target():
 			response = requests.request(url=url, headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
 			# response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
 			if response.status_code == 429:
-				c.info_news(c, "Reached RATE LIMIT, sleeping")
+				c.info_news(c, "Reached RATE LIMIT for {src}, sleeping".format(src=response.url))
 				sleep(2.5)
 		except Exception as ex:
 			c.bad_news(c, "Request could not be made for "+ self.email)

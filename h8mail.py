@@ -57,8 +57,9 @@ def target_factory(targets, api_keys, user_args):
 	for t in targets:
 		c.info_news(c, "Looking up {target}".format(target=t))
 		current_target = target(t)
-		current_target.get_hibp()
-		current_target.get_hunterio_public()
+		if not user_args.skip_defaults:
+			current_target.get_hibp()
+			current_target.get_hunterio_public()
 		if len(api_keys['DEFAULT']['hunterio']) != 0:
 			current_target.get_hunterio_private(api_keys['DEFAULT']['hunterio'])
 		if len(api_keys['DEFAULT']['snusbase_token']) != 0:
@@ -85,11 +86,8 @@ def main(user_args):
 		c.bad_news(c, "No targets found")
 
 # Launch
-	if not user_args.run_local:
-		breached_targets = target_factory(targets, api_keys, user_args)
-	elif user_args.run_local:
-		breached_targets = [target(t) for t in targets]
-	
+	breached_targets = target_factory(targets, api_keys, user_args)
+
 	# These are not done inside the factory as the factory iterates over each target individually
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
@@ -111,7 +109,7 @@ if __name__ == "__main__":
 
 	parser.add_argument("-v", "--verbose", dest="verbosity", help="Show debug information", action="store_true",
 						default=False)
-	parser.add_argument("-l", "--local", dest="run_local", help="Run local actions only", action="store_true", default=False)
+	parser.add_argument("-sk", "--skip-defaults", dest="skip_defaults", help="Skip HaveIBeenPwned and HunterIO check", action="store_true", default=False)
 	parser.add_argument("-k", "--apikey", dest="cli_apikeys", help="Pass config options. Format is \"K:V,K:V\"")
 
 

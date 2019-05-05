@@ -73,13 +73,19 @@ class colors:
         '''
         Print Breach results
         '''
-        # print(self.fg.lightblue, source, self.fg.lightgrey, "| ", self.fg.pink, target, self.fg.lightgrey, "> ", self.bold, self.fg.red, data, self.reset)
-        print("{}{}{:15} | {}{}{:^20} > {}{}{:^40}{}".format(self.fg.lightblue, source, \
-            self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.bold, self.fg.red, data, self.reset))
+        if "PASS" in source:
+            print("{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(self.fg.lightblue, self.bold, source, \
+                self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.bold, self.fg.green, data, self.reset))
+        elif "HASH" in source:
+            print("{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(self.fg.lightblue, source, \
+                self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.fg.red, data, self.reset)) 
+        else:
+            print("{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(self.fg.lightblue, source, \
+                self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.fg.red, data, self.reset))
     
     @staticmethod
     def print_res_header(self, target):
         '''
-        Print Breach results
+        Print Breach result header
         '''
         print(self.bold + self.fg.green + "[>] " + self.reset + "Showing results for " + target + self.reset)

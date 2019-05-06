@@ -3,7 +3,15 @@ import re
 from utils.colors import colors as c
 import configparser
 import csv
+import os
 
+def find_files(targetdir):
+	allfiles = []
+	for root, _, filenames in os.walk(targetdir):
+		for filename in filenames:
+			c.info_news(c, "Found {}".format(os.path.join(root,filename)))
+			allfiles.append(os.path.join(root,filename))
+	return allfiles
 
 
 def print_banner(b_type="intro"):

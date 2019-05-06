@@ -4,7 +4,8 @@ import os
 import configparser
 from utils.colors import colors as c
 from utils.classes import target
-from utils.helpers import print_banner, fetch_emails, get_config_from_file, get_emails_from_file, save_results_csv
+from utils.helpers import print_banner, fetch_emails, get_config_from_file, get_emails_from_file, save_results_csv, find_files
+from utils.localsearch import local_search
 
 
 def breachcomp_check(targets, breachcomp_path):
@@ -91,6 +92,10 @@ def main(user_args):
 	# These are not done inside the factory as the factory iterates over each target individually
 	if user_args.bc_path:
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
+	if user_args.local_breach_src:
+		res = find_files(user_args.local_breach_src)
+		local_search(res, targets, 2)
+		# print(res)
 	print_results(breached_targets)
 	if user_args.output_file:
 		save_results_csv(user_args.output_file, breached_targets)
@@ -100,7 +105,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Email information and password finding tool")
 
 	parser.add_argument("-t", "--targets", required=True, dest="target_emails",
-						help="Either single email, or file")
+						help="Either email, or file")
 
 	parser.add_argument("-c", "--config", dest="config_file", default="config.ini",
 						help="Configuration file for API keys")
@@ -111,6 +116,8 @@ if __name__ == "__main__":
 						default=False)
 	parser.add_argument("-sk", "--skip-defaults", dest="skip_defaults", help="Skip HaveIBeenPwned and HunterIO check", action="store_true", default=False)
 	parser.add_argument("-k", "--apikey", dest="cli_apikeys", help="Pass config options. Format is \"K:V,K:V\"")
+	parser.add_argument("-lb", "--local-breach", dest="local_breach_src", help="Local breaches to scan for targets")
+
 
 
 	args = parser.parse_args()

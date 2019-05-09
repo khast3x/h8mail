@@ -4,8 +4,13 @@ import os
 import configparser
 from utils.colors import colors as c
 from utils.classes import target
-from utils.helpers import print_banner, fetch_emails, get_config_from_file, get_emails_from_file, save_results_csv, find_files
-from utils.localsearch import local_search
+from utils.helpers import (	print_banner, 
+							fetch_emails,
+							get_config_from_file,
+							get_emails_from_file,
+							save_results_csv,
+							find_files)
+from utils.localsearch import local_search, local_to_targets
 
 
 def breachcomp_check(targets, breachcomp_path):
@@ -48,6 +53,8 @@ def print_results(results):
 					c.print_result(c, t.email, t.data[i][1], "HUNTER_RELATED")
 				if "SNUS" in t.data[i][0]:
 					c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+				if "LOCAL" in t.data[i][0]:
+					c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 
 
@@ -70,9 +77,7 @@ def target_factory(targets, api_keys, user_args):
 	return finished
 
 
-
-
-def main(user_args):
+def h8mail(user_args):
 	targets = []
 	api_keys = get_config_from_file(user_args)
 	c.good_news(c, "Targets:")
@@ -84,7 +89,7 @@ def main(user_args):
 		c.info_news(c, "Reading from file " + user_args.target_emails)
 		targets.extend(get_emails_from_file(user_args.target_emails))
 	else:
-		c.bad_news(c, "No targets found")
+		c.bad_news(c, "No targets found in user input")
 
 # Launch
 	breached_targets = target_factory(targets, api_keys, user_args)
@@ -94,12 +99,15 @@ def main(user_args):
 		breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 	if user_args.local_breach_src:
 		res = find_files(user_args.local_breach_src)
-		local_search(res, targets, 2)
+		local_found = local_search(res, targets)
+		breached_targets2 = local_to_targets(breached_targets, local_found)
 		# print(res)
-	print_results(breached_targets)
+	print_results(breached_targets2)
 	if user_args.output_file:
 		save_results_csv(user_args.output_file, breached_targets)
 
+def main(user_args):
+	h8mail(user_args)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Email information and password finding tool")

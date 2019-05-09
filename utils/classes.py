@@ -7,6 +7,20 @@ import socket
 import sys
 import platform
 
+
+
+class local_breach_target():
+	def __init__(self, email, fp, ln, content):
+		self.email = email
+		self.filepath = fp
+		self.line = ln
+		self.content = content
+	def dump(self):
+		print("Email: {}".format(self.email))
+		print("Path: {}".format(self.filepath))
+		print("Line: {}".format(self.line))
+		print("Content: {}".format(self.content))
+
 class target():
 	def __init__(self, email):
 		self.headers = {

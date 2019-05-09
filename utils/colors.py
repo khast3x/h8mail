@@ -76,6 +76,9 @@ class colors:
         if "PASS" in source:
             print("{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(self.fg.lightblue, self.bold, source, \
                 self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.bold, self.fg.green, data, self.reset))
+        if "LOCALSEARCH" in source:
+            print("{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(self.fg.lightblue, self.bold, source, \
+                self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.bold, self.fg.green, data, self.reset))
         elif "HASH" in source:
             print("{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(self.fg.lightblue, source, \
                 self.fg.lightgrey, self.fg.pink, target, self.fg.lightgrey, self.fg.red, data, self.reset)) 

@@ -9,7 +9,7 @@ def find_files(targetdir):
 	allfiles = []
 	for root, _, filenames in os.walk(targetdir):
 		for filename in filenames:
-			c.info_news(c, "Found {}".format(os.path.join(root,filename)))
+			c.info_news(c, "Using file {}".format(os.path.join(root,filename)))
 			allfiles.append(os.path.join(root,filename))
 	return allfiles
 

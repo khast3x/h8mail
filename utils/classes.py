@@ -72,7 +72,6 @@ class target():
 	
 	def get_hunterio_public(self):
 		try:
-			print(self.email)
 			target_domain = self.email.split("@")[1]
 			url = "https://api.hunter.io/v2/email-count?domain={}".format(target_domain)
 			req = self.make_request(url)

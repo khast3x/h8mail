@@ -106,3 +106,4 @@ venv.bak/
 targets.txt
 testoutput.csv
 targets.txt
+.vscode/settings.json

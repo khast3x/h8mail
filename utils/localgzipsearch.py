@@ -67,15 +67,13 @@ def local_search_single_gzip(files_to_parse, target_list):
     for file_to_parse in files_to_parse:
         with gzip.open(file_to_parse, "r") as fp:
             size = os.stat(file_to_parse).st_size
-            lines_no = raw_in_count(file_to_parse)
             c.info_news(
                 c,
-                "Searching for targets in {file_to_parse} ({size} bytes, {lines_no} lines)".format(
-                    file_to_parse=file_to_parse, size=size, lines_no=lines_no
+                "Searching for targets in {file_to_parse} ({size} bytes)".format(
+                    file_to_parse=file_to_parse, size=size
                 ),
             )
             for cnt, line in enumerate(fp):
-                lines_left = lines_no - cnt
                 progress_gzip(cnt)
                 for t in target_list:
                     if t in str(line):

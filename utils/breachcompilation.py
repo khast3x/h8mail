@@ -12,7 +12,13 @@ def breachcomp_check(targets, breachcomp_path):
         subprocess.call(["chmod", "+x", query_bin])
         for t in targets:
             procfd = subprocess.run([query_bin, t.email], stdout=subprocess.PIPE)
-            output = procfd.stdout.decode("utf-8")
+            try:
+                output = procfd.stdout.decode("utf-8")
+            except Exception as e:
+                c.bad_news(c, f"Could not decode bytes for {t.email} results")
+                output = procfd.stdout
+                print(output[:85], "[...]")
+                continue
             if len(output) != 0:
                 split_output = output.split("\n")
                 for line in split_output:

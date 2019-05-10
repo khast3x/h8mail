@@ -105,7 +105,7 @@ def h8mail(user_args):
     if user_args.local_breach_src:
         res = find_files(user_args.local_breach_src)
         if user_args.single_file:
-            local_found = local_search_single(res[0], targets)
+            local_found = local_search_single(res, targets)
         else:
             local_found = local_search(res, targets)
         breached_targets = local_to_targets(breached_targets, local_found)
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         "-sf",
         "--single-file",
         dest="single_file",
-        help="If breach contains big files, set this flag to view the progress bar. Targets one file only",
+        help="If breach contains big files, set this flag to view the progress bar. Disables concurrent file searching for stability",
         action="store_true",
         default=False,
     )

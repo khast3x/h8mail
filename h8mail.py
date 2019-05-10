@@ -47,7 +47,6 @@ def target_factory(targets, api_keys, user_args):
 
     return finished
 
-
 def h8mail(user_args):
     targets = []
     api_keys = get_config_from_file(user_args)
@@ -71,6 +70,7 @@ def h8mail(user_args):
     if user_args.bc_path:
         breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 
+    local_found = None
     if user_args.local_breach_src:
         res = find_files(user_args.local_breach_src)
         if user_args.single_file:
@@ -84,8 +84,9 @@ def h8mail(user_args):
             local_found = local_search_single_gzip(res, targets)
         else:
             local_found = local_gzip_search(res, targets)
-
-    breached_targets = local_to_targets(breached_targets, local_found)
+    if local_found is not None:
+        breached_targets = local_to_targets(breached_targets, local_found)
+    
     print_results(breached_targets)
     
     if user_args.output_file:

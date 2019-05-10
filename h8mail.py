@@ -1,20 +1,4 @@
-import argparse
-import configparser
-import os
-import re
-
-from utils.classes import target
-from utils.colors import colors as c
-from utils.helpers import (
-    fetch_emails,
-    find_files,
-    get_config_from_file,
-    get_emails_from_file,
-    print_banner,
-    save_results_csv,
-)
-from utils.localsearch import local_search, local_search_single, local_to_targets
-from utils.breachcompilation import breachcomp_check
+import sys
 
 
 def print_results(results):
@@ -82,6 +66,8 @@ def h8mail(user_args):
     breached_targets = target_factory(targets, api_keys, user_args)
 
     # These are not done inside the factory as the factory iterates over each target individually
+    # The following functions perform line by line checks of all target per line
+
     if user_args.bc_path:
         breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
     if user_args.local_breach_src:
@@ -101,6 +87,27 @@ def main(user_args):
 
 
 if __name__ == "__main__":
+    if sys.version_info[0] < 3:
+        sys.stdout.write("\n/!\\ h8mail requires Python 3+. Try running h8mail with python3 /!\\\neg: python3 h8mail.py --help\n")
+        sys.exit(1)
+    import configparser
+    import argparse
+    import os
+    import re
+
+    from utils.breachcompilation import breachcomp_check
+    from utils.classes import target
+    from utils.colors import colors as c
+    from utils.helpers import (
+        fetch_emails,
+        find_files,
+        get_config_from_file,
+        get_emails_from_file,
+        print_banner,
+        save_results_csv,
+    )
+    from utils.localsearch import local_search, local_search_single, local_to_targets
+
     parser = argparse.ArgumentParser(
         description="Email information and password finding tool"
     )

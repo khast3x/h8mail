@@ -78,7 +78,7 @@ class target():
 			response = req.json()
 			if response["data"]["total"] != 0:
 				self.data.append(("HUNTER_PUB", response["data"]["total"]))
-			c.good_news(c, "Found {num} related emails for {target} using hunter.io".format(num=response["data"]["total"], target=self.email))	
+			c.good_news(c, "Found {num} related emails for {target} using Hunter.IO".format(num=response["data"]["total"], target=self.email))	
 		except Exception as ex:
 			c.bad_news(c, "HunterIO (pubic API) error: " + self.email)
 			print(ex)

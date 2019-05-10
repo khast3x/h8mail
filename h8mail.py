@@ -1,41 +1,20 @@
 import argparse
-import re
-import os
 import configparser
-from utils.colors import colors as c
+import os
+import re
+
 from utils.classes import target
+from utils.colors import colors as c
 from utils.helpers import (
-    print_banner,
     fetch_emails,
+    find_files,
     get_config_from_file,
     get_emails_from_file,
+    print_banner,
     save_results_csv,
-    find_files,
 )
 from utils.localsearch import local_search, local_search_single, local_to_targets
-
-
-def breachcomp_check(targets, breachcomp_path):
-    # https://gist.github.com/scottlinux/9a3b11257ac575e4f71de811322ce6b3
-    try:
-        import subprocess
-
-        query_bin = os.path.join(breachcomp_path, "query.sh")
-        subprocess.call(["chmod", "+x", query_bin])
-        for t in targets:
-            procfd = subprocess.run([query_bin, t.email], stdout=subprocess.PIPE)
-            output = procfd.stdout.decode("utf-8")
-            if len(output) != 0:
-                t.pwnd = True
-                split_output = output.split("\n")
-                for line in split_output:
-                    if line:
-                        t.breachcomp_passw.append(line.split(":")[1])
-        return targets
-    except Exception as ex:
-        c.bad_news(c, "Breach compilation")
-        print(ex)
-
+from utils.breachcompilation import breachcomp_check
 
 def print_results(results):
     for t in results:
@@ -58,6 +37,8 @@ def print_results(results):
                 if "SNUS" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
                 if "LOCAL" in t.data[i][0]:
+                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                if "BREACHEDCOMP" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 
@@ -100,8 +81,8 @@ def h8mail(user_args):
     breached_targets = target_factory(targets, api_keys, user_args)
 
     # These are not done inside the factory as the factory iterates over each target individually
-    # if user_args.bc_path:
-    #     breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
+    if user_args.bc_path:
+        breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
     if user_args.local_breach_src:
         res = find_files(user_args.local_breach_src)
         if user_args.single_file:
@@ -160,7 +141,7 @@ if __name__ == "__main__":
         "-sk",
         "--skip-defaults",
         dest="skip_defaults",
-        help="Skip HaveIBeenPwned and HunterIO check",
+        help="Skips HaveIBeenPwned and HunterIO check. Ideal for local scans.",
         action="store_true",
         default=False,
     )
@@ -174,13 +155,13 @@ if __name__ == "__main__":
         "-lb",
         "--local-breach",
         dest="local_breach_src",
-        help="Local breaches to scan for targets",
+        help="Local breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
     )
     parser.add_argument(
         "-sf",
         "--single-file",
         dest="single_file",
-        help="If breach contains big files, set this flag to view the progress bar. Disables concurrent file searching for stability",
+        help="If breach contains big files, set this flag to view the progress bar. Disables concurrent file searching for stability.",
         action="store_true",
         default=False,
     )
@@ -190,4 +171,3 @@ if __name__ == "__main__":
     print_banner()
     main(args)
     c.good_news(c, "Done")
-

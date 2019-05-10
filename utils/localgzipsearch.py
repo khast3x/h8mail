@@ -1,15 +1,22 @@
 from multiprocessing import Pool
 from utils.classes import local_breach_target
 from utils.colors import colors as c
+from utils.localsearch import raw_in_count, progress
 import gzip
+import os
 
 
 def gzip_worker(filepath, target_list):
     try:
         found_list = []
+        size = os.stat(filepath).st_size
         with gzip.open(filepath, "r") as gzipfile:
-            # for line in enumerate(gzipfile):
-            #     print(line)
+            c.info_news(
+                c,
+                "Searching for targets in {filepath} ({size} bytes)".format(
+                    filepath=filepath, size=size
+                ),
+            )
             for cnt, line in enumerate(gzipfile):
                 for t in target_list:
                     if t in str(line):
@@ -47,4 +54,47 @@ def local_gzip_search(files_to_parse, target_list):
             found_list.extend(async_results.get())
     pool.close()
     pool.join()
+    return found_list
+
+import sys
+def progress_gzip(count):
+    sys.stdout.write("Lines read:%i\r" % (count))
+    sys.stdout.write("\033[K")
+
+
+def local_search_single_gzip(files_to_parse, target_list):
+    found_list = []
+    for file_to_parse in files_to_parse:
+        with gzip.open(file_to_parse, "r") as fp:
+            size = os.stat(file_to_parse).st_size
+            lines_no = raw_in_count(file_to_parse)
+            c.info_news(
+                c,
+                "Searching for targets in {file_to_parse} ({size} bytes, {lines_no} lines)".format(
+                    file_to_parse=file_to_parse, size=size, lines_no=lines_no
+                ),
+            )
+            for cnt, line in enumerate(fp):
+                lines_left = lines_no - cnt
+                progress_gzip(cnt)
+                for t in target_list:
+                    if t in str(line):
+                        try:
+                            decoded = str(line, "utf-8")
+                            found_list.append(
+                                local_breach_target(t, file_to_parse, cnt, decoded)
+                            )
+                            c.good_news(
+                                c, f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}"
+                            )
+                        except Exception as e:
+                            c.bad_news(
+                                c, f"Got a decoding error line {cnt} - file: {file_to_parse}"
+                            )
+                            c.good_news(
+                                c, f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
+                            )
+                            found_list.append(
+                                local_breach_target(t, file_to_parse, cnt, str(line))
+                            )
     return found_list

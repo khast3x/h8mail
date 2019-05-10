@@ -70,17 +70,24 @@ def h8mail(user_args):
 
     if user_args.bc_path:
         breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
+
     if user_args.local_breach_src:
         res = find_files(user_args.local_breach_src)
         if user_args.single_file:
             local_found = local_search_single(res, targets)
         else:
             local_found = local_search(res, targets)
+
     if user_args.local_gzip_src:
         res = find_files(user_args.local_gzip_src)
-        local_found = local_gzip_search(res, targets)
+        if user_args.single_file:
+            local_found = local_search_single_gzip(res, targets)
+        else:
+            local_found = local_gzip_search(res, targets)
+
     breached_targets = local_to_targets(breached_targets, local_found)
     print_results(breached_targets)
+    
     if user_args.output_file:
         save_results_csv(user_args.output_file, breached_targets)
 
@@ -114,7 +121,7 @@ if __name__ == "__main__":
         save_results_csv,
     )
     from utils.localsearch import local_search, local_search_single, local_to_targets
-    from utils.localgzipsearch import local_gzip_search
+    from utils.localgzipsearch import local_gzip_search, local_search_single_gzip
 
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool"

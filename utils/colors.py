@@ -109,7 +109,7 @@ class colors:
                     self.reset,
                 )
             )
-        if "LOCALSEARCH" in source:
+        elif "LOCALSEARCH" in source:
             print(
                 "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
                     self.fg.lightblue,

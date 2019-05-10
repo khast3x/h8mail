@@ -28,29 +28,33 @@ def raw_in_count(filename):
 
 
 def worker(filepath, target_list):
-    with open(filepath, "r") as fp:
-        found_list = []
-        size = os.stat(filepath).st_size
-        c.info_news(
-            c,
-            "Searching for targets in {filepath} ({size} bytes)".format(
-                filepath=filepath, size=size
-            ),
-        )
-        for cnt, line in enumerate(fp):
-            for t in target_list:
-                if t in line:
-                    found_list.append(local_breach_target(t, filepath, cnt, line))
-                    c.good_news(c, f"Found occurrence [{filepath}] Line {cnt}: {line}")
-    return found_list
-
+    try:
+        with open(filepath, "r") as fp:
+            found_list = []
+            size = os.stat(filepath).st_size
+            c.info_news(
+                c,
+                "Searching for targets in {filepath} ({size} bytes)".format(
+                    filepath=filepath, size=size
+                ),
+            )
+            for cnt, line in enumerate(fp):
+                for t in target_list:
+                    if t in line:
+                        found_list.append(local_breach_target(t, filepath, cnt, line))
+                        c.good_news(c, f"Found occurrence [{filepath}] Line {cnt}: {line}")
+        return found_list
+    except Exception as e:
+        c.bad_news(c, "Something went wrong with worker")
+        print(e)
 
 def local_search(files_to_parse, target_list):
     pool = Pool()
     found_list = []
     for f in files_to_parse:
         async_results = pool.apply_async(worker, args=(f, target_list))
-        found_list.extend(async_results.get())
+        if async_results.get() is not None:
+            found_list.extend(async_results.get())
     pool.close()
     pool.join()
     return found_list

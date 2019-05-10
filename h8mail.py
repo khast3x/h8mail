@@ -76,7 +76,10 @@ def h8mail(user_args):
             local_found = local_search_single(res, targets)
         else:
             local_found = local_search(res, targets)
-        breached_targets = local_to_targets(breached_targets, local_found)
+    if user_args.local_gzip_src:
+        res = find_files(user_args.local_gzip_src)
+        local_found = local_gzip_search(res, targets)
+    breached_targets = local_to_targets(breached_targets, local_found)
     print_results(breached_targets)
     if user_args.output_file:
         save_results_csv(user_args.output_file, breached_targets)
@@ -88,8 +91,12 @@ def main(user_args):
 
 if __name__ == "__main__":
     if sys.version_info[0] < 3:
-        sys.stdout.write("\n/!\\ h8mail requires Python 3+. Try running h8mail with python3 /!\\\neg: python3 h8mail.py --help\n")
+        sys.stdout.write(
+            "\n/!\\ h8mail requires Python 3+. Try running h8mail with python3 /!\\\neg: python3 h8mail.py --help\n\n"
+        )
         sys.exit(1)
+
+    # I REALLY want to make sure I don't get Python2 Issues on Github...
     import configparser
     import argparse
     import os
@@ -107,9 +114,10 @@ if __name__ == "__main__":
         save_results_csv,
     )
     from utils.localsearch import local_search, local_search_single, local_to_targets
+    from utils.localgzipsearch import local_gzip_search
 
     parser = argparse.ArgumentParser(
-        description="Email information and password finding tool"
+        description="Email information and password lookup tool"
     )
 
     parser.add_argument(
@@ -117,7 +125,7 @@ if __name__ == "__main__":
         "--targets",
         required=True,
         dest="target_emails",
-        help="Either email, or file",
+        help="Either emails or file",
     )
 
     parser.add_argument(
@@ -140,7 +148,7 @@ if __name__ == "__main__":
         "-sk",
         "--skip-defaults",
         dest="skip_defaults",
-        help="Skips HaveIBeenPwned and HunterIO check. Ideal for local scans.",
+        help="Skips HaveIBeenPwned and HunterIO check. Ideal for local scans",
         action="store_true",
         default=False,
     )
@@ -154,15 +162,21 @@ if __name__ == "__main__":
         "-lb",
         "--local-breach",
         dest="local_breach_src",
-        help="Cleartext local breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input.",
+        help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
     )
     parser.add_argument(
         "-sf",
         "--single-file",
         dest="single_file",
-        help="If breach contains big cleartext files, set this flag to view the progress bar. Disables concurrent file searching for stability.",
+        help="If breach contains big cleartext files, set this flag to view the progress bar. Disables concurrent file searching for stability",
         action="store_true",
         default=False,
+    )
+    parser.add_argument(
+        "-gz",
+        "--gzip",
+        dest="local_gzip_src",
+        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
     )
 
     args = parser.parse_args()

@@ -16,6 +16,7 @@ from utils.helpers import (
 from utils.localsearch import local_search, local_search_single, local_to_targets
 from utils.breachcompilation import breachcomp_check
 
+
 def print_results(results):
     for t in results:
         print()
@@ -38,7 +39,7 @@ def print_results(results):
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
                 if "LOCAL" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
-                if "BREACHEDCOMP" in t.data[i][0]:
+                if "BC_PASS" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 
@@ -126,16 +127,7 @@ if __name__ == "__main__":
         "-bc",
         "--breachcomp",
         dest="bc_path",
-        help="Path to the breachcompilation Torrent. https://ghostbin.com/paste/2cbdn",
-    )
-
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbosity",
-        help="Show debug information",
-        action="store_true",
-        default=False,
+        help="Path to the breachcompilation Torrent. Uses the query.sh script included in the torrent. https://ghostbin.com/paste/2cbdn",
     )
     parser.add_argument(
         "-sk",
@@ -155,13 +147,13 @@ if __name__ == "__main__":
         "-lb",
         "--local-breach",
         dest="local_breach_src",
-        help="Local breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
+        help="Cleartext local breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input.",
     )
     parser.add_argument(
         "-sf",
         "--single-file",
         dest="single_file",
-        help="If breach contains big files, set this flag to view the progress bar. Disables concurrent file searching for stability.",
+        help="If breach contains big cleartext files, set this flag to view the progress bar. Disables concurrent file searching for stability.",
         action="store_true",
         default=False,
     )

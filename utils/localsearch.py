@@ -42,11 +42,14 @@ def worker(filepath, target_list):
                 for t in target_list:
                     if t in line:
                         found_list.append(local_breach_target(t, filepath, cnt, line))
-                        c.good_news(c, f"Found occurrence [{filepath}] Line {cnt}: {line}")
+                        c.good_news(
+                            c, f"Found occurrence [{filepath}] Line {cnt}: {line}"
+                        )
         return found_list
     except Exception as e:
         c.bad_news(c, "Something went wrong with worker")
         print(e)
+
 
 def local_search(files_to_parse, target_list):
     pool = Pool()

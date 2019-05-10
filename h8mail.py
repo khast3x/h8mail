@@ -175,7 +175,7 @@ if __name__ == "__main__":
         "-sf",
         "--single-file",
         dest="single_file",
-        help="If breach contains big cleartext files, set this flag to view the progress bar. Disables concurrent file searching for stability",
+        help="If breach contains big cleartext or tar.gz files, set this flag to view the progress bar. Disables concurrent file searching for stability",
         action="store_true",
         default=False,
     )

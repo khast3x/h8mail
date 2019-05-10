@@ -24,7 +24,10 @@ def breachcomp_check(targets, breachcomp_path):
                 for line in split_output:
                     if ":" in line:
                         t.data.append(("BC_PASS", line.split(":")[1]))
-                        c.good_news(c, "Found BreachedCompilation entry {line}".format(line=line))
+                        c.good_news(
+                            c,
+                            "Found BreachedCompilation entry {line}".format(line=line),
+                        )
         return targets
     except Exception as ex:
         c.bad_news(c, "Breach compilation")

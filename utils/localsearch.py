@@ -29,7 +29,7 @@ def raw_in_count(filename):
 
 def worker(filepath, target_list):
     try:
-        with open(filepath, "r") as fp:
+        with open(filepath, "rb") as fp:
             found_list = []
             size = os.stat(filepath).st_size
             c.info_news(
@@ -40,11 +40,26 @@ def worker(filepath, target_list):
             )
             for cnt, line in enumerate(fp):
                 for t in target_list:
-                    if t in line:
-                        found_list.append(local_breach_target(t, filepath, cnt, line))
-                        c.good_news(
-                            c, f"Found occurrence [{filepath}] Line {cnt}: {line}"
-                        )
+                    if t in str(line):
+                        try:
+                            decoded = str(line, "utf-8")
+                            found_list.append(
+                                local_breach_target(t, filepath, cnt, decoded)
+                            )
+                            c.good_news(
+                                c,
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}",
+                            )
+                        except Exception as e:
+                            c.bad_news(
+                                c, f"Got a decoding error line {cnt} - file: {filepath}"
+                            )
+                            c.good_news(
+                                c, f"Found occurrence [{filepath}] Line {cnt}: {line}"
+                            )
+                            found_list.append(
+                                local_breach_target(t, filepath, cnt, str(line))
+                            )
         return found_list
     except Exception as e:
         c.bad_news(c, "Something went wrong with worker")
@@ -83,7 +98,7 @@ sys.stdout.flush()
 def local_search_single(files_to_parse, target_list):
     found_list = []
     for file_to_parse in files_to_parse:
-        with open(file_to_parse, "r") as fp:
+        with open(file_to_parse, "rb") as fp:
             size = os.stat(file_to_parse).st_size
             lines_no = raw_in_count(file_to_parse)
             c.info_news(
@@ -98,12 +113,25 @@ def local_search_single(files_to_parse, target_list):
                     cnt, lines_no, f"{cnt} lines checked - {lines_left} lines left"
                 )
                 for t in target_list:
-                    if t in line:
-                        found_list.append(
-                            local_breach_target(t, file_to_parse, cnt, line)
-                        )
-                        c.good_news(
-                            c, f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
-                        )
+                    if t in str(line):
+                        try:
+                            decoded = str(line, "utf-8")
+                            found_list.append(
+                                local_breach_target(t, file_to_parse, cnt, decoded)
+                            )
+                            c.good_news(
+                                c,
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}",
+                            )
+                        except Exception as e:
+                            c.bad_news(
+                                c, f"Got a decoding error line {cnt} - file: {filepath}"
+                            )
+                            c.good_news(
+                                c, f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
+                            )
+                            found_list.append(
+                                local_breach_target(t, file_to_parse, cnt, str(line))
+                            )
     return found_list
 

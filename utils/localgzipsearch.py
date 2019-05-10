@@ -4,7 +4,12 @@ from utils.colors import colors as c
 from utils.localsearch import raw_in_count, progress
 import gzip
 import os
+import sys
 
+
+def progress_gzip(count):
+    sys.stdout.write("Lines checked:%i\r" % (count))
+    sys.stdout.write("\033[K")
 
 def gzip_worker(filepath, target_list):
     try:
@@ -18,6 +23,7 @@ def gzip_worker(filepath, target_list):
                 ),
             )
             for cnt, line in enumerate(gzipfile):
+                progress_gzip(cnt)
                 for t in target_list:
                     if t in str(line):
                         try:
@@ -55,11 +61,6 @@ def local_gzip_search(files_to_parse, target_list):
     pool.close()
     pool.join()
     return found_list
-
-import sys
-def progress_gzip(count):
-    sys.stdout.write("Lines read:%i\r" % (count))
-    sys.stdout.write("\033[K")
 
 
 def local_search_single_gzip(files_to_parse, target_list):

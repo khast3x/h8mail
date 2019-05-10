@@ -29,6 +29,6 @@ def breachcomp_check(targets, breachcomp_path):
                             "Found BreachedCompilation entry {line}".format(line=line),
                         )
         return targets
-    except Exception as ex:
+    except Exception as e:
         c.bad_news(c, "Breach compilation")
-        print(ex)
+        print(e)

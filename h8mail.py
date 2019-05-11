@@ -60,6 +60,7 @@ def h8mail(user_args):
         targets.extend(get_emails_from_file(user_args.target_emails))
     else:
         c.bad_news(c, "No targets found in user input")
+        exit(1)
 
     # Launch
     breached_targets = target_factory(targets, api_keys, user_args)
@@ -173,18 +174,18 @@ if __name__ == "__main__":
         help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
     )
     parser.add_argument(
+        "-gz",
+        "--gzip",
+        dest="local_gzip_src",
+        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
+    )
+    parser.add_argument(
         "-sf",
         "--single-file",
         dest="single_file",
         help="If breach contains big cleartext or tar.gz files, set this flag to view the progress bar. Disables concurrent file searching for stability",
         action="store_true",
         default=False,
-    )
-    parser.add_argument(
-        "-gz",
-        "--gzip",
-        dest="local_gzip_src",
-        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
     )
 
     args = parser.parse_args()

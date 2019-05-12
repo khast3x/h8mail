@@ -6,7 +6,6 @@ from itertools import takewhile, repeat
 from utils.classes import local_breach_target
 from utils.colors import colors as c
 
-# Adding a third element of line data only, might be useful later
 
 def local_to_targets(targets, local_results):
     for t in targets:
@@ -15,9 +14,10 @@ def local_to_targets(targets, local_results):
                 t.data.append(
                     (
                         "LOCALSEARCH",
-                        f"[{l.filepath}] Line {l.line}: {l.content}".strip(),
+                        f"[{os.path.basename(l.filepath)}] Line {l.line}: {l.content}".strip(),
                     )
                 )
+                t.pwned = True
     return targets
 
 
@@ -70,7 +70,10 @@ def worker(filepath, target_list):
 def local_search(files_to_parse, target_list):
     pool = Pool()
     found_list = []
-    async_results = [pool.apply_async(worker, args=(f, target_list)) for i, f in enumerate(files_to_parse)]
+    async_results = [
+        pool.apply_async(worker, args=(f, target_list))
+        for i, f in enumerate(files_to_parse)
+    ]
     for r in async_results:
         if r.get() is not None:
             found_list.extend(r.get())
@@ -129,7 +132,8 @@ def local_search_single(files_to_parse, target_list):
                                 c, f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                c, f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
+                                c,
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {line}",
                             )
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, str(line))

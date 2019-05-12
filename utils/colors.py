@@ -110,21 +110,39 @@ class colors:
                 )
             )
         elif "LOCALSEARCH" in source:
-            print(
-                "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
-                    self.fg.lightblue,
-                    self.bold,
-                    source,
-                    self.fg.lightgrey,
-                    self.fg.pink,
-                    target,
-                    self.fg.lightgrey,
-                    self.bold,
-                    self.fg.green,
-                    data,
-                    self.reset,
+            if len(data) > 140:
+                print(
+                    "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
+                        self.fg.lightblue,
+                        self.bold,
+                        source,
+                        self.fg.lightgrey,
+                        self.fg.pink,
+                        target,
+                        self.fg.lightgrey,
+                        self.bold,
+                        self.fg.green,
+                        "[...]" + data[-135:],
+                        self.reset,
+                    )
                 )
-            )
+            else:
+                print(
+                    "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
+                        self.fg.lightblue,
+                        self.bold,
+                        source,
+                        self.fg.lightgrey,
+                        self.fg.pink,
+                        target,
+                        self.fg.lightgrey,
+                        self.bold,
+                        self.fg.green,
+                        data,
+                        self.reset,
+                    )
+                )
+
         elif "HASH" in source:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(

@@ -27,7 +27,7 @@ class target():
 			'User-Agent': 'h8mail-v.1.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})'.format(pyver=sys.version.split(" ")[0], 
 			platfrm=platform.platform().split("-")[0])}
 		self.email = email
-		self.pwnd = False
+		self.pwned = False
 		self.data = [()]
 
 	def make_request(self, url, meth="GET", timeout=10, redirs=True, data=None, params=None):
@@ -54,7 +54,7 @@ class target():
 			return
 
 		if response.status_code == 200:
-			self.pwnd = True
+			self.pwned = True
 			data = response.json()
 			for d in data:  # Returned type is a dict of Name : Service
 				for _, ser in d.items():
@@ -105,11 +105,14 @@ class target():
 			for result in response["result"]:
 				if result["password"]:
 					self.data.append(("SNUS_PASSWORD", result["password"]))
+					self.pwned = True
 				if result["hash"]:
 					if result["salt"]:
 						self.data.append(("SNUS_HASH_SALT", result["hash"].strip() + " : " + result["salt"].strip()))
+						self.pwned = True
 					else:
 						self.data.append(("SNUS_HASH", result["hash"]))
+						self.pwned = True
 		except Exception as ex:
 			c.bad_news(c, "Snusbase error with {target}".format(self.email))
 			print(ex)

@@ -1,5 +1,5 @@
 import sys
-
+import time
 
 def print_results(results):
     for t in results:
@@ -50,6 +50,7 @@ def target_factory(targets, api_keys, user_args):
 
 def h8mail(user_args):
     targets = []
+    start_time = time.time()
     api_keys = get_config_from_file(user_args)
     c.good_news(c, "Targets:")
     user_stdin_target = fetch_emails(args.target_emails)
@@ -92,7 +93,8 @@ def h8mail(user_args):
             breached_targets = local_to_targets(breached_targets, local_found)
     
     print_results(breached_targets)
-    
+    from utils.summary import print_summary
+    print_summary(start_time, breached_targets)
     if user_args.output_file:
         save_results_csv(user_args.output_file, breached_targets)
 

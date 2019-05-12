@@ -15,7 +15,7 @@ def local_to_targets(targets, local_results):
                 t.data.append(
                     (
                         "LOCALSEARCH",
-                        f"[{l.filepath}] Line {l.line}: {l.content}".strip()
+                        f"[{l.filepath}] Line {l.line}: {l.content}".strip(),
                     )
                 )
     return targets

@@ -16,7 +16,6 @@ def progress_gzip(count):
 
 def gzip_worker(filepath, target_list):
     try:
-        print(filepath)
         found_list = []
         size = os.stat(filepath).st_size
         with gzip.open(filepath, "r") as gzipfile:

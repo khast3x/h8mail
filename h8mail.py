@@ -79,6 +79,8 @@ def h8mail(user_args):
             local_found = local_search_single(res, targets)
         else:
             local_found = local_search(res, targets)
+        if local_found is not None:
+            breached_targets = local_to_targets(breached_targets, local_found)
        
     if user_args.local_gzip_src:
         res = find_files(user_args.local_gzip_src)
@@ -86,8 +88,8 @@ def h8mail(user_args):
             local_found = local_search_single_gzip(res, targets)
         else:
             local_found = local_gzip_search(res, targets)
-    if local_found is not None:
-        breached_targets = local_to_targets(breached_targets, local_found)
+        if local_found is not None:
+            breached_targets = local_to_targets(breached_targets, local_found)
     
     print_results(breached_targets)
     

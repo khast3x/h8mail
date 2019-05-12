@@ -6,26 +6,27 @@ import gzip
 import os
 import sys
 
+
 def progress_gzip(count):
     sys.stdout.write("Lines checked:%i\r" % (count))
     sys.stdout.write("\033[K")
 
 
+
+
 def gzip_worker(filepath, target_list):
     try:
+        print(filepath)
         found_list = []
         size = os.stat(filepath).st_size
         with gzip.open(filepath, "r") as gzipfile:
             c.info_news(
                 c,
-                "Searching for targets in {filepath} ({size} bytes)".format(
-                    filepath=filepath, size=size
+                "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
+                    PID=os.getpid(), filepath=filepath, size=size
                 ),
             )
             for cnt, line in enumerate(gzipfile):
-                progress_gzip(cnt)
-                # with progress_counter.get_lock():
-                #     v.value += 1
                 for t in target_list:
                     if t in str(line):
                         try:
@@ -56,10 +57,11 @@ def gzip_worker(filepath, target_list):
 def local_gzip_search(files_to_parse, target_list):
     pool = Pool()
     found_list = []
-    for f in files_to_parse:
-        async_results = pool.apply_async(gzip_worker, args=(f, target_list))
-        # if async_results.get() is not None:
-        #     found_list.extend(async_results.get())
+    # launch
+    async_results = [pool.apply_async(gzip_worker, args=(f, target_list)) for i, f in enumerate(files_to_parse)]
+    for r in async_results:
+        if r.get() is not None:
+            found_list.extend(r.get())
     pool.close()
     pool.join()
     return found_list

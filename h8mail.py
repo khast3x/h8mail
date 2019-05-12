@@ -5,6 +5,7 @@ def print_results(results):
     for t in results:
         print()
         c.print_res_header(c, t.email)
+        
         for i in range(len(t.data)):
             if len(t.data) == 1:
                 print()
@@ -78,7 +79,7 @@ def h8mail(user_args):
             local_found = local_search_single(res, targets)
         else:
             local_found = local_search(res, targets)
-
+       
     if user_args.local_gzip_src:
         res = find_files(user_args.local_gzip_src)
         if user_args.single_file:

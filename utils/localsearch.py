@@ -6,6 +6,7 @@ from itertools import takewhile, repeat
 from utils.classes import local_breach_target
 from utils.colors import colors as c
 
+# Adding a third element of line data only, might be useful later
 
 def local_to_targets(targets, local_results):
     for t in targets:
@@ -14,7 +15,7 @@ def local_to_targets(targets, local_results):
                 t.data.append(
                     (
                         "LOCALSEARCH",
-                        f"[{l.filepath}] Line {l.line}: {l.content}".strip(),
+                        f"[{l.filepath}] Line {l.line}: {l.content}".strip()
                     )
                 )
     return targets
@@ -34,8 +35,8 @@ def worker(filepath, target_list):
             size = os.stat(filepath).st_size
             c.info_news(
                 c,
-                "Searching for targets in {filepath} ({size} bytes)".format(
-                    filepath=filepath, size=size
+                "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
+                    PID=os.getpid(), filepath=filepath, size=size
                 ),
             )
             for cnt, line in enumerate(fp):
@@ -69,10 +70,10 @@ def worker(filepath, target_list):
 def local_search(files_to_parse, target_list):
     pool = Pool()
     found_list = []
-    for f in files_to_parse:
-        async_results = pool.apply_async(worker, args=(f, target_list))
-        if async_results.get() is not None:
-            found_list.extend(async_results.get())
+    async_results = [pool.apply_async(worker, args=(f, target_list)) for i, f in enumerate(files_to_parse)]
+    for r in async_results:
+        if r.get() is not None:
+            found_list.extend(r.get())
     pool.close()
     pool.join()
     return found_list

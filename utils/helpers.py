@@ -39,7 +39,7 @@ def print_banner(b_type="intro"):
 def fetch_emails(target):
     e = re.findall(r"[\w\.-]+@[\w\.-]+", target)
     if e:
-        print(c.fg.green, ",".join(e), c.reset)
+        print(", ".join(e), c.reset)
         return e
     return None
 

@@ -6,16 +6,19 @@ import csv
 import os
 
 
-def find_files(to_parse):
+def find_files(to_parse, pattern=""):
     allfiles = []
     if os.path.isfile(to_parse):
-        c.info_news(c, "Using file {}".format(to_parse))
-        allfiles.append(to_parse)
+        if pattern in to_parse:
+            c.info_news(c, "Using file {}".format(to_parse))
+            allfiles.append(to_parse)
     elif os.path.isdir(to_parse):
         for root, _, filenames in os.walk(to_parse):
             for filename in filenames:
-                c.info_news(c, "Using file {}".format(os.path.join(root, filename)))
-                allfiles.append(os.path.join(root, filename))
+                print(filename)
+                if pattern in filename:
+                    c.info_news(c, "Using file {}".format(os.path.join(root, filename)))
+                    allfiles.append(os.path.join(root, filename))
     return allfiles
 
 
@@ -36,7 +39,11 @@ def print_banner(b_type="intro"):
         print(c.fg.pink, "\th8mail is free & open-source. Please report scammers\n\n", c.reset)
 
 
-def fetch_emails(target):
+def fetch_emails(target, loose=False):
+    if loose:
+        t = target.split(" ")
+        print(t)
+        return t
     e = re.findall(r"[\w\.-]+@[\w\.-]+", target)
     if e:
         print(", ".join(e), c.reset)
@@ -44,7 +51,7 @@ def fetch_emails(target):
     return None
 
 
-def get_emails_from_file(targets_file):
+def get_emails_from_file(targets_file, loose=False):
     email_obj_list = []
     try:
         target_fd = open(targets_file).readlines()

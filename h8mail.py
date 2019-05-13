@@ -53,13 +53,12 @@ def h8mail(user_args):
     start_time = time.time()
     api_keys = get_config_from_file(user_args)
     c.good_news(c, "Targets:")
-    user_stdin_target = fetch_emails(args.target_emails)
-
+    user_stdin_target = fetch_emails(user_args.target_emails, user_args.loose)
     if user_stdin_target:
         targets.extend(user_stdin_target)
     elif os.path.isfile(user_args.target_emails):
         c.info_news(c, "Reading from file " + user_args.target_emails)
-        targets.extend(get_emails_from_file(user_args.target_emails))
+        targets.extend(get_emails_from_file(user_args.target_emails, user_args.loose))
     else:
         c.bad_news(c, "No targets found in user input")
         exit(1)
@@ -84,7 +83,7 @@ def h8mail(user_args):
             breached_targets = local_to_targets(breached_targets, local_found)
        
     if user_args.local_gzip_src:
-        res = find_files(user_args.local_gzip_src)
+        res = find_files(user_args.local_gzip_src, "gz")
         if user_args.single_file:
             local_found = local_search_single_gzip(res, targets)
         else:
@@ -141,16 +140,22 @@ if __name__ == "__main__":
         dest="target_emails",
         help="Either emails or file",
     )
-
+    parser.add_argument(
+        "--loose",
+        dest="loose",
+        help="Allow loose search by disabling email pattern recognition. Use spaces a pattern seperator",
+        action="store_true",
+        default=False
+    )
     parser.add_argument(
         "-c",
         "--config",
         dest="config_file",
         default="config.ini",
-        help="Configuration file for API keys",
+        help="Configuration file for API keys. Accepts keys from Snusbase, (WeLeakInfo, Citadel.pw), hunterio",
     )
     parser.add_argument(
-        "-o", "--output", dest="output_file", help="File to write output"
+        "-o", "--output", dest="output_file", help="File to write CSV output"
     )
     parser.add_argument(
         "-bc",

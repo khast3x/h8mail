@@ -178,6 +178,7 @@ class colors:
         """
         Print Breach result header
         """
+        print(self.bold, "{:_^90}\n".format(""), self.reset)
         print(
             self.bold
             + self.fg.green

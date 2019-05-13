@@ -13,4 +13,4 @@ def print_summary(start_time, breached_targets):
             print(f"{t.email:^40} | ", c.fg.lightgrey, "{:^40}".format("Not Compromised"), c.reset)
         print('{:_^90}\n'.format(''))
     total_time = time.time() - start_time
-    print("Execution time: ", c.fg.lightcyan, f"{total_time}", c.reset, "\n")
+    print("Execution time (seconds): ", c.fg.lightcyan, f"{total_time}", c.reset, "\n")

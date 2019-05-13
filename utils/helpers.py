@@ -33,7 +33,7 @@ def print_banner(b_type="intro"):
 	"""
         print(c.bold, c.fg.red, banner, c.reset)
     elif "warn" in b_type:
-        print(c.fg.pink, "\th8mail is free & open-source. Please report resellers\n\n", c.reset)
+        print(c.fg.pink, "\th8mail is free & open-source. Please report scammers\n\n", c.reset)
 
 
 def fetch_emails(target):

@@ -12,7 +12,7 @@ def print_results(results):
                 print()
                 c.info_news(c, "No results founds")
                 continue
-            if len(t.data[i]) == 2:  # Contains data header + body
+            if len(t.data[i]) >= 2:  # Contains data header + body
                 if "HIBP" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], "HIBP")
                 if "HUNTER_PUB" in t.data[i][0]:
@@ -31,8 +31,9 @@ def print_results(results):
 
 def target_factory(targets, api_keys, user_args):
     finished = []
+    init_targets_len = len(targets)
 
-    for t in targets:
+    for counter, t in enumerate(targets):
         c.info_news(c, "Looking up {target}".format(target=t))
         current_target = target(t)
         if not user_args.skip_defaults:
@@ -40,6 +41,13 @@ def target_factory(targets, api_keys, user_args):
             current_target.get_hunterio_public()
         if len(api_keys["DEFAULT"]["hunterio"]) != 0:
             current_target.get_hunterio_private(api_keys["DEFAULT"]["hunterio"])
+            if user_args.chase_hunter and counter < init_targets_len: # If chase option
+                for i in range(len(current_target.data)):
+                    if len(current_target.data[i]) >= 2 and "HUNTER_RELATED" in current_target.data[i][0] and i <= user_args.chase_hunter:
+                        c.good_news(c, "Adding {new_target} using HunterIO chase".format(new_target=current_target.data[i][1]))
+                        targets.append(current_target.data[i][1])
+
+
         if len(api_keys["DEFAULT"]["snusbase_token"]) != 0:
             current_target.get_snusbase(
                 api_keys["DEFAULT"]["snusbase_url"],
@@ -55,7 +63,7 @@ def h8mail(user_args):
     start_time = time.time()
     api_keys = get_config_from_file(user_args)
     c.good_news(c, "Targets:")
-    
+
     # Find targets in user input or file
     for arg in user_args.target_emails:
         user_stdin_target = fetch_emails(arg, user_args.loose)
@@ -148,7 +156,7 @@ if __name__ == "__main__":
         required=True,
         dest="target_emails",
         help="Either emails or file",
-        nargs='+'
+        nargs="+",
     )
     parser.add_argument(
         "--loose",
@@ -192,14 +200,14 @@ if __name__ == "__main__":
         "--local-breach",
         dest="local_breach_src",
         help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
-        nargs='+'
+        nargs="+",
     )
     parser.add_argument(
         "-gz",
         "--gzip",
         dest="local_gzip_src",
         help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input. Looks for 'gz' in filename",
-        nargs='+'
+        nargs="+",
     )
     parser.add_argument(
         "-sf",
@@ -208,6 +216,14 @@ if __name__ == "__main__":
         help="If breach contains big cleartext or tar.gz files, set this flag to view the progress bar. Disables concurrent file searching for stability",
         action="store_true",
         default=False,
+    ),
+    parser.add_argument(
+        "-ch",
+        "--chase-hunter",
+        dest="chase_hunter",
+        help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase",
+        type=int,
+        nargs='?'
     )
 
     args = parser.parse_args()

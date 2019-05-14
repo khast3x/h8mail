@@ -115,5 +115,5 @@ class target():
 						self.data.append(("SNUS_HASH", result["hash"]))
 						self.pwned = True
 		except Exception as ex:
-			c.bad_news(c, "Snusbase error with {target}".format(self.email))
+			c.bad_news(c, "Snusbase error with {target}".format(target=self.email))
 			print(ex)

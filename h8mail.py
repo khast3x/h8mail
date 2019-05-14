@@ -57,7 +57,6 @@ def h8mail(user_args):
     c.good_news(c, "Targets:")
     
     # Find targets in user input or file
-    print("toto")
     for arg in user_args.target_emails:
         user_stdin_target = fetch_emails(arg, user_args.loose)
         if user_stdin_target:

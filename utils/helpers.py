@@ -4,10 +4,16 @@ from utils.colors import colors as c
 import configparser
 import csv
 import os
-
+import glob
 
 def find_files(to_parse, pattern=""):
     allfiles = []
+
+    if "*" in to_parse:
+        glob_result =glob.glob(to_parse)
+        for g in glob_result:
+            allfiles.append(g)
+            c.info_news(c, "Using file {}".format(g))
     if os.path.isfile(to_parse):
         if pattern in to_parse:
             c.info_news(c, "Using file {}".format(to_parse))

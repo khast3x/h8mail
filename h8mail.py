@@ -35,7 +35,7 @@ def target_factory(targets, api_keys, user_args):
     init_targets_len = len(targets)
 
     for counter, t in enumerate(targets):
-        c.info_news(c, "Looking up {target}".format(target=t))
+        c.info_news(c, "Factory started for  {target}".format(target=t))
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
@@ -77,6 +77,7 @@ def h8mail(user_args):
     for arg in user_args.target_emails:
         user_stdin_target = fetch_emails(arg, user_args.loose)
         if user_stdin_target:
+            c.info_news(c, "Reading from user input " + arg)
             targets.extend(user_stdin_target)
         elif os.path.isfile(arg):
             c.info_news(c, "Reading from file " + arg)
@@ -84,7 +85,9 @@ def h8mail(user_args):
         else:
             c.bad_news(c, "No targets found in user input")
             exit(1)
-
+    # Remove duplicates
+    c.info_news(c, "Removing duplicates...")
+    targets = list(set(targets))
     # Launch
     breached_targets = target_factory(targets, api_keys, user_args)
 

@@ -8,13 +8,20 @@ import sys
 
 
 def progress_gzip(count):
+    """
+    Prints count without rewriting to stdout
+    """
     sys.stdout.write("Lines checked:%i\r" % (count))
     sys.stdout.write("\033[K")
 
 
-
-
 def gzip_worker(filepath, target_list):
+    """
+    Searches for every email from target_list in every line of filepath.
+    Uses python native gzip lib to decompress file line by line.
+    Archives with multiple files are read as long single files. 
+    Attempts to decode line using utf-8. If it fails, catch and use raw data.
+    """
     try:
         found_list = []
         size = os.stat(filepath).st_size
@@ -54,10 +61,18 @@ def gzip_worker(filepath, target_list):
 
 
 def local_gzip_search(files_to_parse, target_list):
+    """
+    Receives list of all files to check for target_list.
+    Starts a worker pool, one worker per file.
+    Return list of local_breach_targets objects to be tranformed in target objects.
+    """
     pool = Pool()
     found_list = []
-    # launch
-    async_results = [pool.apply_async(gzip_worker, args=(f, target_list)) for i, f in enumerate(files_to_parse)]
+    # Launch
+    async_results = [
+        pool.apply_async(gzip_worker, args=(f, target_list))
+        for i, f in enumerate(files_to_parse)
+    ]
     for r in async_results:
         if r.get() is not None:
             found_list.extend(r.get())
@@ -67,6 +82,11 @@ def local_gzip_search(files_to_parse, target_list):
 
 
 def local_search_single_gzip(files_to_parse, target_list):
+    """
+    Single process searching of every target_list emails, in every files_to_parse list.
+    To be used when stability for big files is a priority
+    Return list of local_breach_target objects to be tranformed in target objects
+    """
     found_list = []
     for file_to_parse in files_to_parse:
         with gzip.open(file_to_parse, "r") as fp:

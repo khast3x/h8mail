@@ -3,6 +3,10 @@ from utils.colors import colors as c
 
 
 def print_summary(start_time, breached_targets):
+    """
+    Prints a padded table where each line is a target, and associated value is simplified to breached/not breached.
+    If breached, shows len(t.data). Shown elements and total may differ as some elements of t.data are not outputted to stdout.
+    """
     print("{:_^90}".format(""))
     print(
         "\n\n\n{:^32}".format(""),
@@ -19,7 +23,7 @@ def print_summary(start_time, breached_targets):
             print(
                 f"{t.email:^40} | ",
                 c.fg.green,
-                "{:^40}".format("Breach Found ("+ str(len(t.data)) + " elements)"),
+                "{:^40}".format("Breach Found (" + str(len(t.data)) + " elements)"),
                 c.reset,
             )
         else:

@@ -8,6 +8,12 @@ from utils.colors import colors as c
 
 
 def local_to_targets(targets, local_results):
+    """
+    Appends data from local_breach_target objects using existing list of targets.
+    Finds corresponding email in dest object list, and adds data to the t.data object variable.
+    Full output line is stored in t.data[1] and original found data in t.data[2]
+    
+    """
     for t in targets:
         for l in local_results:
             if l.email == t.email:
@@ -23,6 +29,10 @@ def local_to_targets(targets, local_results):
 
 
 def raw_in_count(filename):
+    """
+    StackOverflow trick to rapidly count lines in big files.
+    Returns total line number.
+    """
     c.info_news(c, "Identifying total line number...")
     f = open(filename, "rb")
     bufgen = takewhile(lambda x: x, (f.raw.read(1024 * 1024) for _ in repeat(None)))
@@ -30,6 +40,10 @@ def raw_in_count(filename):
 
 
 def worker(filepath, target_list):
+    """
+    Searches for every email from target_list in every line of filepath.
+    Attempts to decode line using utf-8. If it fails, catch and use raw data
+    """
     try:
         with open(filepath, "rb") as fp:
             found_list = []

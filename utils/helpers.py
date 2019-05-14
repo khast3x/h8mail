@@ -6,11 +6,16 @@ import csv
 import os
 import glob
 
+
 def find_files(to_parse, pattern=""):
+    """
+    Returns list of files from t_parse filepath.
+    Can check for patterns such as 'gz'
+    """
     allfiles = []
 
     if "*" in to_parse:
-        glob_result =glob.glob(to_parse)
+        glob_result = glob.glob(to_parse)
         for g in glob_result:
             allfiles.append(g)
             c.info_news(c, "Using file {}".format(g))
@@ -21,7 +26,6 @@ def find_files(to_parse, pattern=""):
     elif os.path.isdir(to_parse):
         for root, _, filenames in os.walk(to_parse):
             for filename in filenames:
-                print(filename)
                 if pattern in filename:
                     c.info_news(c, "Using file {}".format(os.path.join(root, filename)))
                     allfiles.append(os.path.join(root, filename))
@@ -42,10 +46,18 @@ def print_banner(b_type="intro"):
 	"""
         print(c.bold, c.fg.red, banner, c.reset)
     elif "warn" in b_type:
-        print(c.fg.pink, "\th8mail is free & open-source. Please report scammers\n\n", c.reset)
+        print(
+            c.fg.pink,
+            "\th8mail is free & open-source. Please report scammers\n\n",
+            c.reset,
+        )
 
 
 def fetch_emails(target, loose=False):
+    """
+    Returns a list of emails found in 'target'.
+    Can be loosy to skip email pattern search.
+    """
     if loose:
         t = target.split(" ")
         print(t)
@@ -58,6 +70,10 @@ def fetch_emails(target, loose=False):
 
 
 def get_emails_from_file(targets_file, loose=False):
+    """
+    For each line in file, check for emails using fetch_emails().
+    Returns list of emails
+    """
     email_obj_list = []
     try:
         target_fd = open(targets_file).readlines()
@@ -74,6 +90,10 @@ def get_emails_from_file(targets_file, loose=False):
 
 
 def get_config_from_file(user_args):
+    """
+    Read config in file. If keys are passed using CLI, add them to the configuration.
+    Returns a config object
+    """
     try:
         config_file = user_args.config_file
         config = configparser.ConfigParser()
@@ -96,6 +116,10 @@ def get_config_from_file(user_args):
 
 
 def save_results_csv(dest_csv, target_obj_list):
+    """
+    Outputs CSV from target object list.
+    Dumps the target.data object variable
+    """
     with open(dest_csv, "w", newline="") as csvfile:
         try:
             writer = csv.writer(csvfile)

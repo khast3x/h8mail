@@ -131,12 +131,17 @@ def main(user_args):
 
 
 if __name__ == "__main__":
-    if sys.version_info[0] < 3.6:
+    # Check major and minor python version
+    if sys.version_info[0] < 3:
         sys.stdout.write(
-            "\n/!\\ h8mail requires Python 3.6+. Try running h8mail with python3 if on older systems/!\\\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
+            "\n/!\\ h8mail requires Python 3.6+ /!\\\nTry running h8mail with python3 if on older systems\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
         )
         sys.exit(1)
-
+    if sys.version_info[1] < 6:
+        sys.stdout.write(
+            "\n/!\\ h8mail requires Python 3.6+ /!\\\nTry running h8mail with python3 if on older systems\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
+        )
+        sys.exit(1)
     # I REALLY want to make sure I don't get Python2 Issues on Github...
     import configparser
     import argparse

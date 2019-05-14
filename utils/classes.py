@@ -102,6 +102,7 @@ class target():
 			payload = {"type": "email", "term": self.email}
 			req = self.make_request(url, meth="POST", data=payload)
 			response = req.json()
+			c.good_news(c, "Found {num} entries for {target} using Snusbase".format(num=len(response["result"]), target=self.email))
 			for result in response["result"]:
 				if result["password"]:
 					self.data.append(("SNUS_PASSWORD", result["password"]))

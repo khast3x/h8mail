@@ -1,11 +1,12 @@
 import sys
 import time
 
+
 def print_results(results):
     for t in results:
         print()
         c.print_res_header(c, t.email)
-        
+
         for i in range(len(t.data)):
             if len(t.data) == 1:
                 print()
@@ -48,51 +49,59 @@ def target_factory(targets, api_keys, user_args):
 
     return finished
 
+
 def h8mail(user_args):
     targets = []
     start_time = time.time()
     api_keys = get_config_from_file(user_args)
     c.good_news(c, "Targets:")
-    user_stdin_target = fetch_emails(user_args.target_emails, user_args.loose)
-    if user_stdin_target:
-        targets.extend(user_stdin_target)
-    elif os.path.isfile(user_args.target_emails):
-        c.info_news(c, "Reading from file " + user_args.target_emails)
-        targets.extend(get_emails_from_file(user_args.target_emails, user_args.loose))
-    else:
-        c.bad_news(c, "No targets found in user input")
-        exit(1)
+    
+    # Find targets in user input or file
+    print("toto")
+    for arg in user_args.target_emails:
+        user_stdin_target = fetch_emails(arg, user_args.loose)
+        if user_stdin_target:
+            targets.extend(user_stdin_target)
+        elif os.path.isfile(arg):
+            c.info_news(c, "Reading from file " + arg)
+            targets.extend(get_emails_from_file(arg, user_args.loose))
+        else:
+            c.bad_news(c, "No targets found in user input")
+            exit(1)
 
     # Launch
     breached_targets = target_factory(targets, api_keys, user_args)
 
     # These are not done inside the factory as the factory iterates over each target individually
-    # The following functions perform line by line checks of all target per line
+    # The following functions perform line by line checks of all targets per line
 
     if user_args.bc_path:
         breached_targets = breachcomp_check(breached_targets, user_args.bc_path)
 
     local_found = None
+    # Handle cleartext search
     if user_args.local_breach_src:
-        res = find_files(user_args.local_breach_src)
-        if user_args.single_file:
-            local_found = local_search_single(res, targets)
-        else:
-            local_found = local_search(res, targets)
-        if local_found is not None:
-            breached_targets = local_to_targets(breached_targets, local_found)
-       
+        for arg in user_args.local_breach_src:
+            res = find_files(arg)
+            if user_args.single_file:
+                local_found = local_search_single(res, targets)
+            else:
+                local_found = local_search(res, targets)
+            if local_found is not None:
+                breached_targets = local_to_targets(breached_targets, local_found)
+    # Handle gzip search
     if user_args.local_gzip_src:
-        res = find_files(user_args.local_gzip_src, "gz")
-        if user_args.single_file:
-            local_found = local_search_single_gzip(res, targets)
-        else:
-            local_found = local_gzip_search(res, targets)
-        if local_found is not None:
-            breached_targets = local_to_targets(breached_targets, local_found)
-    
+        for arg in user_args.local_gzip_src:
+            res = find_files(arg, "gz")
+            if user_args.single_file:
+                local_found = local_search_single_gzip(res, targets)
+            else:
+                local_found = local_gzip_search(res, targets)
+            if local_found is not None:
+                breached_targets = local_to_targets(breached_targets, local_found)
+
     print_results(breached_targets)
-    from utils.summary import print_summary
+
     print_summary(start_time, breached_targets)
     if user_args.output_file:
         save_results_csv(user_args.output_file, breached_targets)
@@ -128,6 +137,7 @@ if __name__ == "__main__":
     )
     from utils.localsearch import local_search, local_search_single, local_to_targets
     from utils.localgzipsearch import local_gzip_search, local_search_single_gzip
+    from utils.summary import print_summary
 
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool"
@@ -139,13 +149,14 @@ if __name__ == "__main__":
         required=True,
         dest="target_emails",
         help="Either emails or file",
+        nargs='+'
     )
     parser.add_argument(
         "--loose",
         dest="loose",
         help="Allow loose search by disabling email pattern recognition. Use spaces a pattern seperator",
         action="store_true",
-        default=False
+        default=False,
     )
     parser.add_argument(
         "-c",
@@ -182,12 +193,14 @@ if __name__ == "__main__":
         "--local-breach",
         dest="local_breach_src",
         help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
+        nargs='+'
     )
     parser.add_argument(
         "-gz",
         "--gzip",
         dest="local_gzip_src",
-        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
+        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input. Looks for 'gz' in filename",
+        nargs='+'
     )
     parser.add_argument(
         "-sf",

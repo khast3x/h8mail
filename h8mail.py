@@ -131,9 +131,9 @@ def main(user_args):
 
 
 if __name__ == "__main__":
-    if sys.version_info[0] < 3:
+    if sys.version_info[0] < 3.6:
         sys.stdout.write(
-            "\n/!\\ h8mail requires Python 3+. Try running h8mail with python3 /!\\\neg: python3 h8mail.py --help\n\n"
+            "\n/!\\ h8mail requires Python 3.6+. Try running h8mail with python3 if on older systems/!\\\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
         )
         sys.exit(1)
 

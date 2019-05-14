@@ -15,6 +15,7 @@ def local_to_targets(targets, local_results):
                     (
                         "LOCALSEARCH",
                         f"[{os.path.basename(l.filepath)}] Line {l.line}: {l.content}".strip(),
+                        l.content.strip(),
                     )
                 )
                 t.pwned = True

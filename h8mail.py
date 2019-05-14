@@ -1,3 +1,4 @@
+# Most imports are down after python2/3 check further down
 import sys
 import time
 
@@ -41,12 +42,20 @@ def target_factory(targets, api_keys, user_args):
             current_target.get_hunterio_public()
         if len(api_keys["DEFAULT"]["hunterio"]) != 0:
             current_target.get_hunterio_private(api_keys["DEFAULT"]["hunterio"])
-            if user_args.chase_hunter and counter < init_targets_len: # If chase option
+            if user_args.chase_hunter and counter < init_targets_len:  # If chase option
                 for i in range(len(current_target.data)):
-                    if len(current_target.data[i]) >= 2 and "HUNTER_RELATED" in current_target.data[i][0] and i <= user_args.chase_hunter:
-                        c.good_news(c, "Adding {new_target} using HunterIO chase".format(new_target=current_target.data[i][1]))
+                    if (
+                        len(current_target.data[i]) >= 2
+                        and "HUNTER_RELATED" in current_target.data[i][0]
+                        and i <= user_args.chase_hunter
+                    ):
+                        c.good_news(
+                            c,
+                            "Adding {new_target} using HunterIO chase".format(
+                                new_target=current_target.data[i][1]
+                            ),
+                        )
                         targets.append(current_target.data[i][1])
-
 
         if len(api_keys["DEFAULT"]["snusbase_token"]) != 0:
             current_target.get_snusbase(
@@ -155,7 +164,7 @@ if __name__ == "__main__":
         "--targets",
         required=True,
         dest="target_emails",
-        help="Either emails or file",
+        help="Either string inputs or files. Supports email pattern matching from input or file, filepath globing and multiple arguments",
         nargs="+",
     )
     parser.add_argument(
@@ -199,14 +208,14 @@ if __name__ == "__main__":
         "-lb",
         "--local-breach",
         dest="local_breach_src",
-        help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input",
+        help="Local cleartext breaches to scan for targets. Uses multiprocesses, one separate process per file, on separate worker pool by arguments. Supports file or folder as input, and filepath globing",
         nargs="+",
     )
     parser.add_argument(
         "-gz",
         "--gzip",
         dest="local_gzip_src",
-        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input. Looks for 'gz' in filename",
+        help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input, and filepath globing. Looks for 'gz' in filename",
         nargs="+",
     )
     parser.add_argument(
@@ -221,9 +230,9 @@ if __name__ == "__main__":
         "-ch",
         "--chase-hunter",
         dest="chase_hunter",
-        help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase",
+        help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
-        nargs='?'
+        nargs="?",
     )
 
     args = parser.parse_args()

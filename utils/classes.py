@@ -91,6 +91,7 @@ class target():
 			response = req.json()
 			for e in response["data"]["emails"]:
 				self.data.append(("HUNTER_RELATED", e["value"]))
+				self.pwned = True
 		except Exception as ex:
 			c.bad_news(c, "HunterIO (private API) error for {target}:".format(target=self.email))
 			print(ex)

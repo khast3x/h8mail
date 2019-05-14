@@ -19,7 +19,7 @@ def print_summary(start_time, breached_targets):
             print(
                 f"{t.email:^40} | ",
                 c.fg.green,
-                "{:^40}".format("Breach Found"),
+                "{:^40}".format("Breach Found ("+ str(len(t.data)) + " elements)"),
                 c.reset,
             )
         else:

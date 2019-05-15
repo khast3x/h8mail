@@ -49,7 +49,6 @@ def target_factory(targets, user_args):
             if user_args.chase_limit and counter < init_targets_len:
                 chase_limit = 1
                 for i in range(len(current_target.data)):
-                    print(f"Chase {user_args.chase_limit} and {chase_limit}")
                     if (
                         len(current_target.data[i]) >= 2 # Has header & data
                         and "HUNTER_RELATED" in current_target.data[i][0]

@@ -45,13 +45,15 @@ def target_factory(targets, user_args):
 
         if "hunterio" in api_keys:
             current_target.get_hunterio_private(api_keys["hunterio"])
-            # If chase option
-            if user_args.chase_hunter and counter < init_targets_len:
+            # If chase option. Check we're not chasing added target
+            if user_args.chase_limit and counter < init_targets_len:
+                chase_limit = 1
                 for i in range(len(current_target.data)):
+                    print(f"Chase {user_args.chase_limit} and {chase_limit}")
                     if (
-                        len(current_target.data[i]) >= 2
+                        len(current_target.data[i]) >= 2 # Has header & data
                         and "HUNTER_RELATED" in current_target.data[i][0]
-                        and i <= user_args.chase_hunter
+                        and chase_limit <= user_args.chase_limit
                     ):
                         c.good_news(
                             c,
@@ -60,6 +62,7 @@ def target_factory(targets, user_args):
                             ),
                         )
                         targets.append(current_target.data[i][1])
+                        chase_limit += 1
 
         if "snusbase_token" in api_keys:
             current_target.get_snusbase(
@@ -240,7 +243,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-ch",
         "--chase-hunter",
-        dest="chase_hunter",
+        dest="chase_limit",
         help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
         nargs="?",

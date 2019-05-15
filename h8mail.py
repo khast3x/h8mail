@@ -47,12 +47,12 @@ def target_factory(targets, user_args):
             current_target.get_hunterio_private(api_keys["hunterio"])
             # If chase option. Check we're not chasing added target
             if user_args.chase_limit and counter < init_targets_len:
-                chase_limit = 1
+                chase_limiter = 1
                 for i in range(len(current_target.data)):
                     if (
                         len(current_target.data[i]) >= 2 # Has header & data
                         and "HUNTER_RELATED" in current_target.data[i][0]
-                        and chase_limit <= user_args.chase_limit
+                        and chase_limiter <= user_args.chase_limit
                     ):
                         c.good_news(
                             c,
@@ -61,7 +61,7 @@ def target_factory(targets, user_args):
                             ),
                         )
                         targets.append(current_target.data[i][1])
-                        chase_limit += 1
+                        chase_limiter += 1
 
         if "snusbase_token" in api_keys:
             current_target.get_snusbase(
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         "-bc",
         "--breachcomp",
         dest="bc_path",
-        help="Path to the breachcompilation Torrent. Uses the query.sh script included in the torrent. https://ghostbin.com/paste/2cbdn",
+        help="Path to the breachcompilation torrent folder. Uses the query.sh script included in the torrent. https://ghostbin.com/paste/2cbdn",
     )
     parser.add_argument(
         "-sk",

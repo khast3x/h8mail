@@ -10,7 +10,8 @@ import glob
 def find_files(to_parse, pattern=""):
     """
     Returns list of files from t_parse filepath.
-    Can check for patterns such as 'gz'
+    Supports using globing (*) in filepaths.
+    Can check for patterns such as 'gz'.
     """
     allfiles = []
 
@@ -72,7 +73,7 @@ def fetch_emails(target, loose=False):
 def get_emails_from_file(targets_file, loose=False):
     """
     For each line in file, check for emails using fetch_emails().
-    Returns list of emails
+    Returns list of emails.
     """
     email_obj_list = []
     try:
@@ -91,25 +92,36 @@ def get_emails_from_file(targets_file, loose=False):
 
 def get_config_from_file(user_args):
     """
-    Read config in file. If keys are passed using CLI, add them to the configuration.
-    Returns a config object
+    Read config in file. If keys are passed using CLI, add them to the configparser object.
+    Returns a configparser object already set to "DEFAULT" section.
     """
     try:
-        config_file = user_args.config_file
         config = configparser.ConfigParser()
-        config.read(config_file)
-        c.info_news(c, "Correctly read config file")
+        for counter, config_file in enumerate(user_args.config_file):
+            config_file = user_args.config_file[counter]
+            config.read(config_file)
 
         if user_args.cli_apikeys:
-            user_cli_keys = user_args.cli_apikeys.split(",")
-            for user_key in user_cli_keys:
-                if user_key:
-                    config.set(
-                        "DEFAULT",
-                        user_key.split(":", maxsplit=1)[0],
-                        user_key.split(":", maxsplit=1)[1],
-                    )
-        return config
+            for counter, user_key in enumerate(user_args.cli_apikeys):
+                user_cli_keys = user_args.cli_apikeys[counter].split(",")
+                for user_key in user_cli_keys:
+                    if user_key and ":" in user_key:
+                        config.set(
+                            "DEFAULT",
+                            user_key.split(":", maxsplit=1)[0],
+                            user_key.split(":", maxsplit=1)[1],
+                        )
+                    if user_key and "=" in user_key:
+                        config.set(
+                            "DEFAULT",
+                            user_key.split("=", maxsplit=1)[0],
+                            user_key.split("=", maxsplit=1)[1],
+                        )
+            for k in config["DEFAULT"]:
+                if len((config["DEFAULT"][k])) != 0:
+                    c.good_news(c, f"Found {k} configuration key")
+
+        return config["DEFAULT"]
     except Exception as ex:
         c.bad_news(c, "Problems occurred while trying to get configuration file")
         print(ex)
@@ -118,7 +130,7 @@ def get_config_from_file(user_args):
 def save_results_csv(dest_csv, target_obj_list):
     """
     Outputs CSV from target object list.
-    Dumps the target.data object variable
+    Dumps the target.data object variable into CSV file.
     """
     with open(dest_csv, "w", newline="") as csvfile:
         try:

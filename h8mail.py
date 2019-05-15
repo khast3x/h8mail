@@ -30,19 +30,23 @@ def print_results(results):
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 
-def target_factory(targets, api_keys, user_args):
+def target_factory(targets, user_args):
     finished = []
+    api_keys = get_config_from_file(user_args)
+
     init_targets_len = len(targets)
 
     for counter, t in enumerate(targets):
-        c.info_news(c, "Factory started for  {target}".format(target=t))
+        c.info_news(c, "Target factory started for {target}".format(target=t))
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
-        if len(api_keys["DEFAULT"]["hunterio"]) != 0:
-            current_target.get_hunterio_private(api_keys["DEFAULT"]["hunterio"])
-            if user_args.chase_hunter and counter < init_targets_len:  # If chase option
+
+        if "hunterio" in api_keys:
+            current_target.get_hunterio_private(api_keys["hunterio"])
+            # If chase option
+            if user_args.chase_hunter and counter < init_targets_len:
                 for i in range(len(current_target.data)):
                     if (
                         len(current_target.data[i]) >= 2
@@ -57,10 +61,9 @@ def target_factory(targets, api_keys, user_args):
                         )
                         targets.append(current_target.data[i][1])
 
-        if len(api_keys["DEFAULT"]["snusbase_token"]) != 0:
+        if "snusbase_token" in api_keys:
             current_target.get_snusbase(
-                api_keys["DEFAULT"]["snusbase_url"],
-                api_keys["DEFAULT"]["snusbase_token"],
+                api_keys["snusbase_url"], api_keys["snusbase_token"]
             )
         finished.append(current_target)
 
@@ -70,14 +73,12 @@ def target_factory(targets, api_keys, user_args):
 def h8mail(user_args):
     targets = []
     start_time = time.time()
-    api_keys = get_config_from_file(user_args)
     c.good_news(c, "Targets:")
 
     # Find targets in user input or file
     for arg in user_args.target_emails:
         user_stdin_target = fetch_emails(arg, user_args.loose)
         if user_stdin_target:
-            c.info_news(c, "Reading from user input " + arg)
             targets.extend(user_stdin_target)
         elif os.path.isfile(arg):
             c.info_news(c, "Reading from file " + arg)
@@ -85,11 +86,11 @@ def h8mail(user_args):
         else:
             c.bad_news(c, "No targets found in user input")
             exit(1)
-    # Remove duplicates
-    c.info_news(c, "Removing duplicates...")
+
+    c.info_news(c, "Removing duplicates")
     targets = list(set(targets))
     # Launch
-    breached_targets = target_factory(targets, api_keys, user_args)
+    breached_targets = target_factory(targets, user_args)
 
     # These are not done inside the factory as the factory iterates over each target individually
     # The following functions perform line by line checks of all targets per line
@@ -188,6 +189,7 @@ if __name__ == "__main__":
         dest="config_file",
         default="config.ini",
         help="Configuration file for API keys. Accepts keys from Snusbase, (WeLeakInfo, Citadel.pw), hunterio",
+        nargs="+",
     )
     parser.add_argument(
         "-o", "--output", dest="output_file", help="File to write CSV output"
@@ -210,7 +212,8 @@ if __name__ == "__main__":
         "-k",
         "--apikey",
         dest="cli_apikeys",
-        help='Pass config options. Format is "K:V,K:V"',
+        help='Pass config options. Supported formats: "K:V,K=V" "K:V,K=V"',
+        nargs="+",
     )
     parser.add_argument(
         "-lb",

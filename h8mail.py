@@ -28,7 +28,10 @@ def print_results(results):
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
                 if "BC_PASS" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
-
+                if "LEAKLOOKUP_PUB" in t.data[i][0]:
+                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                if "LEAKLOOKUP_PASSWORD" in t.data[i][0]:
+                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 def target_factory(targets, user_args):
     finished = []
@@ -67,6 +70,10 @@ def target_factory(targets, user_args):
             current_target.get_snusbase(
                 api_keys["snusbase_url"], api_keys["snusbase_token"]
             )
+        if "leak-lookup_pub" in api_keys:
+            current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
+        if "leak-lookup_priv" in api_keys:
+            current_target.get_leaklookup_pub(api_keys["leak-lookup_priv"])
         finished.append(current_target)
 
     return finished
@@ -214,7 +221,7 @@ if __name__ == "__main__":
         "-k",
         "--apikey",
         dest="cli_apikeys",
-        help='Pass config options. Supported formats: "K:V,K=V" "K:V,K=V"',
+        help='Pass config options. Supported formats: "K:V,K=V" "K=V"',
         nargs="+",
     )
     parser.add_argument(

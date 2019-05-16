@@ -177,3 +177,55 @@ class target:
             c.bad_news(c, "Snusbase error with {target}".format(target=self.email))
             print(ex)
 
+    def get_leaklookup_pub(self, api_key):
+        try:
+            url = "https://leak-lookup.com/api/search"
+            payload = {"key": api_key, "type": "email_address", "query": self.email}
+            req = self.make_request(url, meth="POST", data=payload, timeout=20)
+            response = req.json()
+            if "false" in response["error"] and len(response["message"]) != 0:
+                c.good_news(
+                    c,
+                    "Found {num} entries for {target} using LeakLookup".format(
+                        num=len(response["message"]), target=self.email
+                    ),
+                )
+                for result in response["message"]:
+                    self.pwned = True
+                    self.data.append(("LEAKLOOKUP_PUB", result))
+            if "false" in response["error"] and len(response["message"]) == 0:
+                c.info_news(
+                    c,
+                    "No breaches found for {} using Leak-lookup (pub)".format(
+                        self.email
+                    ),
+                )
+
+        except Exception as ex:
+            c.bad_news(c, "Leak-lookup error with {target}".format(target=self.email))
+            print(ex)
+
+    def get_leaklookup_priv(self, api_key):
+        try:
+            url = "https://leak-lookup.com/api/search"
+            payload = {"key": api_key, "type": "email_address", "query": self.email}
+            req = self.make_request(url, meth="POST", data=payload, timeout=20)
+            response = req.json()
+            print(response)
+            if "false" in response["error"] and len(response["message"]) != 0:
+                for result in response["message"]:
+                    self.pwned = True
+                    for a, b in result:
+                        print(f"{a} and {b}")
+                    self.data.append(("LEAKLOOKUP_PUB", result))
+            if "false" in response["error"] and len(response["message"]) == 0:
+                c.info_news(
+                    c,
+                    "No breaches found for {} using Leak-lookup (priv)".format(
+                        self.email
+                    ),
+                )
+        except Exception as ex:
+            c.bad_news(c, "Leak-lookup error with {target}".format(target=self.email))
+            print(ex)
+

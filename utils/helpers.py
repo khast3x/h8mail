@@ -96,7 +96,7 @@ def get_config_from_file(user_args):
     Returns a configparser object already set to "DEFAULT" section.
     """
     try:
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(allow_no_value=True)
         for counter, config_file in enumerate(user_args.config_file):
             config_file = user_args.config_file[counter]
             config.read(config_file)

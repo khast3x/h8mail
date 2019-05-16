@@ -30,7 +30,7 @@ def print_results(results):
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
                 if "LEAKLOOKUP_PUB" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
-                if "LEAKLOOKUP_PASSWORD" in t.data[i][0]:
+                if "LEAKLKUP_PASS" in t.data[i][0]:
                     c.print_result(c, t.email, t.data[i][1], t.data[i][0])
 
 def target_factory(targets, user_args):
@@ -70,10 +70,10 @@ def target_factory(targets, user_args):
             current_target.get_snusbase(
                 api_keys["snusbase_url"], api_keys["snusbase_token"]
             )
-        if "leak-lookup_pub" in api_keys:
-            current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
         if "leak-lookup_priv" in api_keys:
-            current_target.get_leaklookup_pub(api_keys["leak-lookup_priv"])
+            current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
+        elif "leak-lookup_pub" in api_keys:
+            current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
         finished.append(current_target)
 
     return finished

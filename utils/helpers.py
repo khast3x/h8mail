@@ -96,7 +96,7 @@ def get_config_from_file(user_args):
     Returns a configparser object already set to "DEFAULT" section.
     """
     try:
-        config = configparser.ConfigParser(allow_no_value=True)
+        config = configparser.ConfigParser()
         for counter, config_file in enumerate(user_args.config_file):
             config_file = user_args.config_file[counter]
             config.read(config_file)
@@ -107,21 +107,21 @@ def get_config_from_file(user_args):
                 for user_key in user_cli_keys:
                     if user_key and ":" in user_key:
                         config.set(
-                            "DEFAULT",
+                            "h8mail",
                             user_key.split(":", maxsplit=1)[0],
                             user_key.split(":", maxsplit=1)[1],
                         )
                     if user_key and "=" in user_key:
                         config.set(
-                            "DEFAULT",
+                            "h8mail",
                             user_key.split("=", maxsplit=1)[0],
                             user_key.split("=", maxsplit=1)[1],
                         )
-            for k in config["DEFAULT"]:
-                if len((config["DEFAULT"][k])) != 0:
+            for k in config["h8mail"]:
+                if len((config["h8mail"][k])) != 0:
                     c.good_news(c, f"Found {k} configuration key")
 
-        return config["DEFAULT"]
+        return config["h8mail"]
     except Exception as ex:
         c.bad_news(c, "Problems occurred while trying to get configuration file")
         print(ex)

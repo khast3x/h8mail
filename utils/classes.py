@@ -179,6 +179,7 @@ class target:
 
     def get_leaklookup_pub(self, api_key):
         try:
+            print("##########>>>>>>>>>>>>>>>")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": "email_address", "query": self.email}
             req = self.make_request(url, meth="POST", data=payload, timeout=20)
@@ -209,15 +210,16 @@ class target:
         try:
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": "email_address", "query": self.email}
-            req = self.make_request(url, meth="POST", data=payload, timeout=20)
+            req = self.make_request(url, meth="POST", data=payload, timeout=30)
             response = req.json()
-            print(response)
+
             if "false" in response["error"] and len(response["message"]) != 0:
-                for result in response["message"]:
-                    self.pwned = True
-                    for a, b in result:
-                        print(f"{a} and {b}")
-                    self.data.append(("LEAKLOOKUP_PUB", result))
+                for _, data in response["message"].items():
+                    for d in data:
+                        if "password" in d.keys():
+                            self.pwned = True
+                            self.data.append(("LEAKLKUP_PASS", d["password"]))
+                
             if "false" in response["error"] and len(response["message"]) == 0:
                 c.info_news(
                     c,

@@ -52,6 +52,13 @@ class colors:
         print(self.bold + self.fg.green + "[>] " + self.reset + news.strip())
 
     @staticmethod
+    def test_news(news):
+        """
+        Print a Success
+        """
+        print(colors.bold + colors.fg.green + "[>] " + colors.reset + news.strip())
+
+    @staticmethod
     def bad_news(self, news):
         """
         Print a Failure, error

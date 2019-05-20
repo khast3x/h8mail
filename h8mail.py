@@ -137,6 +137,7 @@ def h8mail(user_args):
 
 
 def main(user_args):
+    c.test_news("toto")
     h8mail(user_args)
 
 

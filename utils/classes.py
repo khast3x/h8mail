@@ -36,7 +36,7 @@ class target:
 
     def __init__(self, email):
         self.headers = {
-            "User-Agent": "h8mail-v.1.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+            "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
                 pyver=sys.version.split(" ")[0],
                 platfrm=platform.platform().split("-")[0],
             )
@@ -228,5 +228,12 @@ class target:
                 )
         except Exception as ex:
             c.bad_news(c, "Leak-lookup error with {target}".format(target=self.email))
+            print(ex)
+    
+    def get_weleakinfo(self, auth_token):
+        try:
+            print("toto")
+        except Exception as ex:
+            c.bad_news(c, "WeLeakInfo error with {target}".format(target=self.email))
             print(ex)
 

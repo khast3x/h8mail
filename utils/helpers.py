@@ -146,3 +146,34 @@ def save_results_csv(dest_csv, target_obj_list):
             c.bad_news(c, "Error writing to csv")
             print(ex)
 
+def weleakinfo_get_auth_token(endpoint, apikey):
+    """
+    WeLeakInfo requires getting a "session key" for querying the API
+    We reproduce request header as in the target class
+    Since this function will only be called when user has a key, I'd like to keep imports as local as possible
+    """
+    import requests
+    import sys
+    import platform
+    headers = {
+            "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+                pyver=sys.version.split(" ")[0],
+                platfrm=platform.platform().split("-")[0],
+            )
+        }
+    data = {"key": apikey}
+    try:
+        response = requests.request(
+            url=endpoint,
+            headers=headers,
+            method="POST",
+            timeout=10,
+            allow_redirects=True,
+            data=data,
+        )
+    # todo Check incoming status code
+    # if good return key only
+
+    except Exception as ex:
+            c.bad_news(c, "Error getting WeLeakInfo authentication token")
+            print(ex)

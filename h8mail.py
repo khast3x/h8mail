@@ -1,92 +1,106 @@
-# Most imports are down after python2/3 check further down
+# Most imports are after python2/3 check further down
 import sys
 import time
 
 
 def print_results(results):
+
     for t in results:
         print()
-        c.print_res_header(c, t.email)
-
+        c.print_res_header(t.email)
         for i in range(len(t.data)):
             if len(t.data) == 1:
                 print()
-                c.info_news(c, "No results founds")
+                c.info_news("No results founds")
                 continue
             if len(t.data[i]) >= 2:  # Contains data header + body
                 if "HIBP" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], "HIBP")
+                    c.print_result(t.email, t.data[i][1], "HIBP")
                 if "HUNTER_PUB" in t.data[i][0]:
                     c.print_result(
-                        c, t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB"
+                        t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB"
                     )
                 if "HUNTER_RELATED" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], "HUNTER_RELATED")
+                    c.print_result(t.email, t.data[i][1], "HUNTER_RELATED")
                 if "SNUS" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LOCAL" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "BC_PASS" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LEAKLOOKUP_PUB" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LEAKLKUP_PASS" in t.data[i][0]:
-                    c.print_result(c, t.email, t.data[i][1], t.data[i][0])
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
+
 
 def target_factory(targets, user_args):
+    """
+    Receives list of emails and user args. Fetchs API keys from config file using user_args path.
+    For each target, launch target.methods() associated to found config artifacts.
+    Handles the hunter.io chase logic with counters from enumerate()
+    """
     finished = []
     api_keys = get_config_from_file(user_args)
-
     init_targets_len = len(targets)
 
     for counter, t in enumerate(targets):
-        c.info_news(c, "Target factory started for {target}".format(target=t))
+        c.info_news("Target factory started for {target}".format(target=t))
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
+        
+        if api_keys is not None:
+            c.info_news("Factory is calling API keys")
+            if "hunterio" in api_keys:
+                current_target.get_hunterio_private(api_keys["hunterio"])
+                # If chase option. Check we're not chasing added target
+                if user_args.chase_limit and counter < init_targets_len:
+                    chase_limiter = 1
+                    for i in range(len(current_target.data)):
+                        if (
+                            len(current_target.data[i]) >= 2  # Has header & data
+                            and "HUNTER_RELATED" in current_target.data[i][0]
+                            and chase_limiter <= user_args.chase_limit
+                        ):
+                            c.good_news(
+                                "Adding {new_target} using HunterIO chase".format(
+                                    new_target=current_target.data[i][1]
+                                )
+                            )
+                            targets.append(current_target.data[i][1])
+                            chase_limiter += 1
 
-        if "hunterio" in api_keys:
-            current_target.get_hunterio_private(api_keys["hunterio"])
-            # If chase option. Check we're not chasing added target
-            if user_args.chase_limit and counter < init_targets_len:
-                chase_limiter = 1
-                for i in range(len(current_target.data)):
-                    if (
-                        len(current_target.data[i]) >= 2 # Has header & data
-                        and "HUNTER_RELATED" in current_target.data[i][0]
-                        and chase_limiter <= user_args.chase_limit
-                    ):
-                        c.good_news(
-                            c,
-                            "Adding {new_target} using HunterIO chase".format(
-                                new_target=current_target.data[i][1]
-                            ),
-                        )
-                        targets.append(current_target.data[i][1])
-                        chase_limiter += 1
+            if "snusbase_token" in api_keys:
+                current_target.get_snusbase(
+                    api_keys["snusbase_url"], api_keys["snusbase_token"]
+                )
+            if "leak-lookup_priv" in api_keys:
+                current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
+            elif "leak-lookup_pub" in api_keys:
+                current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
+            if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
+                from utils.helpers import weleakinfo_get_auth_token
 
-        if "snusbase_token" in api_keys:
-            current_target.get_snusbase(
-                api_keys["snusbase_url"], api_keys["snusbase_token"]
-            )
-        if "leak-lookup_priv" in api_keys:
-            current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
-        elif "leak-lookup_pub" in api_keys:
-            current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
+                token = weleakinfo_get_auth_token(
+                    api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"]
+                )
+                current_target.get_weleakinfo(token)
+        
         finished.append(current_target)
-        if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
-            from utils.helpers import weleakinfo_get_auth_token
-            token = weleakinfo_get_auth_token(api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"])
-            current_target.get_weleakinfo(token)
-
     return finished
 
 
 def h8mail(user_args):
+    """
+    Handles most user arg logic. Create a list() of targets from user input.
+    Starts the target object factory loop; starts local searches after factory if in user inputs
+    Prints results, saves to csv if in user inputs
+    """
     targets = []
     start_time = time.time()
-    c.good_news(c, "Targets:")
+    c.good_news("Targets:")
 
     # Find targets in user input or file
     for arg in user_args.target_emails:
@@ -94,13 +108,13 @@ def h8mail(user_args):
         if user_stdin_target:
             targets.extend(user_stdin_target)
         elif os.path.isfile(arg):
-            c.info_news(c, "Reading from file " + arg)
+            c.info_news("Reading from file " + arg)
             targets.extend(get_emails_from_file(arg, user_args.loose))
         else:
-            c.bad_news(c, "No targets found in user input")
+            c.bad_news("No targets found in user input")
             exit(1)
 
-    c.info_news(c, "Removing duplicates")
+    c.info_news("Removing duplicates")
     targets = list(set(targets))
     # Launch
     breached_targets = target_factory(targets, user_args)
@@ -263,4 +277,4 @@ if __name__ == "__main__":
     print_banner("warn")
     print_banner()
     main(args)
-    c.good_news(c, "Done")
+    c.good_news("Done")

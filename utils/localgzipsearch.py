@@ -27,10 +27,9 @@ def gzip_worker(filepath, target_list):
         size = os.stat(filepath).st_size
         with gzip.open(filepath, "r") as gzipfile:
             c.info_news(
-                c,
                 "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
                     PID=os.getpid(), filepath=filepath, size=size
-                ),
+                )
             )
             for cnt, line in enumerate(gzipfile):
                 for t in target_list:
@@ -41,22 +40,21 @@ def gzip_worker(filepath, target_list):
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}",
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
-                                c, f"Got a decoding error line {cnt} - file: {filepath}"
+                                f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                c, f"Found occurrence [{filepath}] Line {cnt}: {line}"
+                                f"Found occurrence [{filepath}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, str(line))
                             )
         return found_list
     except Exception as e:
-        c.bad_news(c, "Something went wrong with gzip worker")
+        c.bad_news("Something went wrong with gzip worker")
         print(e)
 
 
@@ -92,10 +90,9 @@ def local_search_single_gzip(files_to_parse, target_list):
         with gzip.open(file_to_parse, "r") as fp:
             size = os.stat(file_to_parse).st_size
             c.info_news(
-                c,
                 "Searching for targets in {file_to_parse} ({size} bytes)".format(
                     file_to_parse=file_to_parse, size=size
-                ),
+                )
             )
             for cnt, line in enumerate(fp):
                 progress_gzip(cnt)
@@ -107,17 +104,14 @@ def local_search_single_gzip(files_to_parse, target_list):
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}",
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
-                                c,
-                                f"Got a decoding error line {cnt} - file: {file_to_parse}",
+                                f"Got a decoding error line {cnt} - file: {file_to_parse}"
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{file_to_parse}] Line {cnt}: {line}",
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, str(line))

@@ -19,16 +19,16 @@ def find_files(to_parse, pattern=""):
         glob_result = glob.glob(to_parse)
         for g in glob_result:
             allfiles.append(g)
-            c.info_news(c, "Using file {}".format(g))
+            c.info_news("Using file {}".format(g))
     if os.path.isfile(to_parse):
         if pattern in to_parse:
-            c.info_news(c, "Using file {}".format(to_parse))
+            c.info_news("Using file {}".format(to_parse))
             allfiles.append(to_parse)
     elif os.path.isdir(to_parse):
         for root, _, filenames in os.walk(to_parse):
             for filename in filenames:
                 if pattern in filename:
-                    c.info_news(c, "Using file {}".format(os.path.join(root, filename)))
+                    c.info_news("Using file {}".format(os.path.join(root, filename)))
                     allfiles.append(os.path.join(root, filename))
     return allfiles
 
@@ -86,7 +86,7 @@ def get_emails_from_file(targets_file, loose=False):
                 email_obj_list.extend(e)
         return email_obj_list
     except Exception as ex:
-        c.bad_news(c, "Problems occurred while trying to get emails from file")
+        c.bad_news("Problems occurred while trying to get emails from file")
         print(ex)
 
 
@@ -95,6 +95,8 @@ def get_config_from_file(user_args):
     Read config in file. If keys are passed using CLI, add them to the configparser object.
     Returns a configparser object already set to "DEFAULT" section.
     """
+    if os.path.isfile(user_args.config_file) is False:
+        return None
     try:
         config = configparser.ConfigParser()
         for counter, config_file in enumerate(user_args.config_file):
@@ -119,11 +121,11 @@ def get_config_from_file(user_args):
                         )
             for k in config["h8mail"]:
                 if len((config["h8mail"][k])) != 0:
-                    c.good_news(c, f"Found {k} configuration key")
+                    c.good_news(f"Found {k} configuration key")
 
         return config["h8mail"]
     except Exception as ex:
-        c.bad_news(c, "Problems occurred while trying to get configuration file")
+        c.bad_news("Problems occurred while trying to get configuration file")
         print(ex)
 
 
@@ -137,14 +139,15 @@ def save_results_csv(dest_csv, target_obj_list):
             writer = csv.writer(csvfile)
 
             writer.writerow(["Target", "Type", "Data"])
-            c.good_news(c, "Writing to CSV")
+            c.good_news("Writing to CSV")
             for t in target_obj_list:
                 for i in range(len(t.data)):
                     if len(t.data[i]) == 2:  # Contains data header + body
                         writer.writerow([t.email, t.data[i][0], t.data[i][1]])
         except Exception as ex:
-            c.bad_news(c, "Error writing to csv")
+            c.bad_news("Error writing to csv")
             print(ex)
+
 
 def weleakinfo_get_auth_token(endpoint, apikey):
     """
@@ -155,12 +158,12 @@ def weleakinfo_get_auth_token(endpoint, apikey):
     import requests
     import sys
     import platform
+
     headers = {
-            "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
-                pyver=sys.version.split(" ")[0],
-                platfrm=platform.platform().split("-")[0],
-            )
-        }
+        "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+            pyver=sys.version.split(" ")[0], platfrm=platform.platform().split("-")[0]
+        )
+    }
     data = {"key": apikey}
     try:
         response = requests.request(
@@ -179,5 +182,6 @@ def weleakinfo_get_auth_token(endpoint, apikey):
             print(response.status_code)
             print(response)
     except Exception as ex:
-            c.bad_news(c, "Error getting WeLeakInfo authentication token")
-            print(ex)
+        c.bad_news("Error getting WeLeakInfo authentication token")
+        print(ex)
+

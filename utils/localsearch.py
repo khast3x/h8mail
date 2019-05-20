@@ -33,7 +33,7 @@ def raw_in_count(filename):
     StackOverflow trick to rapidly count lines in big files.
     Returns total line number.
     """
-    c.info_news(c, "Identifying total line number...")
+    c.info_news("Identifying total line number...")
     f = open(filename, "rb")
     bufgen = takewhile(lambda x: x, (f.raw.read(1024 * 1024) for _ in repeat(None)))
     return sum(buf.count(b"\n") for buf in bufgen)
@@ -49,10 +49,9 @@ def worker(filepath, target_list):
             found_list = []
             size = os.stat(filepath).st_size
             c.info_news(
-                c,
                 "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
                     PID=os.getpid(), filepath=filepath, size=size
-                ),
+                )
             )
             for cnt, line in enumerate(fp):
                 for t in target_list:
@@ -63,22 +62,21 @@ def worker(filepath, target_list):
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}",
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
-                                c, f"Got a decoding error line {cnt} - file: {filepath}"
+                                f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                c, f"Found occurrence [{filepath}] Line {cnt}: {line}"
+                                f"Found occurrence [{filepath}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, str(line))
                             )
         return found_list
     except Exception as e:
-        c.bad_news(c, "Something went wrong with worker")
+        c.bad_news("Something went wrong with worker")
         print(e)
 
 
@@ -121,10 +119,9 @@ def local_search_single(files_to_parse, target_list):
             size = os.stat(file_to_parse).st_size
             lines_no = raw_in_count(file_to_parse)
             c.info_news(
-                c,
                 "Searching for targets in {file_to_parse} ({size} bytes, {lines_no} lines)".format(
                     file_to_parse=file_to_parse, size=size, lines_no=lines_no
-                ),
+                )
             )
             for cnt, line in enumerate(fp):
                 lines_left = lines_no - cnt
@@ -139,16 +136,14 @@ def local_search_single(files_to_parse, target_list):
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}",
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
-                                c, f"Got a decoding error line {cnt} - file: {filepath}"
+                                f"Got a decoding error line {cnt} - file: {file_to_parse}"
                             )
                             c.good_news(
-                                c,
-                                f"Found occurrence [{file_to_parse}] Line {cnt}: {line}",
+                                f"Found occurrence [{file_to_parse}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, str(line))

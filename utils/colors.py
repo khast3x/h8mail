@@ -45,11 +45,11 @@ class colors:
         lightgrey = "\033[47m"
 
     @staticmethod
-    def good_news(self, news):
+    def good_news(news):
         """
         Print a Success
         """
-        print(self.bold + self.fg.green + "[>] " + self.reset + news.strip())
+        print(colors.bold + colors.fg.green + "[>] " + colors.reset + news.strip())
 
     @staticmethod
     def test_news(news):
@@ -59,139 +59,139 @@ class colors:
         print(colors.bold + colors.fg.green + "[>] " + colors.reset + news.strip())
 
     @staticmethod
-    def bad_news(self, news):
+    def bad_news(news):
         """
         Print a Failure, error
         """
-        print(self.bold + self.fg.red + "[!] " + self.reset + news.strip())
+        print(colors.bold + colors.fg.red + "[!] " + colors.reset + news.strip())
 
     @staticmethod
-    def info_news(self, news):
+    def info_news(news):
         """
         Print an information with grey text
         """
         print(
-            self.bold
-            + self.fg.lightblue
+            colors.bold
+            + colors.fg.lightblue
             + "[~] "
-            + self.reset
-            + self.fg.lightgrey
+            + colors.reset
+            + colors.fg.lightgrey
             + news.strip()
-            + self.reset
+            + colors.reset
         )
 
     @staticmethod
-    def question_news(self, news):
+    def question_news(news):
         """
         Print an information with yellow text
         """
         print(
-            self.bold
-            + self.fg.blue
+            colors.bold
+            + colors.fg.blue
             + "[?] "
-            + self.reset
-            + self.fg.yellow
+            + colors.reset
+            + colors.fg.yellow
             + news.strip()
-            + self.reset
+            + colors.reset
         )
 
     @staticmethod
-    def print_result(self, target, data, source):
+    def print_result(target, data, source):
         """
         Print Breach results
         """
         if "PASS" in source:
             print(
                 "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
-                    self.fg.lightblue,
-                    self.bold,
+                    colors.fg.lightblue,
+                    colors.bold,
                     source,
-                    self.fg.lightgrey,
-                    self.fg.pink,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
                     target,
-                    self.fg.lightgrey,
-                    self.bold,
-                    self.fg.green,
+                    colors.fg.lightgrey,
+                    colors.bold,
+                    colors.fg.green,
                     data,
-                    self.reset,
+                    colors.reset,
                 )
             )
         elif "LOCALSEARCH" in source:
             if len(data) > 140:
                 print(
                     "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
-                        self.fg.lightblue,
-                        self.bold,
+                        colors.fg.lightblue,
+                        colors.bold,
                         source,
-                        self.fg.lightgrey,
-                        self.fg.pink,
+                        colors.fg.lightgrey,
+                        colors.fg.pink,
                         target,
-                        self.fg.lightgrey,
-                        self.bold,
-                        self.fg.green,
+                        colors.fg.lightgrey,
+                        colors.bold,
+                        colors.fg.green,
                         "[...]" + data[-135:],
-                        self.reset,
+                        colors.reset,
                     )
                 )
             else:
                 print(
                     "{}{}{:15}{}|{}{:>25.25}{} > {}{}{}{}".format(
-                        self.fg.lightblue,
-                        self.bold,
+                        colors.fg.lightblue,
+                        colors.bold,
                         source,
-                        self.fg.lightgrey,
-                        self.fg.pink,
+                        colors.fg.lightgrey,
+                        colors.fg.pink,
                         target,
-                        self.fg.lightgrey,
-                        self.bold,
-                        self.fg.green,
+                        colors.fg.lightgrey,
+                        colors.bold,
+                        colors.fg.green,
                         data,
-                        self.reset,
+                        colors.reset,
                     )
                 )
 
         elif "HASH" in source:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
-                    self.fg.lightblue,
+                    colors.fg.lightblue,
                     source,
-                    self.fg.lightgrey,
-                    self.fg.pink,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
                     target,
-                    self.fg.lightgrey,
-                    self.fg.red,
+                    colors.fg.lightgrey,
+                    colors.fg.red,
                     data,
-                    self.reset,
+                    colors.reset,
                 )
             )
 
         else:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
-                    self.fg.lightblue,
+                    colors.fg.lightblue,
                     source,
-                    self.fg.lightgrey,
-                    self.fg.pink,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
                     target,
-                    self.fg.lightgrey,
-                    self.fg.red,
+                    colors.fg.lightgrey,
+                    colors.fg.red,
                     data,
-                    self.reset,
+                    colors.reset,
                 )
             )
 
     @staticmethod
-    def print_res_header(self, target):
+    def print_res_header(target):
         """
         Print Breach result header
         """
-        print(self.bold, "{:_^90}\n".format(""), self.reset)
+        print(colors.bold, "{:_^90}\n".format(""), colors.reset)
         print(
-            self.bold
-            + self.fg.green
+            colors.bold
+            + colors.fg.green
             + "[>] "
-            + self.reset
+            + colors.reset
             + "Showing results for "
             + target
-            + self.reset
+            + colors.reset
         )

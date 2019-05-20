@@ -61,11 +61,11 @@ class target:
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if response.status_code == 429:
                 c.info_news(
-                    c, "Reached RATE LIMIT for {src}, sleeping".format(src=response.url)
+                    "Reached RATE LIMIT for {src}, sleeping".format(src=response.url)
                 )
                 sleep(2.5)
         except Exception as ex:
-            c.bad_news(c, "Request could not be made for " + self.email)
+            c.bad_news("Request could not be made for " + self.email)
             print(ex)
             print(response)
         return response
@@ -77,7 +77,7 @@ class target:
         )
         response = self.make_request(url)
         if response.status_code not in [200, 404]:
-            c.bad_news(c, "Could not contact HIBP for " + self.email)
+            c.bad_news("Could not contact HIBP for " + self.email)
             print(response.status_code)
             print(response)
             return
@@ -90,21 +90,19 @@ class target:
                     self.data.append(("HIBP_PWNED_SRC", ser))
 
             c.good_news(
-                c,
                 "Found {num} breaches for {target} using HIBP".format(
                     num=len(self.data) - 1, target=self.email
-                ),
+                )
             )
 
         elif response.status_code == 404:
-            c.info_news(c, "No breaches found for {} using HIBP".format(self.email))
+            c.info_news("No breaches found for {} using HIBP".format(self.email))
             self.pwnd = False
         else:
             c.bad_news(
-                c,
                 "HIBP: got API response code {code} for {target}".format(
                     code=response.status_code, target=self.email
-                ),
+                )
             )
             self.pwnd = False
 
@@ -117,13 +115,12 @@ class target:
             if response["data"]["total"] != 0:
                 self.data.append(("HUNTER_PUB", response["data"]["total"]))
             c.good_news(
-                c,
                 "Found {num} related emails for {target} using Hunter.IO".format(
                     num=response["data"]["total"], target=self.email
-                ),
+                )
             )
         except Exception as ex:
-            c.bad_news(c, "HunterIO (pubic API) error: " + self.email)
+            c.bad_news("HunterIO (pubic API) error: " + self.email)
             print(ex)
 
     def get_hunterio_private(self, api_key):
@@ -139,8 +136,7 @@ class target:
                 self.pwned = True
         except Exception as ex:
             c.bad_news(
-                c,
-                "HunterIO (private API) error for {target}:".format(target=self.email),
+                "HunterIO (private API) error for {target}:".format(target=self.email)
             )
             print(ex)
 
@@ -152,10 +148,9 @@ class target:
             req = self.make_request(url, meth="POST", data=payload)
             response = req.json()
             c.good_news(
-                c,
                 "Found {num} entries for {target} using Snusbase".format(
                     num=len(response["result"]), target=self.email
-                ),
+                )
             )
             for result in response["result"]:
                 if result["password"]:
@@ -174,7 +169,7 @@ class target:
                         self.data.append(("SNUS_HASH", result["hash"]))
                         self.pwned = True
         except Exception as ex:
-            c.bad_news(c, "Snusbase error with {target}".format(target=self.email))
+            c.bad_news("Snusbase error with {target}".format(target=self.email))
             print(ex)
 
     def get_leaklookup_pub(self, api_key):
@@ -185,24 +180,22 @@ class target:
             response = req.json()
             if "false" in response["error"] and len(response["message"]) != 0:
                 c.good_news(
-                    c,
                     "Found {num} entries for {target} using LeakLookup".format(
                         num=len(response["message"]), target=self.email
-                    ),
+                    )
                 )
                 for result in response["message"]:
                     self.pwned = True
                     self.data.append(("LEAKLOOKUP_PUB", result))
             if "false" in response["error"] and len(response["message"]) == 0:
                 c.info_news(
-                    c,
                     "No breaches found for {} using Leak-lookup (pub)".format(
                         self.email
-                    ),
+                    )
                 )
 
         except Exception as ex:
-            c.bad_news(c, "Leak-lookup error with {target}".format(target=self.email))
+            c.bad_news("Leak-lookup error with {target}".format(target=self.email))
             print(ex)
 
     def get_leaklookup_priv(self, api_key):
@@ -218,18 +211,17 @@ class target:
                         if "password" in d.keys():
                             self.pwned = True
                             self.data.append(("LEAKLKUP_PASS", d["password"]))
-                
+
             if "false" in response["error"] and len(response["message"]) == 0:
                 c.info_news(
-                    c,
                     "No breaches found for {} using Leak-lookup (priv)".format(
                         self.email
-                    ),
+                    )
                 )
         except Exception as ex:
-            c.bad_news(c, "Leak-lookup error with {target}".format(target=self.email))
+            c.bad_news("Leak-lookup error with {target}".format(target=self.email))
             print(ex)
-    
+
     def get_weleakinfo(self, auth_token):
         """
         Requires getting the temp key using the helpers.get_wli_key() beforehand
@@ -237,8 +229,8 @@ class target:
         """
         try:
             print("toto")
-            
+
         except Exception as ex:
-            c.bad_news(c, "WeLeakInfo error with {target}".format(target=self.email))
+            c.bad_news("WeLeakInfo error with {target}".format(target=self.email))
             print(ex)
 

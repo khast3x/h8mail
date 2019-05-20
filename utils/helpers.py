@@ -171,9 +171,13 @@ def weleakinfo_get_auth_token(endpoint, apikey):
             allow_redirects=True,
             data=data,
         )
-    # todo Check incoming status code
-    # if good return key only
 
+        if response.status_code == 200:
+            if "true" in response["Success"] and len(response["Message"]) != 0:
+                return response["Message"]
+        else:
+            print(response.status_code)
+            print(response)
     except Exception as ex:
             c.bad_news(c, "Error getting WeLeakInfo authentication token")
             print(ex)

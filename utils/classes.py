@@ -231,8 +231,12 @@ class target:
             print(ex)
     
     def get_weleakinfo(self, auth_token):
+        """
+        Requires getting the temp key using the helpers.get_wli_key() beforehand
+        """
         try:
             print("toto")
+            
         except Exception as ex:
             c.bad_news(c, "WeLeakInfo error with {target}".format(target=self.email))
             print(ex)

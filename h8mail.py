@@ -75,6 +75,10 @@ def target_factory(targets, user_args):
         elif "leak-lookup_pub" in api_keys:
             current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
         finished.append(current_target)
+        if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
+            from utils.helpers import weleakinfo_get_auth_token
+            token = weleakinfo_get_auth_token(api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"])
+            current_target.get_weleakinfo(token)
 
     return finished
 
@@ -137,7 +141,6 @@ def h8mail(user_args):
 
 
 def main(user_args):
-    c.test_news("toto")
     h8mail(user_args)
 
 

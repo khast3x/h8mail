@@ -233,7 +233,7 @@ class target:
     def get_weleakinfo(self, auth_token):
         """
         Requires getting the temp key using the helpers.get_wli_key() beforehand
-        API is currently is version bump
+        API is currently is version bump.
         """
         try:
             print("toto")

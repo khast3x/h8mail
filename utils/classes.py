@@ -179,7 +179,6 @@ class target:
 
     def get_leaklookup_pub(self, api_key):
         try:
-            print("##########>>>>>>>>>>>>>>>")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": "email_address", "query": self.email}
             req = self.make_request(url, meth="POST", data=payload, timeout=20)

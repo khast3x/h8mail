@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from time import sleep
-from utils.colors import colors as c
+from .colors import colors as c
 import requests
 import json
 import socket
@@ -233,4 +235,3 @@ class target:
         except Exception as ex:
             c.bad_news("WeLeakInfo error with {target}".format(target=self.email))
             print(ex)
-

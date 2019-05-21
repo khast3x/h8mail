@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import re
-from utils.colors import colors as c
+from .colors import colors as c
 import configparser
 import csv
 import os
@@ -52,6 +54,8 @@ def print_banner(b_type="intro"):
             "\th8mail is free & open-source. Please report scammers\n\n",
             c.reset,
         )
+    elif "version" in b_type:
+        print("\t\t", c.fg.black, c.bg.orange, "Version 2.0 - \'Foxy\'", c.reset)
 
 
 def fetch_emails(target, loose=False):
@@ -95,8 +99,7 @@ def get_config_from_file(user_args):
     Read config in file. If keys are passed using CLI, add them to the configparser object.
     Returns a configparser object already set to "DEFAULT" section.
     """
-    if os.path.isfile(user_args.config_file) is False:
-        return None
+
     try:
         config = configparser.ConfigParser()
         for counter, config_file in enumerate(user_args.config_file):
@@ -184,4 +187,3 @@ def weleakinfo_get_auth_token(endpoint, apikey):
     except Exception as ex:
         c.bad_news("Error getting WeLeakInfo authentication token")
         print(ex)
-

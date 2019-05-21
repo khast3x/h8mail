@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 class colors:
     """Colors class:
     reset all colors with colors.reset

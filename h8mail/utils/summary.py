@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import time
-from utils.colors import colors as c
+from .colors import colors as c
 
 
 def print_summary(start_time, breached_targets):

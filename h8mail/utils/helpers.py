@@ -102,11 +102,15 @@ def get_config_from_file(user_args):
 
     try:
         config = configparser.ConfigParser()
-        for counter, config_file in enumerate(user_args.config_file):
-            config_file = user_args.config_file[counter]
-            config.read(config_file)
-
+        # Config file        
+        if user_args.config_file:
+            for counter, config_file in enumerate(user_args.config_file):
+                config_file = user_args.config_file[counter]
+                config.read(config_file)
+        # Use -k option
         if user_args.cli_apikeys:
+            if config.has_section("h8mail") is False:
+                config.add_section("h8mail")
             for counter, user_key in enumerate(user_args.cli_apikeys):
                 user_cli_keys = user_args.cli_apikeys[counter].split(",")
                 for user_key in user_cli_keys:
@@ -125,8 +129,8 @@ def get_config_from_file(user_args):
             for k in config["h8mail"]:
                 if len((config["h8mail"][k])) != 0:
                     c.good_news(f"Found {k} configuration key")
-
-        return config["h8mail"]
+                    print(config["h8mail"][k]) #tototo
+        return config
     except Exception as ex:
         c.bad_news("Problems occurred while trying to get configuration file")
         print(ex)

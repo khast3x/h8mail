@@ -33,7 +33,7 @@ def print_results(results):
                 print()
                 c.info_news("No results founds")
                 continue
-            if len(t.data[i]) >= 2:  # Contains data header + body
+            if len(t.data[i]) >= 2:  # Contains header + body data
                 if "HIBP" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HIBP")
                 if "HUNTER_PUB" in t.data[i][0]:
@@ -56,21 +56,25 @@ def print_results(results):
 
 def target_factory(targets, user_args):
     """
-    Receives list of emails and user args. Fetchs API keys from config file using user_args path.
+    Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
     For each target, launch target.methods() associated to found config artifacts.
     Handles the hunter.io chase logic with counters from enumerate()
     """
     finished = []
-    api_keys = get_config_from_file(user_args)
+    if user_args.config_file is not None or user_args.cli_apikeys is not None:
+        api_keys = get_config_from_file(user_args)
+    else:
+        api_keys = None
     init_targets_len = len(targets)
-
+    for l in api_keys:
+        print("tototo")
+        print(l)
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
-
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
             if "hunterio" in api_keys:
@@ -93,6 +97,7 @@ def target_factory(targets, user_args):
                             chase_limiter += 1
 
             if "snusbase_token" in api_keys:
+                print("totototo")
                 current_target.get_snusbase(
                     api_keys["snusbase_url"], api_keys["snusbase_token"]
                 )

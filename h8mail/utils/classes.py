@@ -133,9 +133,16 @@ class target:
             )
             req = self.make_request(url)
             response = req.json()
+            b_counter = 0
             for e in response["data"]["emails"]:
                 self.data.append(("HUNTER_RELATED", e["value"]))
                 self.pwned = True
+                b_counter += 1
+            c.good_news(
+                "Found {num} related emails for {target} using Hunter.IO (private)".format(
+                    num=b_counter, target=self.email
+                )
+            )
         except Exception as ex:
             c.bad_news(
                 "HunterIO (private API) error for {target}:".format(target=self.email)
@@ -208,11 +215,18 @@ class target:
             response = req.json()
 
             if "false" in response["error"] and len(response["message"]) != 0:
+                b_counter = 0
                 for _, data in response["message"].items():
                     for d in data:
                         if "password" in d.keys():
                             self.pwned = True
                             self.data.append(("LEAKLKUP_PASS", d["password"]))
+                            b_counter += 1
+                c.good_news(
+                    "Found {num} entries for {target} using LeakLookup".format(
+                        num=b_counter, target=self.email
+                    )
+                )
 
             if "false" in response["error"] and len(response["message"]) == 0:
                 c.info_news(
@@ -230,7 +244,7 @@ class target:
         API is currently is version bump
         """
         try:
-            print("toto")
+            print("test_wli")
 
         except Exception as ex:
             c.bad_news("WeLeakInfo error with {target}".format(target=self.email))

@@ -66,9 +66,7 @@ def target_factory(targets, user_args):
     else:
         api_keys = None
     init_targets_len = len(targets)
-    for l in api_keys:
-        print("tototo")
-        print(l)
+
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         current_target = target(t)
@@ -97,7 +95,6 @@ def target_factory(targets, user_args):
                             chase_limiter += 1
 
             if "snusbase_token" in api_keys:
-                print("totototo")
                 current_target.get_snusbase(
                     api_keys["snusbase_url"], api_keys["snusbase_token"]
                 )
@@ -183,8 +180,7 @@ def main():
     # I REALLY want to make sure I don't get Python2 Issues on Github...
 
     parser = argparse.ArgumentParser(
-        description="Email information and password lookup tool",
-        prog="h8mail"
+        description="Email information and password lookup tool", prog="h8mail"
     )
 
     parser.add_argument(
@@ -230,7 +226,7 @@ def main():
         "-k",
         "--apikey",
         dest="cli_apikeys",
-        help='Pass config options. Supported formats: "K:V,K=V" "K=V"',
+        help='Pass config options. Supported formats: "K=V,K=V" "K=V"',
         nargs="+",
     )
     parser.add_argument(

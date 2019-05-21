@@ -114,23 +114,16 @@ def get_config_from_file(user_args):
             for counter, user_key in enumerate(user_args.cli_apikeys):
                 user_cli_keys = user_args.cli_apikeys[counter].split(",")
                 for user_key in user_cli_keys:
-                    if user_key and ":" in user_key:
-                        config.set(
-                            "h8mail",
-                            user_key.split(":", maxsplit=1)[0],
-                            user_key.split(":", maxsplit=1)[1],
-                        )
                     if user_key and "=" in user_key:
                         config.set(
                             "h8mail",
-                            user_key.split("=", maxsplit=1)[0],
-                            user_key.split("=", maxsplit=1)[1],
+                            user_key.split("=", maxsplit=1)[0].strip(),
+                            user_key.split("=", maxsplit=1)[1].strip(),
                         )
             for k in config["h8mail"]:
                 if len((config["h8mail"][k])) != 0:
                     c.good_news(f"Found {k} configuration key")
-                    print(config["h8mail"][k]) #tototo
-        return config
+        return config["h8mail"]
     except Exception as ex:
         c.bad_news("Problems occurred while trying to get configuration file")
         print(ex)

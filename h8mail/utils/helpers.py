@@ -47,15 +47,16 @@ def print_banner(b_type="intro"):
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
 	"""
-        print(c.bold, c.fg.red, banner, c.reset)
+        print(c.bold, c.fg.lightblue, banner, c.reset)
     elif "warn" in b_type:
         print(
             c.fg.pink,
-            "\th8mail is free & open-source. Please report scammers\n\n",
+            "\th8mail is free & open-source. Please report scammers.\n\n",
             c.reset,
         )
     elif "version" in b_type:
-        print("\t\t", c.fg.black, c.bg.orange, "Version 2.0 - \'Foxy\'", c.reset)
+        print("\t", c.bold, c.fg.lightblue, "Version 2.0 - \'Birthday Update\'", c.reset)
+        
 
 
 def fetch_emails(target, loose=False):

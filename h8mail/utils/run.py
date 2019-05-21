@@ -100,7 +100,8 @@ def target_factory(targets, user_args):
                 )
             if "leak-lookup_priv" in api_keys:
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
-            elif "leak-lookup_pub" in api_keys:
+            if "leak-lookup_pub" in api_keys:
+                print("tototo")
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
             if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
                 from .helpers import weleakinfo_get_auth_token
@@ -116,7 +117,7 @@ def target_factory(targets, user_args):
 
 def h8mail(user_args):
     """
-    Handles most user arg logic. Create a list() of targets from user input.
+    Handles most user arg logic. Creates a list() of targets from user input.
     Starts the target object factory loop; starts local searches after factory if in user inputs
     Prints results, saves to csv if in user inputs
     """
@@ -194,7 +195,7 @@ def main():
     parser.add_argument(
         "--loose",
         dest="loose",
-        help="Allow loose search by disabling email pattern recognition. Use spaces a pattern seperator",
+        help="Allow loose search by disabling email pattern recognition. Use spaces as pattern seperators",
         action="store_true",
         default=False,
     )
@@ -226,7 +227,7 @@ def main():
         "-k",
         "--apikey",
         dest="cli_apikeys",
-        help='Pass config options. Supported formats: "K=V,K=V" "K=V"',
+        help='Pass config options. Supported format: "K=V,K=V"',
         nargs="+",
     )
     parser.add_argument(
@@ -253,7 +254,7 @@ def main():
     ),
     parser.add_argument(
         "-ch",
-        "--chase-hunter",
+        "--chase",
         dest="chase_limit",
         help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,

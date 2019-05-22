@@ -59,7 +59,7 @@ h8mail 2.0 only requires `requests` to run.
 
 ## :tangerine: Install
 
-### :star: Stable release
+### Stable release (best)
 
 To install h8mail, run this command in your terminal:
 

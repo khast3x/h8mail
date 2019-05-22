@@ -1,5 +1,5 @@
-from .utils.run import main
 import sys
+from .utils.run import main
 
 if __name__ == "__main__":
     # Check major and minor python version

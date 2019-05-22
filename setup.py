@@ -37,7 +37,7 @@ setup(
     include_package_data=True,
     keywords="h8mail",
     name="h8mail",
-    packages=find_packages(include=["h8mail"]),
+    packages=find_packages(),
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",

@@ -13,16 +13,16 @@
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
-* :package: Painless install. Available through `pip`, only requires `requests` 
+* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") :new:
+* :package: Painless install. Available through `pip`, only requires `requests` :new:
 * :whale: Small and fast Alpine Dockerfile available
-* :white_check_mark: CLI or Bulk file-reading for targeting
+* :white_check_mark: CLI or Bulk file-reading for targeting :new:
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house: Search .txt and .gz files locally using multiprocessing
-  * :cyclone: Compatible with "Collection#1-X"
+* :house: Search .txt and .gz files locally using multiprocessing :new:
+  * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
-* :dragon_face: Chase and target related emails in ongoing search
+* :dragon_face: Chase and target related emails in ongoing search :new:
 * :crown: Supports premium lookup services for advanced users
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
@@ -44,25 +44,27 @@
 
 | Service                                               	|                     Functions                     	|       Status       	|
 |-------------------------------------------------------	|:-------------------------------------------------:	|:------------------:	|
-| [HaveIBeenPwned](https://haveibeenpwned.com/)         	|              Number of email breachs              	|    :red_circle:    	|
+| [HaveIBeenPwned](https://haveibeenpwned.com/)         	|              Number of email breaches              	|    :white_check_mark:    	|
 | [Hunter.io](https://hunter.io/) - Public              	|              Number of related emails             	| :white_check_mark: 	|
 | [Hunter.io](https://hunter.io/) - Service (free tier) 	|              Cleartext related emails             	| :white_check_mark: 	|
 | [WeLeakInfo](https://weleakinfo.com/) - Public        	|        Number of search-able breach results       	|      :customs:     	|
 | [WeLeakInfo](https://weleakinfo.com/) - Service       	|        Cleartext passwords, hashs and salts       	|       :soon:       	|
 | [Snusbase](https://snusbase.com/) - Service           	| Cleartext passwords, hashs and salts - Fast :zap: 	| :white_check_mark: 	|
-| [Leak-Lookup](https://leak-lookup.com/) - Public      	| Number of search-able breach results              	| :white_check_mark: 	|
-| [Leak-Lookup](https://leak-lookup.com/) - Service     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
+| [Leak-Lookup](https://leak-lookup.com/) - Public :new:     	| Number of search-able breach results              	| :white_check_mark: 	|
+| [Leak-Lookup](https://leak-lookup.com/) - Service :new:     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
 
 
 ## :tangerine: Install
 
-### Stable release (best)
+### :star: Stable release :star:
 
 To install h8mail, run this command in your terminal:
 
 ```console
 $ pip3 install --user h8mail
 ```
+
+**And that's basically it**.  
 This is the preferred method to install h8mail, as it will always install the most recent stable release.
 
 If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
@@ -153,22 +155,22 @@ optional arguments:
 ###### Query for a single target
 
 ```bash
-$ python h8mail.py -t target@example.com
+$ h8mail -t target@example.com
 ```
 
 ###### Query for list of targets, indicate config file for API keys, output to `pwned_targets.csv`
 ```bash
-$ python h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
+$ h8mail -t targets.txt -c config.ini -o pwned_targets.csv
 ```
 
 ###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-$ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
+$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
 ```
 
 ###### Query without making API calls against local copy of the Breach Compilation
 ```bash
-$ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
+$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 ```
 
 ## :tangerine: Troubleshooting
@@ -183,19 +185,19 @@ $ python --version
 in your terminal. It should be either `Python 3.*` or `Python 2.*`.  
 
 If you are running python2 as default :  
-Make sure you have python3 installed, then replace python commands with explicit python3 calls:
-
-```bash
-$ git clone https://github.com/khast3x/h8mail.git
-$ cd h8mail
-$ pip3 install -r requirements.txt
-$ python3 h8mail.py -h
-```
+Make sure you have python3.6+ installed, then replace python commands with explicit python3 calls.
 
 
 
 ## :tangerine: Notes & Links
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
-* Special thanks to [Snusbase](https://snusbase.com/) for being developer friendly
-* Special thanks to [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
+* Thanks to [Snusbase](https://snusbase.com/) for being developer friendly
+* Thanks to [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
+* Thanks to [Leak-Lookup](https://leak-lookup.com/) for being *infosec research* friendly
+* Thanks to [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when that is over
+
+## :purple_heart: Related open source projects
+* [WhatBreach](https://github.com/Ekultek/WhatBreach) by Ekultek
+* [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
+* [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech

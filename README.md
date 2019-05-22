@@ -1,4 +1,3 @@
-# :mailbox_with_no_mail: h8mail  
 <p align="center">
   <img src="https://i.postimg.cc/130kfgxq/logo-transparent.png" width="420" title="h8maillogo">
 </p>
@@ -53,6 +52,10 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Public :new:     	| Number of search-able breach results              	| :white_check_mark: 	|
 | [Leak-Lookup](https://leak-lookup.com/) - Service :new:     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
 
+
+## :tangerine: Requirements
+
+h8mail 2.0 only requires `requests` to run.
 
 ## :tangerine: Install
 
@@ -165,13 +168,51 @@ $ h8mail -t targets.txt -c config.ini -o pwned_targets.csv
 
 ###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
+$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url=$snusbase_url,snusbase_token=$snusbase_token"
 ```
 
 ###### Query without making API calls against local copy of the Breach Compilation
 ```bash
-$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ --local
+$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -sk
 ```
+
+###### Search every .gz file for targets found in targets.txt locally
+
+```bash
+$ h8mail -t targets.txt -gz /tmp/Collection1/
+```
+
+###### Check a cleartext dump for target. Add the next 10 related emails to targets to check. Read keys from cli
+
+```bash
+$ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE123"
+```
+
+## :tangerine: Configuration file & keys
+
+h8mail can read keys by using a `config.ini` file, or by passing keys from the command line directly.
+
+The configuration file format is as follows:
+```ini
+[h8mail]
+shodan =
+hunterio =
+snusbase_url =
+snusbase_token =
+; leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
+leak-lookup_priv =
+```
+
+In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. The API can sometimes timeout. If that's the case, simply relaunch. 
+
+
+
+Keys and their respective values can also be passed from the command line, with the `-k` option. Format is like so:  
+```
+$ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
+```
+
+
 
 ## :tangerine: Troubleshooting
 
@@ -197,7 +238,7 @@ Make sure you have python3.6+ installed, then replace python commands with expli
 * Thanks to [Leak-Lookup](https://leak-lookup.com/) for being *infosec research* friendly
 * Thanks to [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when that is over
 
-## :purple_heart: Related open source projects
+## :tangerine: Related open source projects
 * [WhatBreach](https://github.com/Ekultek/WhatBreach) by Ekultek
 * [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech

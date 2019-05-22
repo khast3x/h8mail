@@ -1,4 +1,3 @@
-my_config.ini
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,8 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# h8mail
+
+my_config*
+
 # Distribution / packaging
 .Python
+env/
 build/
 develop-eggs/
 dist/
@@ -24,7 +28,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -55,7 +58,6 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
 
 # Flask stuff:
 instance/
@@ -82,14 +84,13 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
-# Environments
+# dotenv
 .env
+
+# virtualenv
 .venv
-env/
 venv/
 ENV/
-env.bak/
-venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -103,8 +104,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-targets.txt
-testoutput.csv
-targets.txt
 .vscode/settings.json
-my_config.ini2

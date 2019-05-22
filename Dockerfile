@@ -4,5 +4,6 @@ RUN apk add --update --no-cache git
 WORKDIR h8mail
 RUN pip3 install requests
 COPY . .
-ENTRYPOINT ["python", "h8mail.py"]
+RUN ["python", "setup.py", "install"]
+ENTRYPOINT ["h8mail"]
 CMD ["-h"]

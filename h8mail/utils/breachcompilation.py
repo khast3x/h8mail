@@ -1,4 +1,5 @@
-from utils.colors import colors as c
+# -*- coding: utf-8 -*-
+from .colors import colors as c
 import os
 
 

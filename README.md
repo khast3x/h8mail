@@ -1,22 +1,30 @@
 # :mailbox_with_no_mail: h8mail  
+<p align="center">
+  <img src="https://i.postimg.cc/GhCh3LQT/logo-transparent.png" width="420" title="h8maillogo">
+</p>
+
+
 
 [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
 > Email OSINT and password finder.  
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or the infamous "Breach Compilation" torrent.  
-> Early release, feedback and pull requests are welcomed :heart:
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
+> First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
 
 ##  :tangerine: Features
 
-*  :mag_right: Email pattern matching (reg exp), useful for all those raw HTML files
+* :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
+* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
+* :package: Painless install. Available through `pip`, only requires `requests` 
 * :whale: Small and fast Alpine Dockerfile available
 * :white_check_mark: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
-*  :loop: Reverse DNS + Open Ports
-* :cop:  CloudFlare rate throttling avoidance
-  - Execution flow remains synchronous and throttled according to API  usage guidelines written by service providers
-*  :fire: Query and group results from [different breach service](#apis) providers
-*  :fire: Query a local copy of the "Breach Compilation"
-*  :fire: Get related emails
+* :muscle: Compatible with the "Breach Compilation" torrent scripts
+* :house: Search .txt and .gz files locally using multiprocessing
+  * :cyclone: Compatible with "Collection#1-X"
+* :fire: Get related emails
+* :dragon_face: Chase and target related emails in ongoing search
+* :crown: Supports premium lookup services for advanced users
+* :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
 
 #### Demos
@@ -47,54 +55,95 @@
 
 ## :tangerine: Install
 
-If you're using Docker, make sure to add your `targets.txt` and your API keys in the configuration file **before** building
-####  Locally
-NodeJS is required to ensure CloudFlare bypassing. You can find out how to install it for your distribution [here](https://nodejs.org/en/download/package-manager/)  
+### Stable release
 
-These instructions assume you are running Python3 as default. If unsure, please check the troubleshooting section  
+To install h8mail, run this command in your terminal:
 
-```bash
-apt-get install nodejs
-git clone https://github.com/khast3x/h8mail.git
-cd h8mail
-pip install -r requirements.txt
-python h8mail.py -h
+```console
+$ pip3 install --user h8mail
+```
+This is the preferred method to install h8mail, as it will always install the most recent stable release.
+
+If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
+you through the process.
+
+### From sources
+
+The sources for h8mail can be downloaded from the [Github repo](https://github.com/khast3x/h8mail).
+
+You can either clone the public repository:
+
+```console
+$ git clone git://github.com/khast3x/h8mail
+```
+Or download the [tarball](https://github.com/khast3x/h8mail/tarball/master):
+
+```console
+$ curl  -OL https://github.com/khast3x/h8mail/tarball/master
+```
+
+Once you have a copy of the source, you can install it with:
+
+```console
+$ python setup.py install
 ```
 
 #### Docker
 
 ```bash
-git clone https://github.com/khast3x/h8mail.git
-cd h8mail
-docker build -t h8mail .
-docker run -ti h8mail -h
+docker run -ti khast3x/h8mail -h
 ```
 
 ##  :tangerine: Usage
 
-```bash
-> python h8mail.py --help
-usage: h8mail.py [-h] -t TARGET_EMAILS [-c CONFIG_FILE] [-o OUTPUT_FILE]
-                 [-bc BC_PATH] [-v] [-l] [-k CLI_APIKEYS]
+```console
+usage: h8mail [-h] -t TARGET_EMAILS [TARGET_EMAILS ...] [--loose]
+              [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
+              [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
+              [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
+              [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
+              [-ch [CHASE_LIMIT]]
 
-Email information and password finding tool
+Email information and password lookup tool
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TARGET_EMAILS, --targets TARGET_EMAILS
-                        Either single email, or file (one email per line).
-                        REGEXP
-  -c CONFIG_FILE, --config CONFIG_FILE
-                        Configuration file for API keys
+  -t TARGET_EMAILS [TARGET_EMAILS ...], --targets TARGET_EMAILS [TARGET_EMAILS ...]
+                        Either string inputs or files. Supports email pattern
+                        matching from input or file, filepath globing and
+                        multiple arguments
+  --loose               Allow loose search by disabling email pattern
+                        recognition. Use spaces as pattern seperators
+  -c CONFIG_FILE [CONFIG_FILE ...], --config CONFIG_FILE [CONFIG_FILE ...]
+                        Configuration file for API keys. Accepts keys from
+                        Snusbase, (WeLeakInfo, Citadel.pw), hunterio
   -o OUTPUT_FILE, --output OUTPUT_FILE
-                        File to write output
+                        File to write CSV output
   -bc BC_PATH, --breachcomp BC_PATH
-                        Path to the breachcompilation Torrent.
+                        Path to the breachcompilation torrent folder. Uses the
+                        query.sh script included in the torrent.
                         https://ghostbin.com/paste/2cbdn
-  -v, --verbose         Show debug information
-  -l, --local           Run local actions only
-  -k CLI_APIKEYS, --apikey CLI_APIKEYS
-                        Pass config options. Format is "K:V,K:V"
+  -sk, --skip-defaults  Skips HaveIBeenPwned and HunterIO check. Ideal for
+                        local scans
+  -k CLI_APIKEYS [CLI_APIKEYS ...], --apikey CLI_APIKEYS [CLI_APIKEYS ...]
+                        Pass config options. Supported format: "K=V,K=V"
+  -lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...], --local-breach LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]
+                        Local cleartext breaches to scan for targets. Uses
+                        multiprocesses, one separate process per file, on
+                        separate worker pool by arguments. Supports file or
+                        folder as input, and filepath globing
+  -gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...], --gzip LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]
+                        Local tar.gz (gzip) compressed breaches to scans for
+                        targets. Uses multiprocesses, one separate process per
+                        file. Supports file or folder as input, and filepath
+                        globing. Looks for 'gz' in filename
+  -sf, --single-file    If breach contains big cleartext or tar.gz files, set
+                        this flag to view the progress bar. Disables
+                        concurrent file searching for stability
+  -ch [CHASE_LIMIT], --chase [CHASE_LIMIT]
+                        Add related emails from HunterIO to ongoing target
+                        list. Define number of emails per target to chase.
+                        Requires hunter.io private API key
 
 ```
 
@@ -136,7 +185,6 @@ If you are running python2 as default :
 Make sure you have python3 installed, then replace python commands with explicit python3 calls:
 
 ```bash
-apt-get install nodejs
 git clone https://github.com/khast3x/h8mail.git
 cd h8mail
 pip3 install -r requirements.txt

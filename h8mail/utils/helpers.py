@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import re
-from utils.colors import colors as c
+from .colors import colors as c
 import configparser
 import csv
 import os
@@ -45,13 +47,16 @@ def print_banner(b_type="intro"):
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
 	"""
-        print(c.bold, c.fg.red, banner, c.reset)
+        print(c.bold, c.fg.lightblue, banner, c.reset)
     elif "warn" in b_type:
         print(
             c.fg.pink,
-            "\th8mail is free & open-source. Please report scammers\n\n",
+            "\th8mail is free & open-source. Please report scammers.\n\n",
             c.reset,
         )
+    elif "version" in b_type:
+        print("\t", c.bold, c.fg.lightblue, "Version 2.0 - \'Birthday Update\'", c.reset)
+        
 
 
 def fetch_emails(target, loose=False):
@@ -95,34 +100,30 @@ def get_config_from_file(user_args):
     Read config in file. If keys are passed using CLI, add them to the configparser object.
     Returns a configparser object already set to "DEFAULT" section.
     """
-    if os.path.isfile(user_args.config_file) is False:
-        return None
+
     try:
         config = configparser.ConfigParser()
-        for counter, config_file in enumerate(user_args.config_file):
-            config_file = user_args.config_file[counter]
-            config.read(config_file)
-
+        # Config file        
+        if user_args.config_file:
+            for counter, config_file in enumerate(user_args.config_file):
+                config_file = user_args.config_file[counter]
+                config.read(config_file)
+        # Use -k option
         if user_args.cli_apikeys:
+            if config.has_section("h8mail") is False:
+                config.add_section("h8mail")
             for counter, user_key in enumerate(user_args.cli_apikeys):
                 user_cli_keys = user_args.cli_apikeys[counter].split(",")
                 for user_key in user_cli_keys:
-                    if user_key and ":" in user_key:
-                        config.set(
-                            "h8mail",
-                            user_key.split(":", maxsplit=1)[0],
-                            user_key.split(":", maxsplit=1)[1],
-                        )
                     if user_key and "=" in user_key:
                         config.set(
                             "h8mail",
-                            user_key.split("=", maxsplit=1)[0],
-                            user_key.split("=", maxsplit=1)[1],
+                            user_key.split("=", maxsplit=1)[0].strip(),
+                            user_key.split("=", maxsplit=1)[1].strip(),
                         )
             for k in config["h8mail"]:
                 if len((config["h8mail"][k])) != 0:
                     c.good_news(f"Found {k} configuration key")
-
         return config["h8mail"]
     except Exception as ex:
         c.bad_news("Problems occurred while trying to get configuration file")
@@ -184,4 +185,3 @@ def weleakinfo_get_auth_token(endpoint, apikey):
     except Exception as ex:
         c.bad_news("Error getting WeLeakInfo authentication token")
         print(ex)
-

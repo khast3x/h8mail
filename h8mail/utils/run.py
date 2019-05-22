@@ -1,6 +1,26 @@
+# -*- coding: utf-8 -*-
 # Most imports are after python2/3 check further down
-import sys
+import configparser
+import argparse
+import os
+import re
 import time
+import sys
+
+from .breachcompilation import breachcomp_check
+from .classes import target
+from .colors import colors as c
+from .helpers import (
+    fetch_emails,
+    find_files,
+    get_config_from_file,
+    get_emails_from_file,
+    print_banner,
+    save_results_csv,
+)
+from .localsearch import local_search, local_search_single, local_to_targets
+from .localgzipsearch import local_gzip_search, local_search_single_gzip
+from .summary import print_summary
 
 
 def print_results(results):
@@ -13,7 +33,7 @@ def print_results(results):
                 print()
                 c.info_news("No results founds")
                 continue
-            if len(t.data[i]) >= 2:  # Contains data header + body
+            if len(t.data[i]) >= 2:  # Contains header + body data
                 if "HIBP" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HIBP")
                 if "HUNTER_PUB" in t.data[i][0]:
@@ -36,12 +56,15 @@ def print_results(results):
 
 def target_factory(targets, user_args):
     """
-    Receives list of emails and user args. Fetchs API keys from config file using user_args path.
+    Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
     For each target, launch target.methods() associated to found config artifacts.
     Handles the hunter.io chase logic with counters from enumerate()
     """
     finished = []
-    api_keys = get_config_from_file(user_args)
+    if user_args.config_file is not None or user_args.cli_apikeys is not None:
+        api_keys = get_config_from_file(user_args)
+    else:
+        api_keys = None
     init_targets_len = len(targets)
 
     for counter, t in enumerate(targets):
@@ -50,7 +73,6 @@ def target_factory(targets, user_args):
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
-        
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
             if "hunterio" in api_keys:
@@ -78,23 +100,24 @@ def target_factory(targets, user_args):
                 )
             if "leak-lookup_priv" in api_keys:
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
-            elif "leak-lookup_pub" in api_keys:
+            if "leak-lookup_pub" in api_keys:
+                print("tototo")
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
             if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
-                from utils.helpers import weleakinfo_get_auth_token
+                from .helpers import weleakinfo_get_auth_token
 
                 token = weleakinfo_get_auth_token(
                     api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"]
                 )
                 current_target.get_weleakinfo(token)
-        
+
         finished.append(current_target)
     return finished
 
 
 def h8mail(user_args):
     """
-    Handles most user arg logic. Create a list() of targets from user input.
+    Handles most user arg logic. Creates a list() of targets from user input.
     Starts the target object factory loop; starts local searches after factory if in user inputs
     Prints results, saves to csv if in user inputs
     """
@@ -154,45 +177,11 @@ def h8mail(user_args):
         save_results_csv(user_args.output_file, breached_targets)
 
 
-def main(user_args):
-    h8mail(user_args)
-
-
-if __name__ == "__main__":
-    # Check major and minor python version
-    if sys.version_info[0] < 3:
-        sys.stdout.write(
-            "\n/!\\ h8mail requires Python 3.6+ /!\\\nTry running h8mail with python3 if on older systems\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
-        )
-        sys.exit(1)
-    if sys.version_info[1] < 6:
-        sys.stdout.write(
-            "\n/!\\ h8mail requires Python 3.6+ /!\\\nTry running h8mail with python3 if on older systems\n\neg: python --version\neg: python3 h8mail.py --help\n\n"
-        )
-        sys.exit(1)
+def main():
     # I REALLY want to make sure I don't get Python2 Issues on Github...
-    import configparser
-    import argparse
-    import os
-    import re
-
-    from utils.breachcompilation import breachcomp_check
-    from utils.classes import target
-    from utils.colors import colors as c
-    from utils.helpers import (
-        fetch_emails,
-        find_files,
-        get_config_from_file,
-        get_emails_from_file,
-        print_banner,
-        save_results_csv,
-    )
-    from utils.localsearch import local_search, local_search_single, local_to_targets
-    from utils.localgzipsearch import local_gzip_search, local_search_single_gzip
-    from utils.summary import print_summary
 
     parser = argparse.ArgumentParser(
-        description="Email information and password lookup tool"
+        description="Email information and password lookup tool", prog="h8mail"
     )
 
     parser.add_argument(
@@ -206,7 +195,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--loose",
         dest="loose",
-        help="Allow loose search by disabling email pattern recognition. Use spaces a pattern seperator",
+        help="Allow loose search by disabling email pattern recognition. Use spaces as pattern seperators",
         action="store_true",
         default=False,
     )
@@ -214,7 +203,6 @@ if __name__ == "__main__":
         "-c",
         "--config",
         dest="config_file",
-        default="config.ini",
         help="Configuration file for API keys. Accepts keys from Snusbase, (WeLeakInfo, Citadel.pw), hunterio",
         nargs="+",
     )
@@ -239,7 +227,7 @@ if __name__ == "__main__":
         "-k",
         "--apikey",
         dest="cli_apikeys",
-        help='Pass config options. Supported formats: "K:V,K=V" "K=V"',
+        help='Pass config options. Supported format: "K=V,K=V"',
         nargs="+",
     )
     parser.add_argument(
@@ -266,15 +254,15 @@ if __name__ == "__main__":
     ),
     parser.add_argument(
         "-ch",
-        "--chase-hunter",
+        "--chase",
         dest="chase_limit",
         help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
         nargs="?",
     )
 
-    args = parser.parse_args()
+    user_args = parser.parse_args()
     print_banner("warn")
+    print_banner("version")
     print_banner()
-    main(args)
-    c.good_news("Done")
+    h8mail(user_args)

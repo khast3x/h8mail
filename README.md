@@ -1,11 +1,11 @@
 # :mailbox_with_no_mail: h8mail  
 <p align="center">
-  <img src="https://i.postimg.cc/GhCh3LQT/logo-transparent.png" width="420" title="h8maillogo">
+  <img src="https://i.postimg.cc/130kfgxq/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 
 
 
-[![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
 > Email OSINT and password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
@@ -42,20 +42,21 @@
 
 ####  APIs
 
-|       Service      |         Functions        |         Status        |
-|:--------------|:-----------------------:|:---------------------:|
-| [HaveIBeenPwned](https://haveibeenpwned.com/) |      Number of email breachs      |   :red_circle: |
-| [Shodan](https://www.shodan.io/)         | Reverse DNS, Open ports |   :white_check_mark: |
-|[Hunter.io](https://hunter.io/) - Public   |Number of related emails   | :white_check_mark:  |
-|[Hunter.io](https://hunter.io/) - Service (free tier)   |Cleartext related emails   | :white_check_mark:   |
-|  [WeLeakInfo](https://weleakinfo.com/) - Public | Number of search-able breach results  |   :customs: |
-|[WeLeakInfo](https://weleakinfo.com/) - Service   |Cleartext passwords, hashs and salts   |  :soon:  |
-|[Snusbase](https://snusbase.com/) - Service   |Cleartext passwords, hashs and salts - Fast :zap:    | :white_check_mark:  |
+| Service                                               	|                     Functions                     	|       Status       	|
+|-------------------------------------------------------	|:-------------------------------------------------:	|:------------------:	|
+| [HaveIBeenPwned](https://haveibeenpwned.com/)         	|              Number of email breachs              	|    :red_circle:    	|
+| [Hunter.io](https://hunter.io/) - Public              	|              Number of related emails             	| :white_check_mark: 	|
+| [Hunter.io](https://hunter.io/) - Service (free tier) 	|              Cleartext related emails             	| :white_check_mark: 	|
+| [WeLeakInfo](https://weleakinfo.com/) - Public        	|        Number of search-able breach results       	|      :customs:     	|
+| [WeLeakInfo](https://weleakinfo.com/) - Service       	|        Cleartext passwords, hashs and salts       	|       :soon:       	|
+| [Snusbase](https://snusbase.com/) - Service           	| Cleartext passwords, hashs and salts - Fast :zap: 	| :white_check_mark: 	|
+| [Leak-Lookup](https://leak-lookup.com/) - Public      	| Number of search-able breach results              	| :white_check_mark: 	|
+| [Leak-Lookup](https://leak-lookup.com/) - Service     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
 
 
 ## :tangerine: Install
 
-### Stable release
+### Stable release (best)
 
 To install h8mail, run this command in your terminal:
 
@@ -91,7 +92,7 @@ $ python setup.py install
 #### Docker
 
 ```bash
-docker run -ti khast3x/h8mail -h
+$ docker run -ti khast3x/h8mail -h
 ```
 
 ##  :tangerine: Usage
@@ -152,22 +153,22 @@ optional arguments:
 ###### Query for a single target
 
 ```bash
-python h8mail.py -t target@example.com
+$ python h8mail.py -t target@example.com
 ```
 
 ###### Query for list of targets, indicate config file for API keys, output to `pwned_targets.csv`
 ```bash
-python h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
+$ python h8mail.py -t targets.txt -c config.ini -o pwned_targets.csv
 ```
 
 ###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
+$ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url:$snusbase_url,snusbase_token:$snusbase_token"
 ```
 
 ###### Query without making API calls against local copy of the Breach Compilation
 ```bash
-python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
+$ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 ```
 
 ## :tangerine: Troubleshooting
@@ -176,7 +177,7 @@ python h8mail.py -t targets.txt -bc ../Downloads/BreachCompilation/ --local
 
 The above instructions assume you are running **python3 as default**. If unsure, type:
 ```bash
-python --version
+$ python --version
 ``` 
 
 in your terminal. It should be either `Python 3.*` or `Python 2.*`.  
@@ -185,10 +186,10 @@ If you are running python2 as default :
 Make sure you have python3 installed, then replace python commands with explicit python3 calls:
 
 ```bash
-git clone https://github.com/khast3x/h8mail.git
-cd h8mail
-pip3 install -r requirements.txt
-python3 h8mail.py -h
+$ git clone https://github.com/khast3x/h8mail.git
+$ cd h8mail
+$ pip3 install -r requirements.txt
+$ python3 h8mail.py -h
 ```
 
 

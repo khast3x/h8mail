@@ -4,12 +4,12 @@
 language: python
 python:
   - 3.6
-  - 3.5
-  - 3.4
 
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -r requirements.txt
+# install: pip install -r requirements.txt
+
+install: pip install -e .
 
 # Command to run tests, e.g. python setup.py test
-script: python h8mail.py -t test@example.com
+script: python setup.py test

@@ -41,6 +41,6 @@ setup(
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",
-    version="2.0",
+    version="2.1",
     zip_safe=False,
 )

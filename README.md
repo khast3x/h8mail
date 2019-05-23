@@ -6,7 +6,7 @@
 </p>
 
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![tested](https://img.shields.io/badge/tested-Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
 > Email OSINT and password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:

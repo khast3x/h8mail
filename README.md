@@ -6,7 +6,7 @@
 </p>
 
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![tested](https://img.shields.io/badge/tested-Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
 > Email OSINT and password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
@@ -14,16 +14,16 @@
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :dizzy: :new: Loosey patterns for local searchs ("john.smith", "evilcorp") 
-* :package: :new: Painless install. Available through `pip`, only requires `requests`
+* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") 
+* :package: Painless install. Available through `pip`, only requires `requests`
 * :whale: Small and fast Alpine Dockerfile available
-* :white_check_mark: :new: CLI or Bulk file-reading for targeting
+* :white_check_mark: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house: :new: Search .txt and .gz files locally using multiprocessing
+* :house: Search .txt and .gz files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
-* :dragon_face: :new: Chase and target related emails in ongoing search
+* :dragon_face: Chase and target related emails in ongoing search
 * :crown: Supports premium lookup services for advanced users
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
@@ -230,6 +230,26 @@ in your terminal. It should be either `Python 3.*` or `Python 2.*`.
 If you are running python2 as default :  
 Make sure you have python3.6+ installed, then replace python commands with explicit python3 calls.
 
+
+### Windows
+
+* `h8mail` uses ANSI color escape characters. Windows doesn't know how to show the colors, and will show gibberish instead.  
+Fortunately, you can use [Cmder](https://cmder.net/), which is an excellent Windows CMD prompt alternative
+* If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/)
+* If you're having trouble with `pip`, you can do the following:
+```bash
+# To have python handle installation of pip
+C:> python -m ensurepip
+# To launch pip as a module
+C:> python -m pip install h8mail
+# To launch h8mail as a module
+C:> python -m h8mail --help
+```
+
+### OSX
+
+As described for Windows, its possible you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
+If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
 
 
 ## :tangerine: Thanks & Credits

@@ -20,7 +20,6 @@ Email OSINT and password breach hunting. Use h8mail to find passwords through di
 
 
 * Free software: BSD license
-* Documentation: https://h8mail.readthedocs.io.
 
 
 Features

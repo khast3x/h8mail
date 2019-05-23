@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease">
+  <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease"> <a href="https://github.com/khast3x/h8mail/releases/tag/2.0.pre-release">
 </p>
 <p align="center">
-  <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
+  <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo"><a href="https://github.com/khast3x/h8mail/">
 </p>
 
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
 > Email OSINT and password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
@@ -28,6 +28,8 @@
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
 
+-----
+
 #### Demos
 
 ######  :unlock: Out of the box
@@ -40,6 +42,8 @@
 
 ###### :minidisc: With the BreachedCompilation torrent
 ![3](/doc/h8mail3.gif)
+
+-----
 
 ####  APIs
 
@@ -54,11 +58,13 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Public :new:     	| Number of search-able breach results              	| :white_check_mark: 	|
 | [Leak-Lookup](https://leak-lookup.com/) - Service :new:     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
 
+-----
 
 ## :tangerine: Requirements
 
 h8mail 2.0 only requires `requests` to run.
 
+-----
 ## :tangerine: Install
 
 ### Stable release (best)
@@ -101,6 +107,8 @@ $ python setup.py install
 ```bash
 $ docker run -ti kh4st3x00/h8mail -h
 ```
+
+-----
 
 ##  :tangerine: Usage
 
@@ -155,6 +163,8 @@ optional arguments:
 
 ```
 
+-----
+
 ## :tangerine: Usage examples
 
 ###### Query for a single target
@@ -190,6 +200,8 @@ $ h8mail -t targets.txt -gz /tmp/Collection1/ -sk
 $ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE123"
 ```
 
+-----
+
 ## :tangerine: Configuration file & keys
 
 h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
@@ -214,7 +226,7 @@ Keys and their respective values can also be passed from the command line, with 
 $ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
 ```
 
-
+-----
 
 ## :tangerine: Troubleshooting
 
@@ -251,6 +263,8 @@ C:> python -m h8mail --help
 As described for Windows, its possible you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
 If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows. Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
 
+-----
+
 ## :tangerine: Thanks & Credits
 
 * [Snusbase](https://snusbase.com/) for being developer friendly
@@ -260,6 +274,7 @@ If thats the case, you can try invoking `pip` and `h8mail` with the same command
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
 
+-----
 
 ## :tangerine: Related open source projects
 * [WhatBreach](https://github.com/Ekultek/WhatBreach) by Ekultek
@@ -267,6 +282,8 @@ If thats the case, you can try invoking `pip` and `h8mail` with the same command
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech
 * [HashBuster](https://github.com/s0md3v/Hash-Buster) by s0md3v
 
+
+-----
 
 ## :tangerine: Notes
 

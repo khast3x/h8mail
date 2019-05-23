@@ -1,6 +1,5 @@
 <p align="center">
-  <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png
-" width="420" title="prelrelease">
+  <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease">
 </p>
 <p align="center">
   <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">

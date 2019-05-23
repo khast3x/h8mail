@@ -249,8 +249,7 @@ C:> python -m h8mail --help
 ### OSX
 
 As described for Windows, its possible you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
-If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
-
+If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows. Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
 
 ## :tangerine: Thanks & Credits
 

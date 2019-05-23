@@ -99,7 +99,7 @@ $ python setup.py install
 #### Docker
 
 ```bash
-$ docker run -ti khast3x/h8mail -h
+$ docker run -ti kh4st3x00/h8mail -h
 ```
 
 ##  :tangerine: Usage

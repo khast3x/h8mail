@@ -11,17 +11,17 @@
 
 ##  :tangerine: Features
 
-* :mag_right::new: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") 
-* :package::new: Painless install. Available through `pip`, only requires `requests`
+* :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
+* :dizzy: :new: Loosey patterns for local searchs ("john.smith", "evilcorp") 
+* :package: :new: Painless install. Available through `pip`, only requires `requests`
 * :whale: Small and fast Alpine Dockerfile available
-* :white_check_mark::new: CLI or Bulk file-reading for targeting
+* :white_check_mark: :new: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house::new: Search .txt and .gz files locally using multiprocessing
+* :house: :new: Search .txt and .gz files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
-* :dragon_face::new: Chase and target related emails in ongoing search
+* :dragon_face: :new: Chase and target related emails in ongoing search
 * :crown: Supports premium lookup services for advanced users
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors

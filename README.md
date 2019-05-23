@@ -181,7 +181,7 @@ $ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -sk
 ###### Search every .gz file for targets found in targets.txt locally
 
 ```bash
-$ h8mail -t targets.txt -gz /tmp/Collection1/
+$ h8mail -t targets.txt -gz /tmp/Collection1/ -sk
 ```
 
 ###### Check a cleartext dump for target. Add the next 10 related emails to targets to check. Read keys from cli

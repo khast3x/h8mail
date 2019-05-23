@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease"> <a href="https://github.com/khast3x/h8mail/releases/tag/2.0.pre-release">
+<a href="https://github.com/khast3x/h8mail/releases/tag/2.0.pre-release"> <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease"> 
 </p>
 <p align="center">
-  <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo"><a href="https://github.com/khast3x/h8mail/">
+<a href="https://github.com/khast3x/h8mail/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 
 
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://github.com/khast3x/h8mail)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
 > Email OSINT and password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:

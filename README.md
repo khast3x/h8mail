@@ -252,10 +252,7 @@ Make sure you have python3.6+ installed, then replace python commands with expli
 ## :tangerine: Notes
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
-* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
-* Special thanks to [Snusbase](https://snusbase.com/) for being developer friendly
-* Special thanks to [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
-
+* H_mail is maintained on my free time. Feedback and war stories are welcomed.
 
 ___
 

@@ -11,6 +11,7 @@ from h8mail.utils import classes
 import sys
 import time
 
+
 class TestH8mail(unittest.TestCase):
     """Tests for `h8mail` package."""
 
@@ -22,6 +23,7 @@ class TestH8mail(unittest.TestCase):
 
     def test_000_simple(self):
         """Test something."""
+
     run.print_banner()
     start_time = time.time()
     target = classes.target("test@test.ca")

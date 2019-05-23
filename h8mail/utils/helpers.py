@@ -55,8 +55,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.lightblue, "Version 2.0 - \'Birthday Update\'", c.reset)
-        
+        print("\t", c.bold, c.fg.lightblue, "Version 2.0 - 'Birthday Update'", c.reset)
 
 
 def fetch_emails(target, loose=False):
@@ -103,7 +102,7 @@ def get_config_from_file(user_args):
 
     try:
         config = configparser.ConfigParser()
-        # Config file        
+        # Config file
         if user_args.config_file:
             for counter, config_file in enumerate(user_args.config_file):
                 config_file = user_args.config_file[counter]

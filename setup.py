@@ -5,7 +5,7 @@
 
 from setuptools import setup, find_packages
 
-with open("README.md") as readme_file:
+with open("PyPi.rst") as readme_file:
     readme = readme_file.read()
 
 # with open("HISTORY.rst") as history_file:

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.postimg.cc/130kfgxq/logo-transparent.png" width="420" title="h8maillogo">
+  <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 
 
@@ -11,17 +11,17 @@
 
 ##  :tangerine: Features
 
-* :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") :new:
-* :package: Painless install. Available through `pip`, only requires `requests` :new:
+* :mag_right::new: Email pattern matching (reg exp), useful for reading from other tool outputs
+* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") 
+* :package::new: Painless install. Available through `pip`, only requires `requests`
 * :whale: Small and fast Alpine Dockerfile available
-* :white_check_mark: CLI or Bulk file-reading for targeting :new:
+* :white_check_mark::new: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house: Search .txt and .gz files locally using multiprocessing :new:
+* :house::new: Search .txt and .gz files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
-* :dragon_face: Chase and target related emails in ongoing search :new:
+* :dragon_face::new: Chase and target related emails in ongoing search
 * :crown: Supports premium lookup services for advanced users
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
@@ -63,7 +63,7 @@ h8mail 2.0 only requires `requests` to run.
 
 To install h8mail, run this command in your terminal:
 
-```console
+```bash
 $ pip3 install --user h8mail
 ```
 
@@ -79,18 +79,18 @@ The sources for h8mail can be downloaded from the [Github repo](https://github.c
 
 You can either clone the public repository:
 
-```console
+```bash
 $ git clone git://github.com/khast3x/h8mail
 ```
 Or download the [tarball](https://github.com/khast3x/h8mail/tarball/master):
 
-```console
+```bash
 $ curl  -OL https://github.com/khast3x/h8mail/tarball/master
 ```
 
 Once you have a copy of the source, you can install it with:
 
-```console
+```bash
 $ python setup.py install
 ```
 
@@ -102,7 +102,7 @@ $ docker run -ti khast3x/h8mail -h
 
 ##  :tangerine: Usage
 
-```console
+```
 usage: h8mail [-h] -t TARGET_EMAILS [TARGET_EMAILS ...] [--loose]
               [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
@@ -190,7 +190,7 @@ $ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE12
 
 ## :tangerine: Configuration file & keys
 
-h8mail can read keys by using a `config.ini` file, or by passing keys from the command line directly.
+h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
 
 The configuration file format is as follows:
 ```ini
@@ -203,7 +203,7 @@ snusbase_token =
 leak-lookup_priv =
 ```
 
-In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. The API can sometimes timeout. If that's the case, simply relaunch. 
+In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. To activate, uncomment the line and make sure to pass to config file. The API can sometimes timeout. If that's the case, simply relaunch. 
 
 
 
@@ -230,15 +230,23 @@ Make sure you have python3.6+ installed, then replace python commands with expli
 
 
 
-## :tangerine: Notes & Links
+## :tangerine: Thanks & Credits
 
-* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
-* Thanks to [Snusbase](https://snusbase.com/) for being developer friendly
-* Thanks to [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
-* Thanks to [Leak-Lookup](https://leak-lookup.com/) for being *infosec research* friendly
-* Thanks to [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when that is over
+* [Snusbase](https://snusbase.com/) for being developer friendly
+* [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
+* [Leak-Lookup](https://leak-lookup.com/) for being *infosec research* friendly
+* [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when available :thumbsup:
+* h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
+* Logo generated using Hatchful by Shopify
+
 
 ## :tangerine: Related open source projects
 * [WhatBreach](https://github.com/Ekultek/WhatBreach) by Ekultek
 * [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech
+* [HashBuster](https://github.com/s0md3v/Hash-Buster) by s0md3v
+
+
+## :tangerine: Notes
+
+* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)

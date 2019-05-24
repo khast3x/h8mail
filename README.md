@@ -32,7 +32,13 @@
 
 #### Demo
 
-![h8mailv2demo](https://i.postimg.cc/Gm3jtDLV/h8mail2demo.gif)
+##### Out of the box
+[![h8mail2demo6-1.gif](https://i.postimg.cc/DwbwqjwX/h8mail2demo6-1.gif)](https://postimg.cc/v4byyv9Y)
+
+
+##### With API services, local breach search & chasing enabled
+
+[![ezgif-3-eada1c3a7e53.gif](https://i.postimg.cc/B67r73hQ/ezgif-3-eada1c3a7e53.gif)](https://postimg.cc/G8Yg9WwZ)
 
 -----
 

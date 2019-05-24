@@ -2,7 +2,7 @@
 <a href="https://github.com/khast3x/h8mail/releases/tag/2.0.pre-release"> <img src="https://i.postimg.cc/4NzKxT5S/button-version-pre-release.png width="420" title="prelrelease"> 
 </p>
 <p align="center">
-<a href="https://github.com/khast3x/h8mail/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
+<a href="https://github.com/khast3x/h8mail/releases/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 
 
@@ -30,18 +30,9 @@
 
 -----
 
-#### Demos
+#### Demo
 
-######  :unlock: Out of the box
-
-![1](/doc/h8mail1.gif)
-
-###### :rocket: With API services
-
-![2](/doc/h8mail2.gif)
-
-###### :minidisc: With the BreachedCompilation torrent
-![3](/doc/h8mail3.gif)
+![h8mailv2demo](https://i.postimg.cc/Gm3jtDLV/h8mail2demo.gif)
 
 -----
 
@@ -288,7 +279,7 @@ If thats the case, you can try invoking `pip` and `h8mail` with the same command
 ## :tangerine: Notes
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
-* H_mail is maintained on my free time. Feedback and war stories are welcomed.
+* h8mail is maintained on my free time. Feedback and war stories are welcomed.
 
 ___
 

@@ -42,14 +42,14 @@ def gzip_worker(filepath, target_list):
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"[:-4]+"****"
                             )
                         except Exception as e:
                             c.bad_news(
                                 f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {line}"
+                                f"Found occurrence [{filepath}] Line {cnt}: {line}"[:-4]+"****"
                             )
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, str(line))

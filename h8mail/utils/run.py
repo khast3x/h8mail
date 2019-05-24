@@ -23,9 +23,10 @@ from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
 
 
-def print_results(results):
+def print_results(results, hide=False):
 
     for t in results:
+        time.sleep(3) #tototo
         print()
         c.print_res_header(t.email)
         for i in range(len(t.data)):
@@ -34,6 +35,13 @@ def print_results(results):
                 c.info_news("No results founds")
                 continue
             if len(t.data[i]) >= 2:  # Contains header + body data
+                if hide:
+                    if "PASS" in t.data[i][0]:
+                        c.print_result(t.email, t.data[i][1][:4]+"********", t.data[i][0])
+                        continue
+                    if "LOCAL" in t.data[i][0]:
+                        c.print_result(t.email, t.data[i][1][:-5]+"********", t.data[i][0])
+                        continue
                 if "HIBP" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HIBP")
                 if "HUNTER_PUB" in t.data[i][0]:
@@ -69,6 +77,7 @@ def target_factory(targets, user_args):
 
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
+        time.sleep(1    ) #tototo
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
@@ -170,7 +179,7 @@ def h8mail(user_args):
             if local_found is not None:
                 breached_targets = local_to_targets(breached_targets, local_found)
 
-    print_results(breached_targets)
+    print_results(breached_targets, user_args.hide)
 
     print_summary(start_time, breached_targets)
     if user_args.output_file:
@@ -259,7 +268,14 @@ def main():
         help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
         nargs="?",
-    )
+    ),
+    parser.add_argument(
+        "--hide",
+        dest="hide",
+        help="Only shows the first 4 characters of found passwords to output. Ideal for demonstrations",
+        action="store_true",
+        default=False,
+    ),
 
     user_args = parser.parse_args()
     print_banner("warn")

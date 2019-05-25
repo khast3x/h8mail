@@ -7,8 +7,8 @@
 
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
-> Email OSINT and password finder.  
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
+> Powerful and user-friendly email recon and password finder.  
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
 
 ##  :tangerine: Features
@@ -57,12 +57,14 @@
 
 -----
 
-## :tangerine: Requirements
+## :tangerine: 
 
-h8mail 2.0 only requires `requests` to run.
 
 -----
-## :tangerine: Install
+
+### Requirements
+
+h8mail 2.0 only requires `requests` to run.
 
 ### Stable release (best)
 
@@ -244,8 +246,8 @@ Make sure you have python3.6+ installed, then replace python commands with expli
 
 * `h8mail` uses ANSI color escape characters. Windows doesn't know how to show the colors, and will show gibberish instead.  
 Fortunately, you can use [Cmder](https://cmder.net/), which is an excellent Windows CMD prompt alternative
-* If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/)
-* If you're having trouble with `pip`, you can do the following:
+* If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/). `pip` will also need to be in your `PATH` environment variable.
+* If you're still having trouble with `pip`, you can do the following:
 ```bash
 # To have python handle installation of pip
 C:> python -m ensurepip
@@ -255,10 +257,12 @@ C:> python -m pip install h8mail
 C:> python -m h8mail --help
 ```
 
+
 ### OSX
 
-As described for Windows, its possible you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
+As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
 If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows. Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
+
 
 -----
 

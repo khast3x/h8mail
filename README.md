@@ -28,6 +28,9 @@
 * :books: Regroup breach results for all targets and methods
 * :rainbow: Delicious colors
 
+
+### :package: `pip3 install h8mail`
+
 -----
 
 #### Demo
@@ -57,10 +60,8 @@
 
 -----
 
-## :tangerine: 
+## :tangerine: Install
 
-
------
 
 ### Requirements
 
@@ -71,7 +72,7 @@ h8mail 2.0 only requires `requests` to run.
 To install h8mail, run this command in your terminal:
 
 ```bash
-$ pip3 install --user h8mail
+$ pip3 install h8mail
 ```
 
 **And that's basically it**.  

@@ -1,7 +1,4 @@
 <p align="center">
-<a href="https://github.com/khast3x/h8mail/releases/tag/2.0.pre-release"> <img src="https://i.postimg.cc/T2smTbTJ/button-version-release-1.png width="420" title="release"> 
-</p>
-<p align="center">
 <a href="https://github.com/khast3x/h8mail/releases/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 

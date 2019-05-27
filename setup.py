@@ -32,7 +32,7 @@ setup(
     description="Email OSINT and password breach hunting. Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation torrent",
     install_requires=requirements,
     license="BSD license",
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     long_description=readme + "\n\n",
     # long_description=readme + "\n\n" + history,
     include_package_data=True,

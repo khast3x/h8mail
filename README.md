@@ -7,9 +7,19 @@
 
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
-> Powerful and user-friendly email recon and password finder.  
+> Powerful and user-friendly password finder.  
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
+
+## :book: Table of Content
+
+- [Features](#tangerine-features)
+  - [Demo](#demo)
+  - [APIs](#apis)
+- [Install](#tangerine-install)
+- [Usage examples](#tangerine-usage-examples)
+- [Troubleshooting](#tangerine-troubleshooting)
+- [Notes](#tangerine-notes)
 
 ##  :tangerine: Features
 
@@ -26,8 +36,10 @@
 * :dragon_face: Chase and target related emails in ongoing search
 * :crown: Supports premium lookup services for advanced users
 * :books: Regroup breach results for all targets and methods
+* :eyes: Includes option to hide passwords for demonstrations
 * :rainbow: Delicious colors
 
+---
 
 ### :package: `pip3 install h8mail`
 
@@ -69,8 +81,7 @@ h8mail 2.0 only requires `requests` to run.
 
 ### Stable release (best)
 
-To install h8mail, run this command in your terminal:
-
+**To install h8mail, run this command in your terminal:**  
 ```bash
 $ pip3 install h8mail
 ```
@@ -102,7 +113,7 @@ Once you have a copy of the source, you can install it with:
 $ python setup.py install
 ```
 
-#### Docker
+## Docker
 
 ```bash
 $ docker run -ti kh4st3x00/h8mail -h
@@ -250,6 +261,8 @@ Fortunately, you can use [Cmder](https://cmder.net/), which is an excellent Wind
 * If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/). `pip` will also need to be in your `PATH` environment variable.
 * If you're still having trouble with `pip`, you can do the following:
 ```bash
+# Check python version, should be 3.6+
+C:> python --version
 # To have python handle installation of pip
 C:> python -m ensurepip
 # To launch pip as a module
@@ -261,8 +274,9 @@ C:> python -m h8mail --help
 
 ### OSX
 
-As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
-If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows. Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
+* As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
+* If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
+* Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
 
 
 -----
@@ -271,7 +285,7 @@ If thats the case, you can try invoking `pip` and `h8mail` with the same command
 
 * [Snusbase](https://snusbase.com/) for being developer friendly
 * [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
-* [Leak-Lookup](https://leak-lookup.com/) for being *infosec research* friendly
+* [Leak-Lookup](https://leak-lookup.com/) for being developer friendly
 * [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when available :thumbsup:
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
@@ -289,7 +303,7 @@ If thats the case, you can try invoking `pip` and `h8mail` with the same command
 
 ## :tangerine: Notes
 
-* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (Protonmail encryption friendly)
+* Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
 
 ___

@@ -97,6 +97,10 @@ you through the process.
 For h8mail specific troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
 
 [![h8mail-install.gif](https://i.postimg.cc/Vs9vznN3/h8mail-install.gif)](https://postimg.cc/c6H0mKwm)
+*The above illustration showcases installing h8mail using `--user`*
+
+
+
 ### From sources
 
 The sources for h8mail can be downloaded from the [Github repo](https://github.com/khast3x/h8mail).
@@ -266,7 +270,7 @@ $ python --version
 ``` 
 
 * If you are running python2 as default :  
-Make sure you have python3.6+ installed, then replace python commands with explicit python3 calls.
+Make sure you have python3.6+ installed, then replace `python` commands with explicit `python3` commands.
 
 * If you have not set your venvs, you might get a permission error saying `Consider using the --user option or check the permissions.`  
 Simply add --user like so:
@@ -328,7 +332,7 @@ $ python3 -m h8mail -h
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
-* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](keybase.io) PGP keys. You can get it using:  
+* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io) PGP keys. You can get it using:  
 ```bash
 # curl + gpg pro tip: import ktx's keys
 curl https://keybase.io/ktx/pgp_keys.asc | gpg --import

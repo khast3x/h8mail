@@ -259,16 +259,20 @@ $ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
 
 ### Python version & Kali
 
-The above instructions assume you are running **python3 as default**. If unsure, type:
+* The above instructions assume you are running **python3 as default**. If unsure, type the following in your terminal.  
+It should be either `Python 3.*` or `Python 2.*` :
 ```bash
 $ python --version
 ``` 
 
-in your terminal. It should be either `Python 3.*` or `Python 2.*`.  
-
-If you are running python2 as default :  
+* If you are running python2 as default :  
 Make sure you have python3.6+ installed, then replace python commands with explicit python3 calls.
 
+* If you have not set your venvs, you might get a permission error saying Consider using the --user option or check the permissions.  
+Simply add --user like so:
+```bash
+$ pip install --user h8mail
+```
 
 ### Windows
 

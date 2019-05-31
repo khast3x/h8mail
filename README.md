@@ -332,7 +332,7 @@ $ python3 -m h8mail -h
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
-* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io) PGP key. You can get it using:  
+* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io/ktx) PGP key. You can get it using:  
 ```bash
 # curl + gpg pro tip: import ktx's keys
 curl https://keybase.io/ktx/pgp_keys.asc | gpg --import
@@ -344,4 +344,7 @@ ___
 
 *If you wish to stay updated on this project:*
 
-[![twitter](https://i.imgur.com/S79Nimd.png)](https://twitter.com/kh4st3x)
+<p align="center">
+<a href="https://twitter.com/kh4st3x"> <img src="https://i.imgur.com/S79Nimd.png" width="420" title="h8maillogo">
+</p>
+

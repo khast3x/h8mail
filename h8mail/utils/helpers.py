@@ -82,6 +82,7 @@ def get_emails_from_file(targets_file, loose=False):
     email_obj_list = []
     try:
         target_fd = open(targets_file).readlines()
+        print(targets_file)
         for line in target_fd:
             e = fetch_emails(line)
             if e is None:

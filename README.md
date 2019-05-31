@@ -8,6 +8,8 @@
 > Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
 
+----
+
 ## :book: Table of Content
 
 - [Features](#tangerine-features)
@@ -17,6 +19,9 @@
 - [Usage examples](#tangerine-usage-examples)
 - [Troubleshooting](#tangerine-troubleshooting)
 - [Notes](#tangerine-notes)
+
+----
+
 
 ##  :tangerine: Features
 
@@ -86,9 +91,12 @@ $ pip3 install h8mail
 **And that's basically it**.  
 This is the preferred method to install h8mail, as it will always install the most recent stable release.
 
+*Please note*:  
 If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
-you through the process.
+you through the process.  
+For h8mail specific troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
 
+[![h8mail-install.gif](https://i.postimg.cc/Vs9vznN3/h8mail-install.gif)](https://postimg.cc/c6H0mKwm)
 ### From sources
 
 The sources for h8mail can be downloaded from the [Github repo](https://github.com/khast3x/h8mail).
@@ -103,12 +111,23 @@ Or download the [tarball](https://github.com/khast3x/h8mail/tarball/master):
 ```bash
 $ curl  -OL https://github.com/khast3x/h8mail/tarball/master
 ```
-
+Next, decompress the downloaded archive.  
 Once you have a copy of the source, you can install it with:
 
 ```bash
+$ cd h8mail/
 $ python setup.py install
+$ h8mail -h
 ```
+
+Or just running it as a module:
+```bash
+$ cd h8mail/
+$ python -m h8mail -h
+```
+
+
+
 
 ## Docker
 
@@ -271,10 +290,13 @@ C:> python -m h8mail --help
 
 ### OSX
 
-* As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.  
+* As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.
 * If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
 * Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
-
+* Basically try this if installed and not executing, check Windows instructions for further examples:
+```bash
+$ python3 -m h8mail -h
+```  
 
 -----
 
@@ -302,7 +324,14 @@ C:> python -m h8mail --help
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
+* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](keybase.io) PGP keys. You can get it using:  
+```bash
+# curl + gpg pro tip: import ktx's keys
+curl https://keybase.io/ktx/pgp_keys.asc | gpg --import
 
+# the Keybase app can push to gpg keychain, too
+keybase pgp pull ktx
+```
 ___
 
 *If you wish to stay updated on this project:*

@@ -5,7 +5,7 @@
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
 > Powerful and user-friendly password finder.  
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
 
 ## :book: Table of Content

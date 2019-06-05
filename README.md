@@ -5,10 +5,17 @@
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail) [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
 > Powerful and user-friendly password finder.  
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or using local breaches such as Troy Hunt's "Collection1" or the infamous "Breach Compilation" torrent.  
+> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
 > First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
 
 ----
+<p align="center">
+<a href="https://khast3x.club/h8mail/2019/05/26/h8mail-release/"> <img src="https://i.postimg.cc/L83gRWvc/button-click-here-to-read-the-official-write-up.png"  title="h8maillogo">
+</p>
+
+
+----
+
 
 ## :book: Table of Content
 
@@ -79,7 +86,7 @@
 
 ### Requirements
 
-h8mail 2.0 only requires `requests` to run.
+h8mail 2.0 only requires the python `requests` module to run.
 
 ### Stable release (best)
 
@@ -94,7 +101,7 @@ This is the preferred method to install h8mail, as it will always install the mo
 *Please note*:  
 If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
 you through the process.  
-For h8mail specific troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
+For troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
 
 [![h8mail-install.gif](https://i.postimg.cc/Vs9vznN3/h8mail-install.gif)](https://postimg.cc/c6H0mKwm)
 *The above illustration showcases installing h8mail using `--user`*
@@ -143,13 +150,13 @@ $ docker run -ti kh4st3x00/h8mail -h
 
 ##  :tangerine: Usage
 
-```
+```bash
 usage: h8mail [-h] -t TARGET_EMAILS [TARGET_EMAILS ...] [--loose]
               [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
-              [-ch [CHASE_LIMIT]]
+              [-ch [CHASE_LIMIT]] [--hide]
 
 Email information and password lookup tool
 
@@ -191,6 +198,8 @@ optional arguments:
                         Add related emails from HunterIO to ongoing target
                         list. Define number of emails per target to chase.
                         Requires hunter.io private API key
+  --hide                Only shows the first 4 characters of found passwords
+                        to output. Ideal for demonstrations
 
 ```
 

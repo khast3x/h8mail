@@ -26,7 +26,6 @@ from .summary import print_summary
 def print_results(results, hide=False):
 
     for t in results:
-        time.sleep(3) #tototo
         print()
         c.print_res_header(t.email)
         for i in range(len(t.data)):
@@ -77,7 +76,6 @@ def target_factory(targets, user_args):
 
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
-        time.sleep(1    ) #tototo
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
@@ -110,7 +108,6 @@ def target_factory(targets, user_args):
             if "leak-lookup_priv" in api_keys:
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
             if "leak-lookup_pub" in api_keys:
-                print("tototo")
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
             if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
                 from .helpers import weleakinfo_get_auth_token

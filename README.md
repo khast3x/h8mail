@@ -331,10 +331,11 @@ $ python3 -m h8mail -h
 
 ## :tangerine: Related open source projects
 * [WhatBreach](https://github.com/Ekultek/WhatBreach) by Ekultek
+* [HashBuster](https://github.com/s0md3v/Hash-Buster) by s0md3v
 * [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech
-* [HashBuster](https://github.com/s0md3v/Hash-Buster) by s0md3v
-
+* [buster](https://github.com/sham00n/buster) by sham00n
+  * discovered emailrep.io through his project, watch out for integration soon!
 
 -----
 

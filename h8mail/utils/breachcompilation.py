@@ -15,7 +15,6 @@ def breachcomp_check(targets, breachcomp_path):
         for t in targets:
             c.info_news(f"Looking up {t.email} in BreachCompilation")  
             procfd = subprocess.run([query_bin, t.email], stdout=subprocess.PIPE)
-            print(procfd)
             try:
                 output = procfd.stdout.decode("cp437")
             except Exception as e:

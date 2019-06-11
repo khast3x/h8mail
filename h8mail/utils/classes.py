@@ -89,13 +89,14 @@ class target:
             data = response.json()
             for d in data:  # Returned type is a dict of Name : Service
                 for _, ser in d.items():
-                    self.data.append(("HIBP_PWNED_SRC", ser))
+                    self.data.append(("HIBP", ser))
 
             c.good_news(
                 "Found {num} breaches for {target} using HIBP".format(
                     num=len(self.data) - 1, target=self.email
                 )
             )
+            self.get_hibp_pastes()
 
         elif response.status_code == 404:
             c.info_news("No breaches found for {} using HIBP".format(self.email))
@@ -107,7 +108,43 @@ class target:
                 )
             )
             self.pwnd = False
+    def get_hibp_pastes(self):
+        sleep(1.3)
+        url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(
+            self.email
+        )
+        response = self.make_request(url)
+        if response.status_code not in [200, 404]:
+            c.bad_news("Could not contact HIBP PASTE for " + self.email)
+            print(response.status_code)
+            print(response)
+            return
 
+        if response.status_code == 200:
+            self.pwned = True
+            data = response.json()
+            for d in data:  # Returned type is a dict of Name : Service
+                if "Pastebin" in d["Source"]:
+                    self.data.append(("HIBP_PASTE", "https://pastebin.com/"+d["Id"]))
+                else:
+                    self.data.append(("HIBP_PASTE", d["Id"]))
+
+                        
+
+            c.good_news(
+                "Found {num} pastes for {target} using HIBP".format(
+                    num=len(data), target=self.email
+                )
+            )
+
+        elif response.status_code == 404:
+            c.info_news("No pastes found for {} using HIBP PASTE".format(self.email))
+        else:
+            c.bad_news(
+                "HIBP PASTE: got API response code {code} for {target}".format(
+                    code=response.status_code, target=self.email
+                )
+            )
     def get_hunterio_public(self):
         try:
             target_domain = self.email.split("@")[1]

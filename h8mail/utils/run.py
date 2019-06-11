@@ -42,7 +42,7 @@ def print_results(results, hide=False):
                         c.print_result(t.email, t.data[i][1][:-5]+"********", t.data[i][0])
                         continue
                 if "HIBP" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], "HIBP")
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "HUNTER_PUB" in t.data[i][0]:
                     c.print_result(
                         t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB"

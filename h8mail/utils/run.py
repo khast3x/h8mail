@@ -61,6 +61,8 @@ def print_results(results, hide=False):
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LEAKLKUP_PASS" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
+                if "WLI" in t.data[i][0]:
+                    c.print_result(t.email, t.data[i][1], t.data[i][0])
 
 
 def target_factory(targets, user_args):
@@ -112,14 +114,11 @@ def target_factory(targets, user_args):
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
             if "leak-lookup_pub" in api_keys:
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
-            if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
-                from .helpers import weleakinfo_get_auth_token
-
-                token = weleakinfo_get_auth_token(
-                    api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"]
-                )
-                current_target.get_weleakinfo(token)
-
+            if "weleakinfo_pub" in api_keys:
+                # current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
+                print()
+            if "weleakinfo_priv" in api_keys:
+                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"])
         finished.append(current_target)
     return finished
 

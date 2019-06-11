@@ -73,105 +73,113 @@ class target:
         return response
 
     def get_hibp(self):
-        sleep(1.3)
-        url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
-            self.email
-        )
-        response = self.make_request(url)
-        if response.status_code not in [200, 404]:
-            c.bad_news("Could not contact HIBP for " + self.email)
-            print(response.status_code)
-            print(response)
-            return
-
-        if response.status_code == 200:
-            self.pwned = True
-            data = response.json()
-            for d in data:  # Returned type is a dict of Name : Service
-                for _, ser in d.items():
-                    self.data.append(("HIBP", ser))
-
-            c.good_news(
-                "Found {num} breaches for {target} using HIBP".format(
-                    num=len(self.data) - 1, target=self.email
-                )
+        try:
+            sleep(1.3)
+            url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
+                self.email
             )
-            self.get_hibp_pastes()
+            response = self.make_request(url)
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact HIBP for " + self.email)
+                print(response.status_code)
+                print(response)
+                return
 
-        elif response.status_code == 404:
-            c.info_news("No breaches found for {} using HIBP".format(self.email))
-            self.pwnd = False
-        else:
-            c.bad_news(
-                "HIBP: got API response code {code} for {target}".format(
-                    code=response.status_code, target=self.email
+            if response.status_code == 200:
+                self.pwned = True
+                data = response.json()
+                for d in data:  # Returned type is a dict of Name : Service
+                    for _, ser in d.items():
+                        self.data.append(("HIBP", ser))
+
+                c.good_news(
+                    "Found {num} breaches for {target} using HIBP".format(
+                        num=len(self.data) - 1, target=self.email
+                    )
                 )
-            )
-            self.pwnd = False
+                self.get_hibp_pastes()
 
+            elif response.status_code == 404:
+                c.info_news("No breaches found for {} using HIBP".format(self.email))
+                self.pwnd = False
+            else:
+                c.bad_news(
+                    "HIBP: got API response code {code} for {target}".format(
+                        code=response.status_code, target=self.email
+                    )
+                )
+                self.pwnd = False
+        except Exception as ex:
+            c.bad_news("HIBP error: " + self.email)
+            print(ex)
     def get_hibp_pastes(self):
-        sleep(1.3)
-        url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(self.email)
-        response = self.make_request(url)
-        if response.status_code not in [200, 404]:
-            c.bad_news("Could not contact HIBP PASTE for " + self.email)
-            print(response.status_code)
-            print(response)
-            return
+        try:
+            sleep(1.3)
+            url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(self.email)
+            response = self.make_request(url)
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact HIBP PASTE for " + self.email)
+                print(response.status_code)
+                print(response)
+                return
 
-        if response.status_code == 200:
-            self.pwned = True
-            data = response.json()
-            for d in data:  # Returned type is a dict of Name : Service
-                if "Pastebin" in d["Source"]:
-                    self.data.append(("HIBP_PASTE", "https://pastebin.com/" + d["Id"]))
-                else:
-                    self.data.append(("HIBP_PASTE", d["Id"]))
+            if response.status_code == 200:
+                self.pwned = True
+                data = response.json()
+                for d in data:  # Returned type is a dict of Name : Service
+                    if "Pastebin" in d["Source"]:
+                        self.data.append(("HIBP_PASTE", "https://pastebin.com/" + d["Id"]))
+                    else:
+                        self.data.append(("HIBP_PASTE", d["Id"]))
 
-            c.good_news(
-                "Found {num} pastes for {target} using HIBP".format(
-                    num=len(data), target=self.email
+                c.good_news(
+                    "Found {num} pastes for {target} using HIBP".format(
+                        num=len(data), target=self.email
+                    )
                 )
-            )
 
-        elif response.status_code == 404:
-            c.info_news("No pastes found for {} using HIBP PASTE".format(self.email))
-        else:
-            c.bad_news(
-                "HIBP PASTE: got API response code {code} for {target}".format(
-                    code=response.status_code, target=self.email
+            elif response.status_code == 404:
+                c.info_news("No pastes found for {} using HIBP PASTE".format(self.email))
+            else:
+                c.bad_news(
+                    "HIBP PASTE: got API response code {code} for {target}".format(
+                        code=response.status_code, target=self.email
+                    )
                 )
-            )
+        except Exception as ex:
+            c.bad_news("HIBP PASTE error: " + self.email)
+            print(ex)
 
     def get_emailrepio(self):
-        url = "https://emailrep.io/{}".format(self.email)
-        response = self.make_request(url)
-        if response.status_code not in [200, 404]:
-            c.bad_news("Could not contact emailrep for " + self.email)
-            print(response.status_code)
-            print(response)
-            return
+        try:
+            url = "https://emailrep.io/{}".format(self.email)
+            response = self.make_request(url)
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact emailrep for " + self.email)
+                print(response.status_code)
+                print(response)
+                return
 
-        if response.status_code == 200:
-            data = response.json()
-            print(data["details"]["profiles"])
-            print(len(data["details"]["profiles"]))
-            if len(data["details"]["last_seen"]) != 0:
-                self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
-            if len(data["details"]["profiles"]) != 0:
-                for profile in data["details"]["profiles"]:
-                    self.data.append(("EMAILREP_SOCIAL", profile))
-            c.good_news("Found additional data with emailrep.io")
+            if response.status_code == 200:
+                data = response.json()
+                if len(data["details"]["last_seen"]) != 0:
+                    self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
+                if len(data["details"]["profiles"]) != 0:
+                    for profile in data["details"]["profiles"]:
+                        self.data.append(("EMAILREP_SOCIAL", profile))
+                c.good_news("Found additional data with emailrep.io")
 
-        elif response.status_code == 404:
-            c.info_news("No data found for {} using emailrep.io".format(self.email))
-        else:
-            c.bad_news(
-                "emailrep.io: got API response code {code} for {target}".format(
-                    code=response.status_code, target=self.email
+            elif response.status_code == 404:
+                c.info_news("No data found for {} using emailrep.io".format(self.email))
+            else:
+                c.bad_news(
+                    "emailrep.io: got API response code {code} for {target}".format(
+                        code=response.status_code, target=self.email
+                    )
                 )
-            )
-
+        except Exception as ex:
+                c.bad_news("emailrep.io error: " + self.email)
+                print(ex)
     def get_hunterio_public(self):
         try:
             target_domain = self.email.split("@")[1]
@@ -302,14 +310,38 @@ class target:
             c.bad_news("Leak-lookup error with {target}".format(target=self.email))
             print(ex)
 
-    def get_weleakinfo(self, auth_token):
-        """
-        Requires getting the temp key using the helpers.get_wli_key() beforehand
-        API is currently is version bump
-        """
-        try:
-            print("test_wli")
 
+    def get_weleakinfo_priv(self, api_key):
+        try:
+            url = "https://api.weleakinfo.com/v3/search"
+            self.headers.update({"Authorization": "Bearer " + api_key})
+            self.headers.update({"Content-Type": "application/x-www-form-urlencoded"})
+
+            payload = {"type": "email", "query": self.email}
+            req = self.make_request(url, meth="POST", data=payload)
+            response = req.json()
+            if req.status_code == 200:
+                c.good_news(
+                    "Found {num} entries for {target} using WeLeakInfo".format(
+                        num=response["Total"], target=self.email
+                    )
+                )
+                if response["Success"] is False:
+                    c.bad_news(response["Message"])
+                    return
+                for result in response["Data"]:
+                    if "Password" in result:
+                        self.data.append(("WLI_PASSWORD", result["Password"]))
+                        self.pwned = True
+                    if "Hash" in result:
+                        self.data.append(("WLI_HASH", result["Hash"]))
+                        self.pwned = True
+                    if "Username" in result:
+                        self.data.append(("WLI_USERNAME", result["Username"]))
+            if req.status_code == 400:
+                c.bad_news(f"Got WLI API response code {req.status_code}: Invalid search type provided")
+            else:
+                c.bad_news(f"Got WLI API response code {req.status_code}")
         except Exception as ex:
             c.bad_news("WeLeakInfo error with {target}".format(target=self.email))
             print(ex)

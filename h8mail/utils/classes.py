@@ -108,11 +108,10 @@ class target:
                 )
             )
             self.pwnd = False
+
     def get_hibp_pastes(self):
         sleep(1.3)
-        url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(
-            self.email
-        )
+        url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(self.email)
         response = self.make_request(url)
         if response.status_code not in [200, 404]:
             c.bad_news("Could not contact HIBP PASTE for " + self.email)
@@ -125,11 +124,9 @@ class target:
             data = response.json()
             for d in data:  # Returned type is a dict of Name : Service
                 if "Pastebin" in d["Source"]:
-                    self.data.append(("HIBP_PASTE", "https://pastebin.com/"+d["Id"]))
+                    self.data.append(("HIBP_PASTE", "https://pastebin.com/" + d["Id"]))
                 else:
                     self.data.append(("HIBP_PASTE", d["Id"]))
-
-                        
 
             c.good_news(
                 "Found {num} pastes for {target} using HIBP".format(
@@ -145,6 +142,36 @@ class target:
                     code=response.status_code, target=self.email
                 )
             )
+
+    def get_emailrepio(self):
+        url = "https://emailrep.io/{}".format(self.email)
+        response = self.make_request(url)
+        if response.status_code not in [200, 404]:
+            c.bad_news("Could not contact emailrep for " + self.email)
+            print(response.status_code)
+            print(response)
+            return
+
+        if response.status_code == 200:
+            data = response.json()
+            print(data["details"]["profiles"])
+            print(len(data["details"]["profiles"]))
+            if len(data["details"]["last_seen"]) != 0:
+                self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
+            if len(data["details"]["profiles"]) != 0:
+                for profile in data["details"]["profiles"]:
+                    self.data.append(("EMAILREP_SOCIAL", profile))
+            c.good_news("Found additional data with emailrep.io")
+
+        elif response.status_code == 404:
+            c.info_news("No data found for {} using emailrep.io".format(self.email))
+        else:
+            c.bad_news(
+                "emailrep.io: got API response code {code} for {target}".format(
+                    code=response.status_code, target=self.email
+                )
+            )
+
     def get_hunterio_public(self):
         try:
             target_domain = self.email.split("@")[1]

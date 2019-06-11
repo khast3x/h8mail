@@ -49,6 +49,8 @@ def print_results(results, hide=False):
                     )
                 if "HUNTER_RELATED" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HUNTER_RELATED")
+                if "EMAILREP" in t.data[i][0]:
+                    c.print_result(t.email, str(t.data[i][1]).capitalize(), t.data[i][0])
                 if "SNUS" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LOCAL" in t.data[i][0]:
@@ -80,6 +82,7 @@ def target_factory(targets, user_args):
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
+            current_target.get_emailrepio()
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
             if "hunterio" in api_keys:

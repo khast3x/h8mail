@@ -43,7 +43,7 @@ def raw_in_count(filename):
 def worker(filepath, target_list):
     """
     Searches for every email from target_list in every line of filepath.
-    Attempts to decode line using utf-8. If it fails, catch and use raw data
+    Attempts to decode line using cp437. If it fails, catch and use raw data
     """
     try:
         with open(filepath, "rb") as fp:
@@ -58,7 +58,7 @@ def worker(filepath, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
@@ -132,7 +132,7 @@ def local_search_single(files_to_parse, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )

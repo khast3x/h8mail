@@ -22,7 +22,7 @@ def gzip_worker(filepath, target_list):
     Searches for every email from target_list in every line of filepath.
     Uses python native gzip lib to decompress file line by line.
     Archives with multiple files are read as long single files. 
-    Attempts to decode line using utf-8. If it fails, catch and use raw data.
+    Attempts to decode line using cp437. If it fails, catch and use raw data.
     """
     try:
         found_list = []
@@ -37,7 +37,7 @@ def gzip_worker(filepath, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
@@ -101,7 +101,7 @@ def local_search_single_gzip(files_to_parse, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )

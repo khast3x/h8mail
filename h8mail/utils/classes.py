@@ -112,6 +112,7 @@ class target:
         except Exception as ex:
             c.bad_news("HIBP error: " + self.email)
             print(ex)
+
     def get_hibp_pastes(self):
         try:
             sleep(1.3)
@@ -162,8 +163,9 @@ class target:
 
             if response.status_code == 200:
                 data = response.json()
-                if len(data["details"]["last_seen"]) != 0:
-                    self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
+                if "never" in data["details"]["last_seen"]:
+                    return
+                self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
                         self.data.append(("EMAILREP_SOCIAL", profile))
@@ -320,15 +322,23 @@ class target:
             payload = {"type": "email", "query": self.email}
             req = self.make_request(url, meth="POST", data=payload)
             response = req.json()
+            if req.status_code == 400:
+                c.bad_news(f"Got WLI API response code {req.status_code}: Invalid search type provided")
+                return
+            elif req.status_code != 200:
+                c.bad_news(f"Got WLI API response code {req.status_code}")
+                return
             if req.status_code == 200:
+                if response["Success"] is False:
+                    c.bad_news(response["Message"])
+                    return
                 c.good_news(
-                    "Found {num} entries for {target} using WeLeakInfo".format(
+                    "Found {num} entries for {target} using WeLeakInfo (private)".format(
                         num=response["Total"], target=self.email
                     )
                 )
                 self.data.append(("WLI_TOTAL", response["Total"]))
-                if response["Success"] is False:
-                    c.bad_news(response["Message"])
+                if response["Total"] == 0:
                     return
                 for result in response["Data"]:
                     if "Password" in result:
@@ -339,10 +349,6 @@ class target:
                         self.pwned = True
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
-            if req.status_code == 400:
-                c.bad_news(f"Got WLI API response code {req.status_code}: Invalid search type provided")
-            else:
-                c.bad_news(f"Got WLI API response code {req.status_code}")
         except Exception as ex:
             c.bad_news("WeLeakInfo priv error with {target}".format(target=self.email))
             print(ex)
@@ -352,9 +358,12 @@ class target:
             self.headers.update({"Authorization": "Bearer " + api_key})
             req = self.make_request(url)
             response = req.json()
-            if req.status_code == 200:
+            if req.status_code != 200:
+                c.bad_news(f"Got WLI API response code {req.status_code}")
+                return
+            else:
                 c.good_news(
-                    "Found {num} entries for {target} using WeLeakInfo".format(
+                    "Found {num} entries for {target} using WeLeakInfo (public)".format(
                         num=response["Total"], target=self.email
                     )
                 )
@@ -362,22 +371,10 @@ class target:
                     c.bad_news(response["Message"])
                     return
                 self.data.append(("WLI_PUB_TOTAL", response["Total"]))
+                if response["Total"] == 0:
+                    return
                 for name, data in response["Data"].items():
                     self.data.append(("WLI_PUB_SRC", name + " (" + str(data)+")" ))
-
-
-
-                for result in response["Data"]:
-                    if "Password" in result:
-                        self.data.append(("WLI_PASSWORD", result["Password"]))
-                        self.pwned = True
-                    if "Hash" in result:
-                        self.data.append(("WLI_HASH", result["Hash"]))
-                        self.pwned = True
-                    if "Username" in result:
-                        self.data.append(("WLI_USERNAME", result["Username"]))
-            else:
-                c.bad_news(f"Got WLI API response code {req.status_code}")
         except Exception as ex:
             c.bad_news("WeLeakInfo pub error with {target}".format(target=self.email))
             print(ex)

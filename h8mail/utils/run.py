@@ -115,8 +115,7 @@ def target_factory(targets, user_args):
             if "leak-lookup_pub" in api_keys:
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
             if "weleakinfo_pub" in api_keys:
-                # current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
-                print()
+                current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"])
         finished.append(current_target)

@@ -33,18 +33,18 @@ class local_breach_target:
 class target:
     """
 	Main class used to create and follow breach data.
-	Found data is stored in self.data. Each method switches self.pwned to True when data is found.
+	Found data is stored in self.data. Each method increments self.pwned when data is found.
 	"""
 
     def __init__(self, email):
         self.headers = {
-            "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+            "User-Agent": "h8mail-v.2.2-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
                 pyver=sys.version.split(" ")[0],
                 platfrm=platform.platform().split("-")[0],
             )
         }
         self.email = email
-        self.pwned = False
+        self.pwned = 0
         self.data = [()]
 
     def make_request(
@@ -86,11 +86,11 @@ class target:
                 return
 
             if response.status_code == 200:
-                self.pwned = True
                 data = response.json()
                 for d in data:  # Returned type is a dict of Name : Service
                     for _, ser in d.items():
                         self.data.append(("HIBP", ser))
+                        self.pwned += 1
 
                 c.good_news(
                     "Found {num} breaches for {target} using HIBP".format(
@@ -101,14 +101,12 @@ class target:
 
             elif response.status_code == 404:
                 c.info_news("No breaches found for {} using HIBP".format(self.email))
-                self.pwnd = False
             else:
                 c.bad_news(
                     "HIBP: got API response code {code} for {target}".format(
                         code=response.status_code, target=self.email
                     )
                 )
-                self.pwnd = False
         except Exception as ex:
             c.bad_news("HIBP error: " + self.email)
             print(ex)
@@ -125,9 +123,10 @@ class target:
                 return
 
             if response.status_code == 200:
-                self.pwned = True
+                
                 data = response.json()
                 for d in data:  # Returned type is a dict of Name : Service
+                    self.pwned +=1
                     if "Pastebin" in d["Source"]:
                         self.data.append(("HIBP_PASTE", "https://pastebin.com/" + d["Id"]))
                     else:
@@ -166,9 +165,11 @@ class target:
                 if "never" in data["details"]["last_seen"]:
                     return
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
+                self.pwned += 1
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
                         self.data.append(("EMAILREP_SOCIAL", profile))
+                        self.pwned += 1
                 c.good_news("Found additional data with emailrep.io")
 
             elif response.status_code == 404:
@@ -210,8 +211,8 @@ class target:
             b_counter = 0
             for e in response["data"]["emails"]:
                 self.data.append(("HUNTER_RELATED", e["value"]))
-                self.pwned = True
                 b_counter += 1
+                if self.pwned is not 0: self.pwned += 1
             c.good_news(
                 "Found {num} related emails for {target} using Hunter.IO (private)".format(
                     num=b_counter, target=self.email
@@ -238,7 +239,7 @@ class target:
             for result in response["result"]:
                 if result["password"]:
                     self.data.append(("SNUS_PASSWORD", result["password"]))
-                    self.pwned = True
+                    self.pwned += 1
                 if result["hash"]:
                     if result["salt"]:
                         self.data.append(
@@ -247,10 +248,10 @@ class target:
                                 result["hash"].strip() + " : " + result["salt"].strip(),
                             )
                         )
-                        self.pwned = True
+                        self.pwned += 1
                     else:
                         self.data.append(("SNUS_HASH", result["hash"]))
-                        self.pwned = True
+                        self.pwned += 1
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.email))
             print(ex)
@@ -268,7 +269,7 @@ class target:
                     )
                 )
                 for result in response["message"]:
-                    self.pwned = True
+                    self.pwned += 1
                     self.data.append(("LEAKLOOKUP_PUB", result))
             if "false" in response["error"] and len(response["message"]) == 0:
                 c.info_news(
@@ -293,7 +294,7 @@ class target:
                 for _, data in response["message"].items():
                     for d in data:
                         if "password" in d.keys():
-                            self.pwned = True
+                            self.pwned += 1
                             self.data.append(("LEAKLKUP_PASS", d["password"]))
                             b_counter += 1
                 c.good_news(
@@ -343,10 +344,10 @@ class target:
                 for result in response["Data"]:
                     if "Password" in result:
                         self.data.append(("WLI_PASSWORD", result["Password"]))
-                        self.pwned = True
+                        self.pwned += 1
                     if "Hash" in result:
                         self.data.append(("WLI_HASH", result["Hash"]))
-                        self.pwned = True
+                        self.pwned += 1
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
         except Exception as ex:

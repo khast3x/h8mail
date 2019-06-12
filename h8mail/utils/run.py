@@ -50,7 +50,7 @@ def print_results(results, hide=False):
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "HUNTER_PUB" in t.data[i][0]:
                     c.print_result(
-                        t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB"
+                        t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTER_PUB"
                     )
                 if "HUNTER_RELATED" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HUNTER_RELATED")

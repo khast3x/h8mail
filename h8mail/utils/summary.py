@@ -21,11 +21,11 @@ def print_summary(start_time, breached_targets):
     print("{:^40} | ".format("Target"), "{:^40}".format("Status"), c.reset)
     print("{:_^90}\n".format(""))
     for t in breached_targets:
-        if t.pwned:
+        if t.pwned is not 0:
             print(
                 f"{t.email:^40} | ",
                 c.fg.green,
-                "{:^40}".format("Breach Found (" + str(len(t.data)) + " elements)"),
+                "{:^40}".format("Breach Found (" + str(t.pwned) + " elements)"),
                 c.reset,
             )
         else:

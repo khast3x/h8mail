@@ -42,12 +42,12 @@ def print_banner(b_type="intro"):
 	| ._. | | ._. |     ; h8mail.py ;
 	| !_| |_|_|_! |     ;-----------;
 	!___| |_______!  Heartfelt Email OSINT
-	.___|_|_| |___.   Use responsibly etc
+	.___|_|_| |___.   Use responsibly kay
 	| ._____| |_. | ;____________________;
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
 	"""
-        print(c.bold, c.fg.lightblue, banner, c.reset)
+        print(c.bold, c.fg.lightgreen, banner, c.reset)
     elif "warn" in b_type:
         print(
             c.fg.pink,
@@ -55,7 +55,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.lightblue, "Version 2.2", c.reset)
+        print("\t", c.bold, c.fg.lightgreen, "Version 2.2 - \"GREENSCREEN\" ", c.reset)
 
 
 def fetch_emails(target, loose=False):

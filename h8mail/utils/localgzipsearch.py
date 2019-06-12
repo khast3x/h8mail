@@ -7,6 +7,7 @@ from .localsearch import raw_in_count, progress
 import gzip
 import os
 import sys
+import signal
 
 
 def progress_gzip(count):
@@ -22,7 +23,7 @@ def gzip_worker(filepath, target_list):
     Searches for every email from target_list in every line of filepath.
     Uses python native gzip lib to decompress file line by line.
     Archives with multiple files are read as long single files. 
-    Attempts to decode line using utf-8. If it fails, catch and use raw data.
+    Attempts to decode line using cp437. If it fails, catch and use raw data.
     """
     try:
         found_list = []
@@ -37,19 +38,19 @@ def gzip_worker(filepath, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"[:-4]+"****"
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
                                 f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {line}"[:-4]+"****"
+                                f"Found occurrence [{filepath}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, str(line))
@@ -66,17 +67,25 @@ def local_gzip_search(files_to_parse, target_list):
     Starts a worker pool, one worker per file.
     Return list of local_breach_targets objects to be tranformed in target objects.
     """
+    original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     pool = Pool()
     found_list = []
+    signal.signal(signal.SIGINT, original_sigint_handler)
     # Launch
-    async_results = [
-        pool.apply_async(gzip_worker, args=(f, target_list))
-        for i, f in enumerate(files_to_parse)
-    ]
-    for r in async_results:
-        if r.get() is not None:
-            found_list.extend(r.get())
-    pool.close()
+    try:
+        async_results = [
+            pool.apply_async(gzip_worker, args=(f, target_list))
+            for i, f in enumerate(files_to_parse)
+        ]
+        for r in async_results:
+            if r.get() is not None:
+                found_list.extend(r.get(60))
+    except KeyboardInterrupt:
+        c.bad_news("Caught KeyboardInterrupt, terminating workers")
+        pool.terminate()
+    else:
+        c.info_news("Terminating worker pool")
+        pool.close()
     pool.join()
     return found_list
 
@@ -101,7 +110,7 @@ def local_search_single_gzip(files_to_parse, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )

@@ -24,6 +24,7 @@
   - [Demo](#demo)
   - [APIs](#apis)
 - [Install](#tangerine-install)
+- [Update](#tangerine-update)
 - [Usage examples](#tangerine-usage-examples)
 - [Troubleshooting](#tangerine-troubleshooting)
 - [Notes](#tangerine-notes)
@@ -69,16 +70,22 @@
 
 ####  APIs
 
-| Service                                               	|                     Functions                     	|       Status       	|
-|-------------------------------------------------------	|:-------------------------------------------------:	|:------------------:	|
-| [HaveIBeenPwned](https://haveibeenpwned.com/)         	|              Number of email breaches              	|    :white_check_mark:    	|
-| [Hunter.io](https://hunter.io/) - Public              	|              Number of related emails             	| :white_check_mark: 	|
-| [Hunter.io](https://hunter.io/) - Service (free tier) 	|              Cleartext related emails             	| :white_check_mark: 	|
-| [WeLeakInfo](https://weleakinfo.com/) - Public        	|        Number of search-able breach results       	|      :customs:     	|
-| [WeLeakInfo](https://weleakinfo.com/) - Service       	|        Cleartext passwords, hashs and salts       	|       :soon:       	|
-| [Snusbase](https://snusbase.com/) - Service           	| Cleartext passwords, hashs and salts - Fast :zap: 	| :white_check_mark: 	|
-| [Leak-Lookup](https://leak-lookup.com/) - Public :new:     	| Number of search-able breach results              	| :white_check_mark: 	|
-| [Leak-Lookup](https://leak-lookup.com/) - Service :new:     	| Cleartext passwords, hashs and salts              	| :white_check_mark: 	|
+| Service                                                          	|                             Functions                             	|           Status           	|
+|------------------------------------------------------------------	|:-----------------------------------------------------------------:	|:--------------------------:	|
+| [HaveIBeenPwned](https://haveibeenpwned.com/)                    	|                      Number of email breaches                     	|     :white_check_mark:     	|
+| [HaveIBeenPwned Pastes](https://haveibeenpwned.com/Pastes) :new: 	| URLs of text files mentioning targets                             	| :white_check_mark:         	|
+| [Hunter.io](https://hunter.io/) - Public                         	|                      Number of related emails                     	|     :white_check_mark:     	|
+| [Hunter.io](https://hunter.io/) - Service (free tier)            	|                 Cleartext related emails, Chasing                 	|  :white_check_mark: :key:  	|
+| [WeLeakInfo](https://weleakinfo.com/) - Public :new:             	|                Number of search-able breach results               	|  :white_check_mark: :key:  	|
+| [WeLeakInfo](https://weleakinfo.com/) - Service :new:            	|        Cleartext passwords, hashs and salts, usernames, IPs       	|  :white_check_mark: :key:  	|
+| [Snusbase](https://snusbase.com/) - Service                      	| Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: 	|  :white_check_mark: :key:  	|
+| [Leak-Lookup](https://leak-lookup.com/) - Public :new:           	|                Number of search-able breach results               	| :white_check_mark: (:key:) 	|
+| [Leak-Lookup](https://leak-lookup.com/) - Service :new:          	|        Cleartext passwords, hashs and salts, usernames, IPs       	|  :white_check_mark: :key:  	|
+| [Emailrep.io](https://emailrep.io/) - :new:                      	|  Last seen in breaches, social media profiles                     	| :white_check_mark:         	|
+
+*:key: - API key required*  
+*:new: - new in h8mail v2+*
+
 
 -----
 
@@ -138,8 +145,15 @@ $ cd h8mail/
 $ python -m h8mail -h
 ```
 
+----
 
+## Update
 
+```bash
+$ pip3 install --upgrade h8mail
+```
+
+----
 
 ## Docker
 
@@ -250,12 +264,13 @@ h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys 
 The configuration file format is as follows:
 ```ini
 [h8mail]
-shodan =
 hunterio =
 snusbase_url =
 snusbase_token =
 ; leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
 leak-lookup_priv =
+weleakinfo_pub =
+weleakinfo_priv =
 ```
 
 In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. To activate, uncomment the line and make sure to pass to config file. The API can sometimes timeout. If that's the case, simply relaunch. 
@@ -265,6 +280,7 @@ In the above example, you'll notice a Leak-lookup public key, graciously generat
 Keys and their respective values can also be passed from the command line, with the `-k` option. Format is like so:  
 ```
 $ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
+$ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610a6ff9263"
 ```
 
 -----
@@ -335,7 +351,7 @@ $ python3 -m h8mail -h
 * [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech
 * [buster](https://github.com/sham00n/buster) by sham00n
-  * discovered emailrep.io through his project, watch out for integration soon!
+
 
 -----
 
@@ -343,6 +359,7 @@ $ python3 -m h8mail -h
 
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
+* Licence is BSD 3 clause
 * My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io/ktx) PGP key. You can get it using:  
 ```bash
 # curl + gpg pro tip: import ktx's keys

@@ -21,45 +21,9 @@ from .helpers import (
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
+from .chase import chase
+from .print_results import print_results
 
-
-def print_results(results, hide=False):
-
-    for t in results:
-        time.sleep(3) #tototo
-        print()
-        c.print_res_header(t.email)
-        for i in range(len(t.data)):
-            if len(t.data) == 1:
-                print()
-                c.info_news("No results founds")
-                continue
-            if len(t.data[i]) >= 2:  # Contains header + body data
-                if hide:
-                    if "PASS" in t.data[i][0]:
-                        c.print_result(t.email, t.data[i][1][:4]+"********", t.data[i][0])
-                        continue
-                    if "LOCAL" in t.data[i][0]:
-                        c.print_result(t.email, t.data[i][1][:-5]+"********", t.data[i][0])
-                        continue
-                if "HIBP" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], "HIBP")
-                if "HUNTER_PUB" in t.data[i][0]:
-                    c.print_result(
-                        t.email, str(t.data[i][1]) + " RELATED EMAILS", "HUNTERPUB"
-                    )
-                if "HUNTER_RELATED" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], "HUNTER_RELATED")
-                if "SNUS" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], t.data[i][0])
-                if "LOCAL" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], t.data[i][0])
-                if "BC_PASS" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], t.data[i][0])
-                if "LEAKLOOKUP_PUB" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], t.data[i][0])
-                if "LEAKLKUP_PASS" in t.data[i][0]:
-                    c.print_result(t.email, t.data[i][1], t.data[i][0])
 
 
 def target_factory(targets, user_args):
@@ -77,32 +41,17 @@ def target_factory(targets, user_args):
 
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
-        time.sleep(1    ) #tototo
         current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
+            current_target.get_emailrepio()
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
             if "hunterio" in api_keys:
                 current_target.get_hunterio_private(api_keys["hunterio"])
-                # If chase option. Check we're not chasing added target
-                if user_args.chase_limit and counter < init_targets_len:
-                    chase_limiter = 1
-                    for i in range(len(current_target.data)):
-                        if (
-                            len(current_target.data[i]) >= 2  # Has header & data
-                            and "HUNTER_RELATED" in current_target.data[i][0]
-                            and chase_limiter <= user_args.chase_limit
-                        ):
-                            c.good_news(
-                                "Adding {new_target} using HunterIO chase".format(
-                                    new_target=current_target.data[i][1]
-                                )
-                            )
-                            targets.append(current_target.data[i][1])
-                            chase_limiter += 1
-
+            if user_args.chase_limit and counter < init_targets_len:
+                targets.extend(chase(current_target, user_args))
             if "snusbase_token" in api_keys:
                 current_target.get_snusbase(
                     api_keys["snusbase_url"], api_keys["snusbase_token"]
@@ -110,16 +59,11 @@ def target_factory(targets, user_args):
             if "leak-lookup_priv" in api_keys:
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
             if "leak-lookup_pub" in api_keys:
-                print("tototo")
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
-            if "weleakinfo_endpoint" in api_keys and "weleakinfo_key" in api_keys:
-                from .helpers import weleakinfo_get_auth_token
-
-                token = weleakinfo_get_auth_token(
-                    api_keys["weleakinfo_endpoint"], api_keys["weleakinfo_key"]
-                )
-                current_target.get_weleakinfo(token)
-
+            if "weleakinfo_pub" in api_keys:
+                current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
+            if "weleakinfo_priv" in api_keys:
+                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"])
         finished.append(current_target)
     return finished
 
@@ -187,7 +131,6 @@ def h8mail(user_args):
 
 
 def main():
-    # I REALLY want to make sure I don't get Python2 Issues on Github...
 
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"

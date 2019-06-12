@@ -38,16 +38,16 @@ def find_files(to_parse, pattern=""):
 def print_banner(b_type="intro"):
     if "intro" in b_type:
         banner = """
-	._____. ._____.     ;___________;
-	| ._. | | ._. |     ; h8mail.py ;
-	| !_| |_|_|_! |     ;-----------;
+	._____. ._____.     ;____________;
+	| ._. | | ._. |     ;   h8mail   ;
+	| !_| |_|_|_! |     ;------------;
 	!___| |_______!  Heartfelt Email OSINT
-	.___|_|_| |___.   Use responsibly etc
+	.___|_|_| |___.    Use responsibly!
 	| ._____| |_. | ;____________________;
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
 	"""
-        print(c.bold, c.fg.lightblue, banner, c.reset)
+        print(c.bold, c.fg.pink, banner, c.reset)
     elif "warn" in b_type:
         print(
             c.fg.pink,
@@ -55,7 +55,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.lightblue, "Version 2.0 - 'Birthday Update'", c.reset)
+        print("\t", c.bold, c.fg.purple, "Version 2.2 - \"HAILTEAM\" ", c.reset)
 
 
 def fetch_emails(target, loose=False):
@@ -148,40 +148,3 @@ def save_results_csv(dest_csv, target_obj_list):
         except Exception as ex:
             c.bad_news("Error writing to csv")
             print(ex)
-
-
-def weleakinfo_get_auth_token(endpoint, apikey):
-    """
-    WeLeakInfo requires getting a "session key" for querying the API
-    We reproduce request header as in the target class
-    Since this function will only be called when user has a key, I'd like to keep imports as local as possible
-    """
-    import requests
-    import sys
-    import platform
-
-    headers = {
-        "User-Agent": "h8mail-v.2.0-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
-            pyver=sys.version.split(" ")[0], platfrm=platform.platform().split("-")[0]
-        )
-    }
-    data = {"key": apikey}
-    try:
-        response = requests.request(
-            url=endpoint,
-            headers=headers,
-            method="POST",
-            timeout=10,
-            allow_redirects=True,
-            data=data,
-        )
-
-        if response.status_code == 200:
-            if "true" in response["Success"] and len(response["Message"]) != 0:
-                return response["Message"]
-        else:
-            print(response.status_code)
-            print(response)
-    except Exception as ex:
-        c.bad_news("Error getting WeLeakInfo authentication token")
-        print(ex)

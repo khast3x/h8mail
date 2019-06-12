@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
+import signal
+
 from multiprocessing import Pool
 from itertools import takewhile, repeat
 from .classes import local_breach_target
@@ -25,7 +28,7 @@ def local_to_targets(targets, local_results):
                         l.content.strip(),
                     )
                 )
-                t.pwned = True
+                t.pwned += 1
     return targets
 
 
@@ -43,7 +46,7 @@ def raw_in_count(filename):
 def worker(filepath, target_list):
     """
     Searches for every email from target_list in every line of filepath.
-    Attempts to decode line using utf-8. If it fails, catch and use raw data
+    Attempts to decode line using cp437. If it fails, catch and use raw data
     """
     try:
         with open(filepath, "rb") as fp:
@@ -58,19 +61,19 @@ def worker(filepath, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, decoded)
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"[:-4]+"****"
+                                f"Found occurrence [{filepath}] Line {cnt}: {decoded}"
                             )
                         except Exception as e:
                             c.bad_news(
                                 f"Got a decoding error line {cnt} - file: {filepath}"
                             )
                             c.good_news(
-                                f"Found occurrence [{filepath}] Line {cnt}: {line}"[:-4]+"****"
+                                f"Found occurrence [{filepath}] Line {cnt}: {line}"
                             )
                             found_list.append(
                                 local_breach_target(t, filepath, cnt, str(line))
@@ -80,23 +83,29 @@ def worker(filepath, target_list):
         c.bad_news("Something went wrong with worker")
         print(e)
 
-
 def local_search(files_to_parse, target_list):
+    original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     pool = Pool()
     found_list = []
-    async_results = [
-        pool.apply_async(worker, args=(f, target_list))
-        for i, f in enumerate(files_to_parse)
-    ]
-    for r in async_results:
-        if r.get() is not None:
-            found_list.extend(r.get())
-    pool.close()
+    signal.signal(signal.SIGINT, original_sigint_handler)
+    try:
+        async_results = [
+            pool.apply_async(worker, args=(f, target_list))
+            for i, f in enumerate(files_to_parse)
+        ]
+        for r in async_results:
+            if r.get() is not None:
+                found_list.extend(r.get(60))
+    except KeyboardInterrupt:
+        c.bad_news("Caught KeyboardInterrupt, terminating workers")
+        pool.terminate()
+    else:
+        c.info_news("Terminating worker pool")
+        pool.close()
     pool.join()
     return found_list
 
 
-import sys
 
 
 def progress(count, total, status=""):
@@ -132,7 +141,7 @@ def local_search_single(files_to_parse, target_list):
                 for t in target_list:
                     if t in str(line):
                         try:
-                            decoded = str(line, "utf-8")
+                            decoded = str(line, "cp437")
                             found_list.append(
                                 local_breach_target(t, file_to_parse, cnt, decoded)
                             )

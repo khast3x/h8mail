@@ -55,7 +55,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.lightgreen, "Version 2.2 - \"GREENSCREEN\" ", c.reset)
+        print("\t", c.bold, c.fg.lightcyan, "Version 2.2 - \"GREENSCREEN\" ", c.reset)
 
 
 def fetch_emails(target, loose=False):

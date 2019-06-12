@@ -123,12 +123,14 @@ class target:
                 return
 
             if response.status_code == 200:
-                
+
                 data = response.json()
                 for d in data:  # Returned type is a dict of Name : Service
-                    self.pwned +=1
+                    self.pwned += 1
                     if "Pastebin" in d["Source"]:
-                        self.data.append(("HIBP_PASTE", "https://pastebin.com/" + d["Id"]))
+                        self.data.append(
+                            ("HIBP_PASTE", "https://pastebin.com/" + d["Id"])
+                        )
                     else:
                         self.data.append(("HIBP_PASTE", d["Id"]))
 
@@ -139,7 +141,9 @@ class target:
                 )
 
             elif response.status_code == 404:
-                c.info_news("No pastes found for {} using HIBP PASTE".format(self.email))
+                c.info_news(
+                    "No pastes found for {} using HIBP PASTE".format(self.email)
+                )
             else:
                 c.bad_news(
                     "HIBP PASTE: got API response code {code} for {target}".format(
@@ -181,8 +185,9 @@ class target:
                     )
                 )
         except Exception as ex:
-                c.bad_news("emailrep.io error: " + self.email)
-                print(ex)
+            c.bad_news("emailrep.io error: " + self.email)
+            print(ex)
+
     def get_hunterio_public(self):
         try:
             target_domain = self.email.split("@")[1]
@@ -212,7 +217,8 @@ class target:
             for e in response["data"]["emails"]:
                 self.data.append(("HUNTER_RELATED", e["value"]))
                 b_counter += 1
-                if self.pwned is not 0: self.pwned += 1
+                if self.pwned is not 0:
+                    self.pwned += 1
             c.good_news(
                 "Found {num} related emails for {target} using Hunter.IO (private)".format(
                     num=b_counter, target=self.email
@@ -252,6 +258,10 @@ class target:
                     else:
                         self.data.append(("SNUS_HASH", result["hash"]))
                         self.pwned += 1
+                if result["username"]:
+                    self.data.append(("SNUS_USERNAME", result["username"]))
+                if result["lastip"]:
+                    self.data.append(("SNUS_LASTIP", result["lastip"]))
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.email))
             print(ex)
@@ -288,15 +298,26 @@ class target:
             payload = {"key": api_key, "type": "email_address", "query": self.email}
             req = self.make_request(url, meth="POST", data=payload, timeout=30)
             response = req.json()
-
             if "false" in response["error"] and len(response["message"]) != 0:
                 b_counter = 0
                 for _, data in response["message"].items():
                     for d in data:
                         if "password" in d.keys():
+                            if "plaintext" in d:
+                                self.pwned += 1
+                                self.data.append(("LKLP_HASH", d["password"]))
+                                b_counter += 1
+                            else:
+                                self.pwned += 1
+                                self.data.append(("LKLP_PASSWORD", d["password"]))
+                                b_counter += 1
+                        if "username" in d.keys():
                             self.pwned += 1
-                            self.data.append(("LEAKLKUP_PASS", d["password"]))
-                            b_counter += 1
+                            self.data.append(("LKLP_USERNAME", d["username"]))
+                        if "ipaddress" in d.keys():
+                            self.pwned += 1
+                            self.data.append(("LKLP_LASTIP", d["ipaddress"]))
+
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup".format(
                         num=b_counter, target=self.email
@@ -313,7 +334,6 @@ class target:
             c.bad_news("Leak-lookup error with {target}".format(target=self.email))
             print(ex)
 
-
     def get_weleakinfo_priv(self, api_key):
         try:
             url = "https://api.weleakinfo.com/v3/search"
@@ -324,7 +344,9 @@ class target:
             req = self.make_request(url, meth="POST", data=payload)
             response = req.json()
             if req.status_code == 400:
-                c.bad_news(f"Got WLI API response code {req.status_code}: Invalid search type provided")
+                c.bad_news(
+                    f"Got WLI API response code {req.status_code}: Invalid search type provided"
+                )
                 return
             elif req.status_code != 200:
                 c.bad_news(f"Got WLI API response code {req.status_code}")
@@ -353,9 +375,12 @@ class target:
         except Exception as ex:
             c.bad_news("WeLeakInfo priv error with {target}".format(target=self.email))
             print(ex)
+
     def get_weleakinfo_pub(self, api_key):
         try:
-            url = "https://api.weleakinfo.com/v3/public/email/{query}".format(query=self.email)
+            url = "https://api.weleakinfo.com/v3/public/email/{query}".format(
+                query=self.email
+            )
             self.headers.update({"Authorization": "Bearer " + api_key})
             req = self.make_request(url)
             response = req.json()
@@ -375,8 +400,8 @@ class target:
                 if response["Total"] == 0:
                     return
                 for name, data in response["Data"].items():
-                    self.data.append(("WLI_PUB_SRC", name + " (" + str(data)+")" ))
+                    self.data.append(("WLI_PUB_SRC", name + " (" + str(data) + ")"))
         except Exception as ex:
             c.bad_news("WeLeakInfo pub error with {target}".format(target=self.email))
             print(ex)
-            
+

@@ -14,6 +14,7 @@ class local_breach_target:
     """
 	Class is called when performing local file search.
 	This class is meant to store found data, to be later appended to the existing target objects.
+    local_to_targets() tranforms to target object
 	Used by both cleartext and gzip search
 	"""
 

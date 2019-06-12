@@ -21,6 +21,7 @@ from .helpers import (
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
+from .chase import chase
 
 
 def print_results(results, hide=False):
@@ -36,10 +37,14 @@ def print_results(results, hide=False):
             if len(t.data[i]) >= 2:  # Contains header + body data
                 if hide:
                     if "PASS" in t.data[i][0]:
-                        c.print_result(t.email, t.data[i][1][:4]+"********", t.data[i][0])
+                        c.print_result(
+                            t.email, t.data[i][1][:4] + "********", t.data[i][0]
+                        )
                         continue
                     if "LOCAL" in t.data[i][0]:
-                        c.print_result(t.email, t.data[i][1][:-5]+"********", t.data[i][0])
+                        c.print_result(
+                            t.email, t.data[i][1][:-5] + "********", t.data[i][0]
+                        )
                         continue
                 if "HIBP" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
@@ -50,7 +55,9 @@ def print_results(results, hide=False):
                 if "HUNTER_RELATED" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], "HUNTER_RELATED")
                 if "EMAILREP" in t.data[i][0]:
-                    c.print_result(t.email, str(t.data[i][1]).capitalize(), t.data[i][0])
+                    c.print_result(
+                        t.email, str(t.data[i][1]).capitalize(), t.data[i][0]
+                    )
                 if "SNUS" in t.data[i][0]:
                     c.print_result(t.email, t.data[i][1], t.data[i][0])
                 if "LOCAL" in t.data[i][0]:
@@ -89,23 +96,8 @@ def target_factory(targets, user_args):
             c.info_news("Factory is calling API keys")
             if "hunterio" in api_keys:
                 current_target.get_hunterio_private(api_keys["hunterio"])
-                # If chase option. Check we're not chasing added target
-                if user_args.chase_limit and counter < init_targets_len:
-                    chase_limiter = 1
-                    for i in range(len(current_target.data)):
-                        if (
-                            len(current_target.data[i]) >= 2  # Has header & data
-                            and "HUNTER_RELATED" in current_target.data[i][0]
-                            and chase_limiter <= user_args.chase_limit
-                        ):
-                            c.good_news(
-                                "Adding {new_target} using HunterIO chase".format(
-                                    new_target=current_target.data[i][1]
-                                )
-                            )
-                            targets.append(current_target.data[i][1])
-                            chase_limiter += 1
-
+            if user_args.chase_limit and counter < init_targets_len:
+                targets.extend(chase(current_target, user_args))
             if "snusbase_token" in api_keys:
                 current_target.get_snusbase(
                     api_keys["snusbase_url"], api_keys["snusbase_token"]
@@ -185,7 +177,6 @@ def h8mail(user_args):
 
 
 def main():
-    # I REALLY want to make sure I don't get Python2 Issues on Github...
 
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"

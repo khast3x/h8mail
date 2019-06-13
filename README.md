@@ -153,6 +153,8 @@ $ python -m h8mail -h
 $ pip3 install --upgrade h8mail
 ```
 
+Use `--user` at the end if getting a permission message from pip
+
 ----
 
 ## Docker

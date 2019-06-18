@@ -353,6 +353,8 @@ $ python3 -m h8mail -h
 * [BaseQuery](https://github.com/g666gle/BaseQuery) by g666gle
 * [LeakLooker](https://github.com/woj-ciech/LeakLooker) by woj-ciech
 * [buster](https://github.com/sham00n/buster) by sham00n
+* [Scavenger](https://github.com/rndinfosecguy/Scavenger) by ndinfosecguy
+* [pwndb](https://github.com/davidtavarez/pwndb) by davidtavarez
 
 
 -----

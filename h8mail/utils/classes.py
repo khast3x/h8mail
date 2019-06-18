@@ -83,11 +83,11 @@ class target:
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact HIBP for " + self.email)
                 print(response.status_code)
-                print(response)
                 return
 
             if response.status_code == 200:
                 data = response.json()
+                print(data)
                 for d in data:  # Returned type is a dict of Name : Service
                     for _, ser in d.items():
                         self.data.append(("HIBP", ser))

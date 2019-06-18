@@ -19,7 +19,7 @@ test_requirements = ['requests']
 
 setup(
     author="khast3x",
-    author_email="k@kast3x.club",
+    author_email="k@khast3x.club",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
@@ -42,6 +42,6 @@ setup(
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",
-    version="2.2.0",
+    version="2.2.1",
     zip_safe=False,
 )

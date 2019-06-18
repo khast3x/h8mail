@@ -339,7 +339,7 @@ $ python3 -m h8mail -h
 ## :tangerine: Thanks & Credits
 
 * [Snusbase](https://snusbase.com/) for being developer friendly
-* [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walktrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
+* [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walkthrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
 * [Leak-Lookup](https://leak-lookup.com/) for being developer friendly
 * [WeLeakInfo](https://weleakinfo.com/) for being developer friendly. They are currently migrating API service. I'll update h8mail when available :thumbsup:
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)

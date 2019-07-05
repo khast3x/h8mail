@@ -87,7 +87,6 @@ class target:
 
             if response.status_code == 200:
                 data = response.json()
-                print(data)
                 for d in data:  # Returned type is a dict of Name : Service
                     for _, ser in d.items():
                         self.data.append(("HIBP", ser))

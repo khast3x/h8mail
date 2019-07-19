@@ -48,6 +48,8 @@ def target_factory(targets, user_args):
             current_target.get_emailrepio()
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
+            if "hibp" in api_keys:
+                current_target.get_hibp3(api_keys["hibp"])
             if "hunterio" in api_keys:
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if user_args.chase_limit and counter < init_targets_len:

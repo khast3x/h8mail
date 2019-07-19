@@ -73,6 +73,7 @@ class target:
             print(response)
         return response
 
+    # Soon to be deprecated
     def get_hibp(self):
         try:
             sleep(1.3)
@@ -111,6 +112,7 @@ class target:
             c.bad_news("HIBP error: " + self.email)
             print(ex)
 
+    # Soon to be deprecated
     def get_hibp_pastes(self):
         try:
             sleep(1.3)
@@ -154,6 +156,91 @@ class target:
             c.bad_news("HIBP PASTE error: " + self.email)
             print(ex)
 
+    # New HIBP API 
+    def get_hibp3(self, api_key):
+        try :
+            sleep(1.3)
+            url = "https://haveibeenpwned.com/api/v3/breachedaccount/{}".format(
+                self.email
+            )
+            self.headers.update({"hibp-api-key": api_key})
+            response = self.make_request(url)
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact HIBP v3 for " + self.email)
+                print(response.status_code)
+                return
+
+            if response.status_code == 200:
+                data = response.json()
+                for d in data:  # Returned type is a dict of Name : Service
+                    for _, ser in d.items():
+                        self.data.append(("HIBP3", ser))
+                        self.pwned += 1
+
+                c.good_news(
+                    "Found {num} breaches for {target} using HIBP v3".format(
+                        num=len(self.data) - 1, target=self.email
+                    )
+                )
+                self.get_hibp3_pastes()
+                print(self.headers)
+                self.headers.popitem()
+                print(self.headers)
+            elif response.status_code == 404:
+                c.info_news("No breaches found for {} using HIBP v3".format(self.email))
+            else:
+                c.bad_news(
+                    "HIBP v3: got API response code {code} for {target}".format(
+                        code=response.status_code, target=self.email
+                    )
+                )
+        except Exception as e:
+            c.bad_news("haveibeenpwned v3: " + self.email)
+            print(e)
+
+    # New HIBP API
+    def get_hibp3_pastes(self):
+        try:
+            sleep(1.3)
+            url = "https://haveibeenpwned.com/api/v3/pasteaccount/{}".format(self.email)
+            response = self.make_request(url)
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact HIBP PASTE for " + self.email)
+                print(response.status_code)
+                print(response)
+                return
+
+            if response.status_code == 200:
+
+                data = response.json()
+                for d in data:  # Returned type is a dict of Name : Service
+                    self.pwned += 1
+                    if "Pastebin" in d["Source"]:
+                        self.data.append(
+                            ("HIBP_PASTE", "https://pastebin.com/" + d["Id"])
+                        )
+                    else:
+                        self.data.append(("HIBP_PASTE", d["Id"]))
+
+                c.good_news(
+                    "Found {num} pastes for {target} using HIBP".format(
+                        num=len(data), target=self.email
+                    )
+                )
+
+            elif response.status_code == 404:
+                c.info_news(
+                    "No pastes found for {} using HIBP PASTE".format(self.email)
+                )
+            else:
+                c.bad_news(
+                    "HIBP PASTE: got API response code {code} for {target}".format(
+                        code=response.status_code, target=self.email
+                    )
+                )
+        except Exception as ex:
+            c.bad_news("HIBP PASTE error: " + self.email)
+            print(ex)
     def get_emailrepio(self):
         try:
             url = "https://emailrep.io/{}".format(self.email)
@@ -236,6 +323,7 @@ class target:
             self.headers.update({"Authorization": api_key})
             payload = {"type": "email", "term": self.email}
             req = self.make_request(url, meth="POST", data=payload)
+            self.headers.popitem()
             response = req.json()
             c.good_news(
                 "Found {num} entries for {target} using Snusbase".format(
@@ -342,6 +430,8 @@ class target:
 
             payload = {"type": "email", "query": self.email}
             req = self.make_request(url, meth="POST", data=payload)
+            self.headers.popitem()
+            self.headers.popitem()
             response = req.json()
             if req.status_code == 400:
                 c.bad_news(
@@ -383,6 +473,7 @@ class target:
             )
             self.headers.update({"Authorization": "Bearer " + api_key})
             req = self.make_request(url)
+            self.headers.popitem()
             response = req.json()
             if req.status_code != 200:
                 c.bad_news(f"Got WLI API response code {req.status_code}")

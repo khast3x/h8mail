@@ -183,9 +183,7 @@ class target:
                     )
                 )
                 self.get_hibp3_pastes()
-                print(self.headers)
                 self.headers.popitem()
-                print(self.headers)
             elif response.status_code == 404:
                 c.info_news("No breaches found for {} using HIBP v3".format(self.email))
             else:
@@ -217,7 +215,7 @@ class target:
                     self.pwned += 1
                     if "Pastebin" in d["Source"]:
                         self.data.append(
-                            ("HIBP_PASTE", "https://pastebin.com/" + d["Id"])
+                            ("HIBP3_PASTE", "https://pastebin.com/" + d["Id"])
                         )
                     else:
                         self.data.append(("HIBP_PASTE", d["Id"]))
@@ -241,6 +239,7 @@ class target:
         except Exception as ex:
             c.bad_news("HIBP PASTE error: " + self.email)
             print(ex)
+
     def get_emailrepio(self):
         try:
             url = "https://emailrep.io/{}".format(self.email)
@@ -253,15 +252,25 @@ class target:
 
             if response.status_code == 200:
                 data = response.json()
+
+                # WIP
+                if data["details"]["credentials_leaked"] is True:
+                    self.pwned += int(data["references"]) # or inc num references
+                    
+                    c.good_news(
+                        "Found {num} breaches for {target} using emailrep.io".format(
+                            num=data["references"], target=self.email
+                        )
+                    )
+
+
                 if "never" in data["details"]["last_seen"]:
                     return
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
-                self.pwned += 1
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
                         self.data.append(("EMAILREP_SOCIAL", profile))
-                        self.pwned += 1
-                c.good_news("Found additional data with emailrep.io")
+                c.good_news("Found social profils")
 
             elif response.status_code == 404:
                 c.info_news("No data found for {} using emailrep.io".format(self.email))
@@ -284,12 +293,12 @@ class target:
             if response["data"]["total"] != 0:
                 self.data.append(("HUNTER_PUB", response["data"]["total"]))
             c.good_news(
-                "Found {num} related emails for {target} using Hunter.IO".format(
+                "Found {num} related emails for {target} using hunter.io".format(
                     num=response["data"]["total"], target=self.email
                 )
             )
         except Exception as ex:
-            c.bad_news("HunterIO (pubic API) error: " + self.email)
+            c.bad_news("hunter.io (pubic API) error: " + self.email)
             print(ex)
 
     def get_hunterio_private(self, api_key):
@@ -307,13 +316,13 @@ class target:
                 if self.pwned is not 0:
                     self.pwned += 1
             c.good_news(
-                "Found {num} related emails for {target} using Hunter.IO (private)".format(
+                "Found {num} related emails for {target} using hunter.io (private)".format(
                     num=b_counter, target=self.email
                 )
             )
         except Exception as ex:
             c.bad_news(
-                "HunterIO (private API) error for {target}:".format(target=self.email)
+                "hunter.io (private API) error for {target}:".format(target=self.email)
             )
             print(ex)
 
@@ -325,6 +334,7 @@ class target:
             req = self.make_request(url, meth="POST", data=payload)
             self.headers.popitem()
             response = req.json()
+            print(response) #tototo
             c.good_news(
                 "Found {num} entries for {target} using Snusbase".format(
                     num=len(response["result"]), target=self.email

@@ -60,10 +60,10 @@ def target_factory(targets, user_args):
                 targets.extend(chase(current_target, user_args))
             if "snusbase_token" in api_keys:
                 current_target.get_snusbase(
-                    api_keys["snusbase_url"], api_keys["snusbase_token"]
+                    api_keys["snusbase_url"], api_keys["snusbase_token"], query
                 )
             if "leak-lookup_priv" in api_keys:
-                current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
+                current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"], query)
             if "leak-lookup_pub" in api_keys:
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
             if "weleakinfo_pub" in api_keys:

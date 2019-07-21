@@ -326,11 +326,11 @@ class target:
             )
             print(ex)
 
-    def get_snusbase(self, api_url, api_key):
+    def get_snusbase(self, api_url, api_key, user_query):
         try:
             url = api_url
             self.headers.update({"Authorization": api_key})
-            payload = {"type": "email", "term": self.target}
+            payload = {"type": user_query, "term": self.target}
             req = self.make_request(url, meth="POST", data=payload)
             self.headers.popitem()
             response = req.json()
@@ -386,13 +386,13 @@ class target:
                 )
 
         except Exception as ex:
-            c.bad_news("Leak-lookup error with {target}".format(target=self.target))
+            c.bad_news("Leak-lookup error with {target} (public)".format(target=self.target))
             print(ex)
 
-    def get_leaklookup_priv(self, api_key):
+    def get_leaklookup_priv(self, api_key, user_query):
         try:
             url = "https://leak-lookup.com/api/search"
-            payload = {"key": api_key, "type": "email_address", "query": self.target}
+            payload = {"key": api_key, "type": user_query, "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=30)
             response = req.json()
             if "false" in response["error"] and len(response["message"]) != 0:
@@ -473,7 +473,7 @@ class target:
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
         except Exception as ex:
-            c.bad_news("WeLeakInfo priv error with {target}".format(target=self.target))
+            c.bad_news("WeLeakInfo error with {target} (private)".format(target=self.target))
             print(ex)
 
     def get_weleakinfo_pub(self, api_key):
@@ -503,6 +503,6 @@ class target:
                 for name, data in response["Data"].items():
                     self.data.append(("WLI_PUB_SRC", name + " (" + str(data) + ")"))
         except Exception as ex:
-            c.bad_news("WeLeakInfo public error with {target}".format(target=self.target))
+            c.bad_news("WeLeakInfo error with {target} (public)".format(target=self.target))
             print(ex)
 

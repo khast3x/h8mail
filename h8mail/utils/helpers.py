@@ -50,15 +50,22 @@ def print_banner(b_type="intro"):
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
 	"""
-        print(c.bold, c.fg.pink, banner, c.reset)
+        # print(c.bold, c.fg.pink, banner, c.reset)
+
+        banner_tab = banner.splitlines()
+        code = 16
+        for b in banner_tab:
+            clr = u"\u001b[38;5;" + str(code) + "m "
+            print(c.bold + clr + b + c.reset)
+            code += 5
     elif "warn" in b_type:
         print(
-            c.fg.pink,
+            c.fg.green,
             "\th8mail is free & open-source. Please report scammers.\n\n",
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.purple, 'Version 2.2 - "HAILTEAM" ', c.reset)
+        print("\t", c.bold, c.fg.green, 'Version 2.3 - "CYBRKITTN" ', c.reset)
 
 
 def fetch_emails(target, user_args):

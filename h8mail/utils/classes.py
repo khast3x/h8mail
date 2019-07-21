@@ -19,7 +19,7 @@ class local_breach_target:
 	"""
 
     def __init__(self, target_data, fp, ln, content):
-        self.target= target_data
+        self.target = target_data
         self.filepath = fp
         self.line = ln
         self.content = content
@@ -116,7 +116,9 @@ class target:
     def get_hibp_pastes(self):
         try:
             sleep(1.3)
-            url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(self.target)
+            url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(
+                self.target
+            )
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact HIBP PASTE for " + self.target)
@@ -156,9 +158,9 @@ class target:
             c.bad_news("HIBP PASTE error: " + self.target)
             print(ex)
 
-    # New HIBP API 
+    # New HIBP API
     def get_hibp3(self, api_key):
-        try :
+        try:
             sleep(1.3)
             url = "https://haveibeenpwned.com/api/v3/breachedaccount/{}".format(
                 self.target
@@ -185,7 +187,9 @@ class target:
                 self.get_hibp3_pastes()
                 self.headers.popitem()
             elif response.status_code == 404:
-                c.info_news("No breaches found for {} using HIBP v3".format(self.target))
+                c.info_news(
+                    "No breaches found for {} using HIBP v3".format(self.target)
+                )
             else:
                 c.bad_news(
                     "HIBP v3: got API response code {code} for {target}".format(
@@ -200,7 +204,9 @@ class target:
     def get_hibp3_pastes(self):
         try:
             sleep(1.3)
-            url = "https://haveibeenpwned.com/api/v3/pasteaccount/{}".format(self.target)
+            url = "https://haveibeenpwned.com/api/v3/pasteaccount/{}".format(
+                self.target
+            )
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact HIBP PASTE for " + self.target)
@@ -253,7 +259,7 @@ class target:
             if response.status_code == 200:
                 data = response.json()
                 if data["details"]["credentials_leaked"] is True:
-                    self.pwned += int(data["references"]) # or inc num references
+                    self.pwned += int(data["references"])  # or inc num references
                     c.good_news(
                         "Found {num} breaches for {target} using emailrep.io".format(
                             num=data["references"], target=self.target
@@ -268,7 +274,9 @@ class target:
                 c.good_news("Found social profils")
 
             elif response.status_code == 404:
-                c.info_news("No data found for {} using emailrep.io".format(self.target))
+                c.info_news(
+                    "No data found for {} using emailrep.io".format(self.target)
+                )
             else:
                 c.bad_news(
                     "emailrep.io: got API response code {code} for {target}".format(
@@ -326,7 +334,9 @@ class target:
             if user_query == "ip":
                 user_query = "ipadress"
             if user_query in ["domain"]:
-                c.bad_news("Snusbase does not support {} search (yet)".format(user_query))
+                c.bad_news(
+                    "Snusbase does not support {} search (yet)".format(user_query)
+                )
                 return
             url = api_url
             self.headers.update({"Authorization": api_key})
@@ -386,7 +396,9 @@ class target:
                 )
 
         except Exception as ex:
-            c.bad_news("Leak-lookup error with {target} (public)".format(target=self.target))
+            c.bad_news(
+                "Leak-lookup error with {target} (public)".format(target=self.target)
+            )
             print(ex)
 
     def get_leaklookup_priv(self, api_key, user_query):
@@ -394,7 +406,9 @@ class target:
             if user_query == "ip":
                 user_query = "ipadress"
             if user_query in ["hash"]:
-                c.bad_news("Leaklookup does not support {} search (yet)".format(user_query))
+                c.bad_news(
+                    "Leaklookup does not support {} search (yet)".format(user_query)
+                )
                 return
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": user_query, "query": self.target}
@@ -433,12 +447,14 @@ class target:
                     )
                 )
         except Exception as ex:
-            c.bad_news("Leak-lookup error with {target} (private)".format(target=self.target))
+            c.bad_news(
+                "Leak-lookup error with {target} (private)".format(target=self.target)
+            )
             print(ex)
 
     def get_weleakinfo_priv(self, api_key, user_query):
         try:
-            
+
             url = "https://api.weleakinfo.com/v3/search"
             self.headers.update({"Authorization": "Bearer " + api_key})
             self.headers.update({"Content-Type": "application/x-www-form-urlencoded"})
@@ -458,7 +474,11 @@ class target:
                 return
             if req.status_code == 200:
                 if response["Success"] is False:
-                    c.bad_news("WeLeakInfo (private) error response {}".format(response["Message"]))
+                    c.bad_news(
+                        "WeLeakInfo (private) error response {}".format(
+                            response["Message"]
+                        )
+                    )
                     return
                 c.good_news(
                     "Found {num} entries for {target} using WeLeakInfo (private)".format(
@@ -478,7 +498,9 @@ class target:
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
         except Exception as ex:
-            c.bad_news("WeLeakInfo error with {target} (private)".format(target=self.target))
+            c.bad_news(
+                "WeLeakInfo error with {target} (private)".format(target=self.target)
+            )
             print(ex)
 
     def get_weleakinfo_pub(self, api_key):
@@ -508,6 +530,7 @@ class target:
                 for name, data in response["Data"].items():
                     self.data.append(("WLI_PUB_SRC", name + " (" + str(data) + ")"))
         except Exception as ex:
-            c.bad_news("WeLeakInfo error with {target} (public)".format(target=self.target))
+            c.bad_news(
+                "WeLeakInfo error with {target} (public)".format(target=self.target)
+            )
             print(ex)
-

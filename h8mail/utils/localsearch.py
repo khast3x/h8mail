@@ -83,6 +83,7 @@ def worker(filepath, target_list):
         c.bad_news("Something went wrong with worker")
         print(e)
 
+
 def local_search(files_to_parse, target_list):
     original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     pool = Pool()
@@ -104,8 +105,6 @@ def local_search(files_to_parse, target_list):
         pool.close()
     pool.join()
     return found_list
-
-
 
 
 def progress(count, total, status=""):

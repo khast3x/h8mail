@@ -45,7 +45,7 @@ def print_banner(b_type="intro"):
 	| ._. | | ._. |     ;   h8mail   ;
 	| !_| |_|_|_! |     ;------------;
 	!___| |_______!  Heartfelt Email OSINT
-	.___|_|_| |___.    Use responsibly!
+	.___|_|_| |___.    Use responsibly
 	| ._____| |_. | ;____________________;
 	| !_! | | !_! | ; github.com/khast3x ;
 	!_____! !_____! ;--------------------;
@@ -55,7 +55,7 @@ def print_banner(b_type="intro"):
         banner_tab = banner.splitlines()
         code = 16
         for b in banner_tab:
-            clr = u"\u001b[38;5;" + str(code) + "m "
+            clr = "\u001b[38;5;" + str(code) + "m "
             print(c.bold + clr + b + c.reset)
             code += 5
     elif "warn" in b_type:

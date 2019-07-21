@@ -26,7 +26,6 @@ from .chase import chase
 from .print_results import print_results
 
 
-
 def target_factory(targets, user_args):
     """
     Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
@@ -84,7 +83,7 @@ def h8mail(user_args):
     targets = []
     start_time = time.time()
     c.good_news("Targets:")
-    
+
     # Find targets in user input or file
     for arg in user_args.user_targets:
         user_stdin_target = fetch_emails(arg, user_args)
@@ -139,7 +138,7 @@ def h8mail(user_args):
 
 
 def main():
-    
+
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"
     )
@@ -156,7 +155,7 @@ def main():
         "-q",
         "--query-type",
         dest="user_query",
-        help="Perform a custom query. Supports username, password, ip, hash, domain. Performs an implicit \"loose\" search when searching locally" ,
+        help='Perform a custom query. Supports username, password, ip, hash, domain. Performs an implicit "loose" search when searching locally',
     )
     parser.add_argument(
         "--loose",

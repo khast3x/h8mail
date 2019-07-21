@@ -20,7 +20,7 @@ def local_to_targets(targets, local_results):
     """
     for t in targets:
         for l in local_results:
-            if l.email == t.email:
+            if l.target == t.target:
                 t.data.append(
                     (
                         "LOCALSEARCH",

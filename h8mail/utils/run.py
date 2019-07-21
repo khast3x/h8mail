@@ -39,6 +39,11 @@ def target_factory(targets, user_args):
         api_keys = None
     init_targets_len = len(targets)
 
+    query = "email"
+    if user_args.user_query is not None:
+        query = user_args.user_query
+        user_args.skip_defaults = True
+
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         current_target = target(t)
@@ -64,7 +69,7 @@ def target_factory(targets, user_args):
             if "weleakinfo_pub" in api_keys:
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
-                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"])
+                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
         finished.append(current_target)
     return finished
 
@@ -80,13 +85,13 @@ def h8mail(user_args):
     c.good_news("Targets:")
 
     # Find targets in user input or file
-    for arg in user_args.target_emails:
-        user_stdin_target = fetch_emails(arg, user_args.loose)
+    for arg in user_args.user_targets:
+        user_stdin_target = fetch_emails(arg, user_args)
         if user_stdin_target:
             targets.extend(user_stdin_target)
         elif os.path.isfile(arg):
             c.info_news("Reading from file " + arg)
-            targets.extend(get_emails_from_file(arg, user_args.loose))
+            targets.extend(get_emails_from_file(arg, user_args))
         else:
             c.bad_news("No targets found in user input")
             exit(1)
@@ -141,9 +146,15 @@ def main():
         "-t",
         "--targets",
         required=True,
-        dest="target_emails",
+        dest="user_targets",
         help="Either string inputs or files. Supports email pattern matching from input or file, filepath globing and multiple arguments",
         nargs="+",
+    )
+    parser.add_argument(
+        "-q",
+        "--query-type",
+        dest="user_query",
+        help="Perform a custom query. Supports username, password, ip, hash, domain. Performs an implicit \"loose\" search when searching locally" ,
     )
     parser.add_argument(
         "--loose",

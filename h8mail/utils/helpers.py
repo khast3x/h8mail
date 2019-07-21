@@ -58,12 +58,12 @@ def print_banner(b_type="intro"):
         print("\t", c.bold, c.fg.purple, "Version 2.2 - \"HAILTEAM\" ", c.reset)
 
 
-def fetch_emails(target, loose=False):
+def fetch_emails(target, user_args):
     """
     Returns a list of emails found in 'target'.
     Can be loosy to skip email pattern search.
     """
-    if loose:
+    if user_args.loose or user_args.user_query is not None:
         t = target.split(" ")
         print(t)
         return t
@@ -74,7 +74,7 @@ def fetch_emails(target, loose=False):
     return None
 
 
-def get_emails_from_file(targets_file, loose=False):
+def get_emails_from_file(targets_file, user_args):
     """
     For each line in file, check for emails using fetch_emails().
     Returns list of emails.
@@ -84,7 +84,7 @@ def get_emails_from_file(targets_file, loose=False):
         target_fd = open(targets_file).readlines()
         print(targets_file)
         for line in target_fd:
-            e = fetch_emails(line)
+            e = fetch_emails(line, user_args)
             if e is None:
                 continue
             else:
@@ -144,7 +144,7 @@ def save_results_csv(dest_csv, target_obj_list):
             for t in target_obj_list:
                 for i in range(len(t.data)):
                     if len(t.data[i]) == 2:  # Contains data header + body
-                        writer.writerow([t.email, t.data[i][0], t.data[i][1]])
+                        writer.writerow([t.target, t.data[i][0], t.data[i][1]])
         except Exception as ex:
             c.bad_news("Error writing to csv")
             print(ex)

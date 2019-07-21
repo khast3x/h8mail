@@ -39,7 +39,7 @@ class target:
 
     def __init__(self, target_data):
         self.headers = {
-            "User-Agent": "h8mail-v.2.2-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+            "User-Agent": "h8mail-v.2.3-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
                 pyver=sys.version.split(" ")[0],
                 platfrm=platform.platform().split("-")[0],
             )
@@ -252,18 +252,13 @@ class target:
 
             if response.status_code == 200:
                 data = response.json()
-
-                # WIP
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"]) # or inc num references
-                    
                     c.good_news(
                         "Found {num} breaches for {target} using emailrep.io".format(
                             num=data["references"], target=self.target
                         )
                     )
-
-
                 if "never" in data["details"]["last_seen"]:
                     return
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
@@ -328,6 +323,11 @@ class target:
 
     def get_snusbase(self, api_url, api_key, user_query):
         try:
+            if user_query == "ip":
+                user_query = "ipadress"
+            if user_query in ["domain"]:
+                c.bad_news("Snusbase does not support {} search (yet)".format(user_query))
+                return
             url = api_url
             self.headers.update({"Authorization": api_key})
             payload = {"type": user_query, "term": self.target}
@@ -391,6 +391,11 @@ class target:
 
     def get_leaklookup_priv(self, api_key, user_query):
         try:
+            if user_query == "ip":
+                user_query = "ipadress"
+            if user_query in ["hash"]:
+                c.bad_news("Leaklookup does not support {} search (yet)".format(user_query))
+                return
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": user_query, "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=30)
@@ -428,16 +433,16 @@ class target:
                     )
                 )
         except Exception as ex:
-            c.bad_news("Leak-lookup error with {target}".format(target=self.target))
+            c.bad_news("Leak-lookup error with {target} (private)".format(target=self.target))
             print(ex)
 
     def get_weleakinfo_priv(self, api_key, user_query):
         try:
+            
             url = "https://api.weleakinfo.com/v3/search"
             self.headers.update({"Authorization": "Bearer " + api_key})
             self.headers.update({"Content-Type": "application/x-www-form-urlencoded"})
-            # tototo
-            print(user_query)
+
             payload = {"type": user_query, "query": self.target}
             req = self.make_request(url, meth="POST", data=payload)
             self.headers.popitem()
@@ -449,11 +454,11 @@ class target:
                 )
                 return
             elif req.status_code != 200:
-                c.bad_news(f"Got WLI API response code {req.status_code}")
+                c.bad_news(f"Got WLI API response code {req.status_code} (private)")
                 return
             if req.status_code == 200:
                 if response["Success"] is False:
-                    c.bad_news(response["Message"])
+                    c.bad_news("WeLeakInfo (private) error response {}".format(response["Message"]))
                     return
                 c.good_news(
                     "Found {num} entries for {target} using WeLeakInfo (private)".format(
@@ -486,7 +491,7 @@ class target:
             self.headers.popitem()
             response = req.json()
             if req.status_code != 200:
-                c.bad_news(f"Got WLI API response code {req.status_code}")
+                c.bad_news(f"Got WLI API response code {req.status_code} (public)")
                 return
             else:
                 c.good_news(

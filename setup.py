@@ -4,6 +4,14 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+from distutils.util import convert_path
+
+main_ns = {}
+ver_path = convert_path('h8mail/version.py')
+with open(ver_path) as ver_file:
+    exec(ver_file.read(), main_ns)
+
+
 
 with open("README.md") as readme_file:
     readme = readme_file.read()
@@ -42,6 +50,6 @@ setup(
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",
-    version="2.2.1",
+    version=main_ns['__version__'],
     zip_safe=False,
 )

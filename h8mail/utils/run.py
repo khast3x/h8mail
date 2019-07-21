@@ -17,6 +17,7 @@ from .helpers import (
     get_emails_from_file,
     print_banner,
     save_results_csv,
+    check_latest_version,
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
@@ -83,7 +84,7 @@ def h8mail(user_args):
     targets = []
     start_time = time.time()
     c.good_news("Targets:")
-
+    
     # Find targets in user input or file
     for arg in user_args.user_targets:
         user_stdin_target = fetch_emails(arg, user_args)
@@ -98,6 +99,7 @@ def h8mail(user_args):
 
     c.info_news("Removing duplicates")
     targets = list(set(targets))
+
     # Launch
     breached_targets = target_factory(targets, user_args)
 
@@ -137,7 +139,7 @@ def h8mail(user_args):
 
 
 def main():
-
+    
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"
     )
@@ -236,4 +238,5 @@ def main():
     print_banner("warn")
     print_banner("version")
     print_banner()
+    check_latest_version()
     h8mail(user_args)

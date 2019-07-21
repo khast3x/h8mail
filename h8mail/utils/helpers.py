@@ -7,6 +7,9 @@ import configparser
 import csv
 import os
 import glob
+from .version import __version__
+import requests
+import json
 
 
 def find_files(to_parse, pattern=""):
@@ -55,7 +58,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.purple, "Version 2.2 - \"HAILTEAM\" ", c.reset)
+        print("\t", c.bold, c.fg.purple, 'Version 2.2 - "HAILTEAM" ', c.reset)
 
 
 def fetch_emails(target, user_args):
@@ -148,3 +151,22 @@ def save_results_csv(dest_csv, target_obj_list):
         except Exception as ex:
             c.bad_news("Error writing to csv")
             print(ex)
+
+
+def check_latest_version():
+    """
+    Fetches local version and compares it to github api tag version
+    """
+    response = requests.request(
+        url="https://api.github.com/repos/khast3x/h8mail/releases/latest", method="GET"
+    )
+    data = response.json()
+    latest = data["tag_name"]
+    if __version__ == data["tag_name"]:
+        c.good_news("h8mail is up to date")
+    else:
+        c.bad_news(
+            "Running outdated h8mail version. [Current: {current} | Latest: {latest}]".format(
+                current=__version__, latest=latest
+            )
+        )

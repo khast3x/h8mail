@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from .colors import colors as c
-# signing test fix
 
 def print_results(results, hide=False):
 

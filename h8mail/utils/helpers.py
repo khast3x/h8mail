@@ -65,7 +65,7 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.green, 'Version ' + __version__ + ' - "OK,BUT" ', c.reset)
+        print("\t", c.bold, c.fg.green, 'Version ' + __version__ + ' - "Hunter2" ', c.reset)
 
 
 def fetch_emails(target, user_args):
@@ -173,7 +173,7 @@ def check_latest_version():
         c.good_news("h8mail is up to date")
     else:
         c.bad_news(
-            "Running outdated h8mail version. [Current: {current} | Latest: {latest}]".format(
+            "Not running latest h8mail version. [Current: {current} | Latest: {latest}]".format(
                 current=__version__, latest=latest
             )
         )

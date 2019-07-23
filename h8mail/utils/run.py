@@ -163,7 +163,7 @@ def main():
     )
     parser.add_argument(
         "-q",
-        "--query-type",
+        "--custom-query",
         dest="user_query",
         help='Perform a custom query. Supports username, password, ip, hash, domain. Performs an implicit "loose" search when searching locally',
     )
@@ -178,7 +178,7 @@ def main():
         "-c",
         "--config",
         dest="config_file",
-        help="Configuration file for API keys. Accepts keys from Snusbase, (WeLeakInfo, Citadel.pw), hunterio",
+        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and hunterio",
         nargs="+",
     )
     parser.add_argument(
@@ -188,7 +188,7 @@ def main():
         "-bc",
         "--breachcomp",
         dest="bc_path",
-        help="Path to the breachcompilation torrent folder. Uses the query.sh script included in the torrent. https://ghostbin.com/paste/2cbdn",
+        help="Path to the breachcompilation torrent folder. Uses the query.sh script included in the torrent",
     )
     parser.add_argument(
         "-sk",

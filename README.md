@@ -20,32 +20,41 @@
 
 ## :book: Table of Content
 
-- [Features](#tangerine-features)
-  - [Demo](#demo)
-  - [APIs](#apis)
-- [Install](#tangerine-install)
-- [Update](#tangerine-update)
-- [Usage examples](#tangerine-usage-examples)
-- [Troubleshooting](#tangerine-troubleshooting)
-- [Notes](#tangerine-notes)
-
+- [Features](#tangerine-Features)
+- [Demo](#Demo)
+  - [Out of the box](#Out-of-the-box)
+  - [With API services, local breach search & chasing enabled](#With-API-services-local-breach-search--chasing-enabled)
+- [APIs](#APIs)
+- [Install](#tangerine-Install)
+- [Update](#Update)
+- [Docker](#Docker)
+- [Usage](#tangerine-Usage)
+- [Configuration file & keys](#tangerine-Configuration-file--keys)
+- [Supported custom queries](#tangerine-Supported-custom-queries)
+- [Troubleshooting](#tangerine-Troubleshooting)
+  - [Python version & Kali](#Python-version--Kali)
+  - [Windows](#Windows)
+  - [OSX](#OSX)
+- [Thanks & Credits](#tangerine-Thanks--Credits)
+- [Related open source projects](#tangerine-Related-open-source-projects)
+- [Notes](#tangerine-Notes)
 ----
 
 
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp") 
+* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
-* :whale: Small and fast Alpine Dockerfile available
 * :white_check_mark: CLI or Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house: Search .txt and .gz files locally using multiprocessing
+* :house: Search cleartext and compressed .gz files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
-* :dragon_face: Chase and target related emails in ongoing search
+* :dragon_face: Chase related emails by adding them to the ongoing search
 * :crown: Supports premium lookup services for advanced users
+* :factory: Custom query premium APIs. Supports username, hash, ip, domain and password
 * :books: Regroup breach results for all targets and methods
 * :eyes: Includes option to hide passwords for demonstrations
 * :rainbow: Delicious colors
@@ -168,32 +177,36 @@ $ docker run -ti kh4st3x00/h8mail -h
 ##  :tangerine: Usage
 
 ```bash
-usage: h8mail [-h] -t TARGET_EMAILS [TARGET_EMAILS ...] [--loose]
-              [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
+usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]] [-q USER_QUERY]
+              [--loose] [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
-              [-ch [CHASE_LIMIT]] [--hide]
+              [-ch [CHASE_LIMIT]] [--hide] [--debug] [--gen-config]
 
 Email information and password lookup tool
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TARGET_EMAILS [TARGET_EMAILS ...], --targets TARGET_EMAILS [TARGET_EMAILS ...]
+  -t USER_TARGETS [USER_TARGETS ...], --targets USER_TARGETS [USER_TARGETS ...]
                         Either string inputs or files. Supports email pattern
                         matching from input or file, filepath globing and
                         multiple arguments
+  -q USER_QUERY, --custom-query USER_QUERY
+                        Perform a custom query. Supports username, password,
+                        ip, hash, domain. Performs an implicit "loose" search
+                        when searching locally
   --loose               Allow loose search by disabling email pattern
                         recognition. Use spaces as pattern seperators
   -c CONFIG_FILE [CONFIG_FILE ...], --config CONFIG_FILE [CONFIG_FILE ...]
                         Configuration file for API keys. Accepts keys from
-                        Snusbase, (WeLeakInfo, Citadel.pw), hunterio
+                        Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and
+                        hunterio
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write CSV output
   -bc BC_PATH, --breachcomp BC_PATH
                         Path to the breachcompilation torrent folder. Uses the
-                        query.sh script included in the torrent.
-                        https://ghostbin.com/paste/2cbdn
+                        query.sh script included in the torrent
   -sk, --skip-defaults  Skips HaveIBeenPwned and HunterIO check. Ideal for
                         local scans
   -k CLI_APIKEYS [CLI_APIKEYS ...], --apikey CLI_APIKEYS [CLI_APIKEYS ...]
@@ -217,7 +230,9 @@ optional arguments:
                         Requires hunter.io private API key
   --hide                Only shows the first 4 characters of found passwords
                         to output. Ideal for demonstrations
-
+  --debug               Print debug information
+  --gen-config, -g      Generates a configuration file template in the current
+                        working directory & exits
 ```
 
 -----
@@ -251,16 +266,22 @@ $ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -sk
 $ h8mail -t targets.txt -gz /tmp/Collection1/ -sk
 ```
 
-###### Check a cleartext dump for target. Add the next 10 related emails to targets to check. Read keys from cli
+###### Check a cleartext dump for target. Add the next 10 related emails to targets to check. Read keys from CLI
 
 ```bash
 $ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE123"
+```
+###### Query username. Read keys from CLI
+
+```bash
+$ h8mail -t JSmith89 -q username -k "weleakinfo_priv=ABCDE123"
 ```
 
 -----
 
 ## :tangerine: Configuration file & keys
 
+h8mail can generate a template configuration file in the current working directory using `-g`.  
 h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
 
 The configuration file format is as follows:
@@ -287,7 +308,24 @@ $ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610
 
 -----
 
+## :tangerine: Supported custom queries
+
+|            | username | domain | hash | password |       ip       |
+|------------|:--------:|:------:|:----:|:--------:|:--------------:|
+| WeLeakInfo |    yes   |   yes  |  yes |    yes   |      yes       |
+| LeakLookup |    yes   |   yes  |      |    yes   |      yes       |
+| Snusbase   |    yes   |        |  yes |    yes   |      yes       |
+
+
+As of writing, some service providers are undergoing upgrades and might support additional queries.  
+To use a custom query, use `-q` followed by the appropriate keyword 
+
+
+-----
+
 ## :tangerine: Troubleshooting
+
+
 
 ### Python version & Kali
 
@@ -323,6 +361,7 @@ C:> python -m pip install h8mail
 C:> python -m h8mail --help
 ```
 
+To find where `pip` installed h8mail, use `pip3 show h8mail`
 
 ### OSX
 
@@ -345,6 +384,8 @@ $ python3 -m h8mail -h
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
 * [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)
+
+
 -----
 
 ## :tangerine: Related open source projects

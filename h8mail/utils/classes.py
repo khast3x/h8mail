@@ -8,7 +8,7 @@ import json
 import socket
 import sys
 import platform
-
+from .version import __version__
 
 class local_breach_target:
     """
@@ -37,16 +37,24 @@ class target:
 	Found data is stored in self.data. Each method increments self.pwned when data is found.
 	"""
 
-    def __init__(self, target_data):
+    def __init__(self, target_data, debug=False):
         self.headers = {
-            "User-Agent": "h8mail-v.2.3-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
-                pyver=sys.version.split(" ")[0],
+            "User-Agent": "h8mail-v.{h8ver}-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+                h8ver=__version__, pyver=sys.version.split(" ")[0],
                 platfrm=platform.platform().split("-")[0],
             )
         }
         self.target = target_data
         self.pwned = 0
         self.data = [()]
+        self.debug = debug
+
+    def not_exists(self, pattern):
+        for d in self.data:
+            if len(d) >= 2:
+                if d[1] == pattern:
+                    return False
+        return True
 
     def make_request(
         self, url, meth="GET", timeout=10, redirs=True, data=None, params=None
@@ -62,11 +70,17 @@ class target:
                 params=params,
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
-            if response.status_code == 429:
-                c.info_news(
-                    "Reached RATE LIMIT for {src}, sleeping".format(src=response.url)
-                )
-                sleep(2.5)
+            if self.debug:
+                print(c.fg.lightred + "\nDEBUG: Sent the following---------------------")
+                print(self.headers)
+                print(url, meth, data, params)
+                print("DEBUG: Received the following---------------------")
+                print(response.url)
+                print("\nDEBUG: HEADER---------------")
+                print('\n'.join('{}: {}'.format(k, v) for k, v in response.headers.items()))
+                print("\nDEBUG: BODY---------------")
+                print(json.dumps(response.json(), indent=2))
+                print(c.reset)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)
             print(ex)
@@ -224,7 +238,7 @@ class target:
                             ("HIBP3_PASTE", "https://pastebin.com/" + d["Id"])
                         )
                     else:
-                        self.data.append(("HIBP_PASTE", d["Id"]))
+                        self.data.append(("HIBP3_PASTE", d["Id"]))
 
                 c.good_news(
                     "Found {num} pastes for {target} using HIBP v3 Pastes".format(
@@ -248,6 +262,7 @@ class target:
 
     def get_emailrepio(self):
         try:
+            sleep(0.5)
             url = "https://emailrep.io/{}".format(self.target)
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
@@ -332,7 +347,7 @@ class target:
     def get_snusbase(self, api_url, api_key, user_query):
         try:
             if user_query == "ip":
-                user_query = "ipadress"
+                user_query = "lastip"
             if user_query in ["domain"]:
                 c.bad_news(
                     "Snusbase does not support {} search (yet)".format(user_query)
@@ -369,6 +384,8 @@ class target:
                     self.data.append(("SNUS_USERNAME", result["username"]))
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
+                if result["tablenr"] and self.not_exists(result["tablenr"]):
+                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.target))
             print(ex)
@@ -416,7 +433,8 @@ class target:
             response = req.json()
             if "false" in response["error"] and len(response["message"]) != 0:
                 b_counter = 0
-                for _, data in response["message"].items():
+                for db, data in response["message"].items():
+                    self.data.append(("LKLP_SOURCE", db))
                     for d in data:
                         if "password" in d.keys():
                             if "plaintext" in d:
@@ -497,6 +515,8 @@ class target:
                         self.pwned += 1
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
+                    if "Database" in result:
+                        self.data.append(("WLI_SOURCE", result["Username"]))
         except Exception as ex:
             c.bad_news(
                 "WeLeakInfo error with {target} (private)".format(target=self.target)

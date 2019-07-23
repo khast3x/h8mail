@@ -24,6 +24,7 @@ from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
 from .chase import chase
 from .print_results import print_results
+from .gen_config import gen_config_file 
 
 
 def target_factory(targets, user_args):
@@ -46,27 +47,34 @@ def target_factory(targets, user_args):
 
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
-        current_target = target(t)
+        if user_args.debug:
+            current_target = target(t, debug=True)
+        else:
+            current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
         if api_keys is not None:
             c.info_news("Factory is calling API keys")
-            if "hibp" in api_keys:
+            if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
-            if "hunterio" in api_keys:
+            if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if user_args.chase_limit and counter < init_targets_len:
                 targets.extend(chase(current_target, user_args))
             if "snusbase_token" in api_keys:
+                if "snusbase_url" in api_keys:
+                    snusbase_url = api_keys["snusbase_url"]
+                else:
+                    snusbase_url = "http://api.snusbase.com/v2/search"
                 current_target.get_snusbase(
-                    api_keys["snusbase_url"], api_keys["snusbase_token"], query
+                    snusbase_url, api_keys["snusbase_token"], query
                 )
             if "leak-lookup_priv" in api_keys:
                 current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"], query)
-            if "leak-lookup_pub" in api_keys:
+            if "leak-lookup_pub" in api_keys and query == "email":
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
-            if "weleakinfo_pub" in api_keys:
+            if "weleakinfo_pub" in api_keys and query == "email":
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
@@ -80,6 +88,9 @@ def h8mail(user_args):
     Starts the target object factory loop; starts local searches after factory if in user inputs
     Prints results, saves to csv if in user inputs
     """
+    if not user_args.user_targets:
+        c.bad_news("Missing Target")
+        exit(1)
     targets = []
     start_time = time.time()
     c.good_news("Targets:")
@@ -146,7 +157,6 @@ def main():
     parser.add_argument(
         "-t",
         "--targets",
-        required=True,
         dest="user_targets",
         help="Either string inputs or files. Supports email pattern matching from input or file, filepath globing and multiple arguments",
         nargs="+",
@@ -232,10 +242,28 @@ def main():
         action="store_true",
         default=False,
     ),
+    parser.add_argument(
+        "--debug",
+        dest="debug",
+        help="Print debug information",
+        action="store_true",
+        default=False,
+    ),
+    parser.add_argument(
+        "--gen-config",
+        "-g",
+        dest="gen_config",
+        help="Generates a configuration file template in the current working directory & exits",
+        action="store_true",
+        default=False,
+    ),
 
     user_args = parser.parse_args()
     print_banner("warn")
     print_banner("version")
     print_banner()
     check_latest_version()
+    if user_args.gen_config:
+        gen_config_file()
+        exit(0)
     h8mail(user_args)

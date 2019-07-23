@@ -312,9 +312,9 @@ $ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610
 
 |            | username | domain | hash | password |       ip       |
 |------------|:--------:|:------:|:----:|:--------:|:--------------:|
-| WeLeakInfo |    yes   |   yes  |  yes |    yes   |      yes       |
-| LeakLookup |    yes   |   yes  |      |    yes   |      yes       |
-| Snusbase   |    yes   |        |  yes |    yes   |      yes       |
+| WeLeakInfo |    :white_check_mark:   |   :white_check_mark:  |  :white_check_mark: |    :white_check_mark:   |      :white_check_mark:       |
+| LeakLookup |    :white_check_mark:   |   :white_check_mark:  |      |    :white_check_mark:   |      :white_check_mark:       |
+| Snusbase   |    :white_check_mark:   |        |  :white_check_mark: |    :white_check_mark:   |      :white_check_mark:       |
 
 
 As of writing, some service providers are undergoing upgrades and might support additional queries.  

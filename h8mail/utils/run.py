@@ -60,10 +60,6 @@ def target_factory(targets, user_args):
                 current_target.get_hibp3(api_keys["hibp"])
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
-            if user_args.chase_limit and counter < init_targets_len:
-                targets.extend(chase(current_target, user_args))
-                c.info_news("Removing duplicates")
-                targets = list(set(targets))
             if "snusbase_token" in api_keys:
                 if "snusbase_url" in api_keys:
                     snusbase_url = api_keys["snusbase_url"]
@@ -80,6 +76,15 @@ def target_factory(targets, user_args):
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
+            if user_args.chase_limit and counter < init_targets_len:
+                # targets.extend(chase(current_target, user_args))
+                # c.info_news("Removing duplicates")
+                # targets = list(set(targets))
+                user_args_force_email = user_args
+                user_args_force_email.user_query = "email"
+                user_args_force_email.chase_limit -= 1
+                finished_chased = target_factory(chase(current_target, user_args), user_args_force_email)
+                finished.extend((finished_chased))
         finished.append(current_target)
     return finished
 
@@ -233,9 +238,16 @@ def main():
         "-ch",
         "--chase",
         dest="chase_limit",
-        help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
+        help="Add related emails from hunter.io to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
         nargs="?",
+    ),
+    parser.add_argument(
+        "--power-chase",
+        dest="power_chase",
+        help="Add related emails from ALL API services to ongoing target list. Use with --chase. Requires a private API key",
+        action="store_true",
+        default=False,
     ),
     parser.add_argument(
         "--hide",
@@ -247,7 +259,7 @@ def main():
     parser.add_argument(
         "--debug",
         dest="debug",
-        help="Print debug information",
+        help="Print request debug information",
         action="store_true",
         default=False,
     ),
@@ -255,7 +267,7 @@ def main():
         "--gen-config",
         "-g",
         dest="gen_config",
-        help="Generates a configuration file template in the current working directory & exits",
+        help="Generates a configuration file template in the current working directory & exits. Will overwrite existing h8mail_config.ini file",
         action="store_true",
         default=False,
     ),

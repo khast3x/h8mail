@@ -48,6 +48,8 @@ class target:
         self.pwned = 0
         self.data = [()]
         self.debug = debug
+        if debug:
+            print(c.fg.red, "DEBUG: Created target object for {}".format(self.target), c.reset)
 
     def not_exists(self, pattern):
         for d in self.data:
@@ -60,6 +62,7 @@ class target:
         self, url, meth="GET", timeout=10, redirs=True, data=None, params=None
     ):
         try:
+            sleep(1)
             response = requests.request(
                 url=url,
                 headers=self.headers,
@@ -76,10 +79,10 @@ class target:
                 print(url, meth, data, params)
                 print("DEBUG: Received the following---------------------")
                 print(response.url)
-                print("\nDEBUG: HEADER---------------")
+                print("\nDEBUG: RESPONSE HEADER---------------")
                 print('\n'.join('{}: {}'.format(k, v) for k, v in response.headers.items()))
-                print("\nDEBUG: BODY---------------")
-                print(json.dumps(response.json(), indent=2))
+                print("\nDEBUG: RESPONSE BODY---------------")
+                # print(json.dumps(response.json(), indent=2))
                 print(c.reset)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)
@@ -386,6 +389,9 @@ class target:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
                 if result["tablenr"] and self.not_exists(result["tablenr"]):
                     self.data.append(("SNUS_SOURCE", result["tablenr"]))
+                if result["email"] and self.not_exists(result["email"]):
+                    self.data.append(("SNUS_RELATED", result["email"].strip()))
+
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.target))
             print(ex)
@@ -452,6 +458,8 @@ class target:
                         if "ipaddress" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_LASTIP", d["ipaddress"]))
+                        if "email_address" in d.keys() and self.not_exists(d["email_address"]):
+                            self.data.append(("LKLP_RELATED", d["email_address"].strip()))
 
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup (private)".format(
@@ -479,7 +487,7 @@ class target:
             self.headers.update({"Content-Type": "application/x-www-form-urlencoded"})
 
             payload = {"type": user_query, "query": self.target}
-            req = self.make_request(url, meth="POST", data=payload)
+            req = self.make_request(url, meth="POST", data=payload, timeout=30)
             self.headers.popitem()
             self.headers.popitem()
             response = req.json()
@@ -518,6 +526,8 @@ class target:
                         self.data.append(("WLI_USERNAME", result["Username"]))
                     if "Database" in result and self.not_exists(result["Database"]):
                         self.data.append(("WLI_SOURCE", result["Database"]))
+                    if "Email" in result and self.not_exists(result["Email"]):
+                        self.data.append(("WLI_RELATED", result["Email"].strip()))
         except Exception as ex:
             c.bad_news(
                 "WeLeakInfo error with {target} (private)".format(target=self.target)
@@ -530,7 +540,7 @@ class target:
                 query=self.target
             )
             self.headers.update({"Authorization": "Bearer " + api_key})
-            req = self.make_request(url)
+            req = self.make_request(url, timeout=30)
             self.headers.popitem()
             response = req.json()
             if req.status_code != 200:

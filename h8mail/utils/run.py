@@ -62,6 +62,8 @@ def target_factory(targets, user_args):
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if user_args.chase_limit and counter < init_targets_len:
                 targets.extend(chase(current_target, user_args))
+                c.info_news("Removing duplicates")
+                targets = list(set(targets))
             if "snusbase_token" in api_keys:
                 if "snusbase_url" in api_keys:
                     snusbase_url = api_keys["snusbase_url"]

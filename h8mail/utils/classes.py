@@ -434,7 +434,8 @@ class target:
             if "false" in response["error"] and len(response["message"]) != 0:
                 b_counter = 0
                 for db, data in response["message"].items():
-                    self.data.append(("LKLP_SOURCE", db))
+                    if self.not_exists(db):
+                        self.data.append(("LKLP_SOURCE", db))
                     for d in data:
                         if "password" in d.keys():
                             if "plaintext" in d:
@@ -515,8 +516,8 @@ class target:
                         self.pwned += 1
                     if "Username" in result:
                         self.data.append(("WLI_USERNAME", result["Username"]))
-                    if "Database" in result:
-                        self.data.append(("WLI_SOURCE", result["Username"]))
+                    if "Database" in result and self.not_exists(result["Database"]):
+                        self.data.append(("WLI_SOURCE", result["Database"]))
         except Exception as ex:
             c.bad_news(
                 "WeLeakInfo error with {target} (private)".format(target=self.target)

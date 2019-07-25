@@ -24,7 +24,7 @@ from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
 from .chase import chase
 from .print_results import print_results
-from .gen_config import gen_config_file 
+from .gen_config import gen_config_file
 
 
 def target_factory(targets, user_args):
@@ -55,7 +55,6 @@ def target_factory(targets, user_args):
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
         if api_keys is not None:
-            c.info_news("Factory is calling API keys")
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
             if "hunterio" in api_keys and query == "email":
@@ -77,13 +76,12 @@ def target_factory(targets, user_args):
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
             if user_args.chase_limit and counter < init_targets_len:
-                # targets.extend(chase(current_target, user_args))
-                # c.info_news("Removing duplicates")
-                # targets = list(set(targets))
                 user_args_force_email = user_args
                 user_args_force_email.user_query = "email"
                 user_args_force_email.chase_limit -= 1
-                finished_chased = target_factory(chase(current_target, user_args), user_args_force_email)
+                finished_chased = target_factory(
+                    chase(current_target, user_args), user_args_force_email
+                )
                 finished.extend((finished_chased))
         finished.append(current_target)
     return finished

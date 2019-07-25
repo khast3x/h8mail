@@ -19,7 +19,7 @@ def chase(target, user_args):
         for d in target.data:
             if len(d) is not 2:
                 continue
-            
+
             if user_args.power_chase:
                 if "RELATED" in d[0]:
                     c.good_news(

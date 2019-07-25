@@ -10,6 +10,7 @@ import sys
 import platform
 from .version import __version__
 
+
 class local_breach_target:
     """
 	Class is called when performing local file search.
@@ -40,7 +41,8 @@ class target:
     def __init__(self, target_data, debug=False):
         self.headers = {
             "User-Agent": "h8mail-v.{h8ver}-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
-                h8ver=__version__, pyver=sys.version.split(" ")[0],
+                h8ver=__version__,
+                pyver=sys.version.split(" ")[0],
                 platfrm=platform.platform().split("-")[0],
             )
         }
@@ -49,7 +51,11 @@ class target:
         self.data = [()]
         self.debug = debug
         if debug:
-            print(c.fg.red, "DEBUG: Created target object for {}".format(self.target), c.reset)
+            print(
+                c.fg.red,
+                "DEBUG: Created target object for {}".format(self.target),
+                c.reset,
+            )
 
     def not_exists(self, pattern):
         for d in self.data:
@@ -62,7 +68,6 @@ class target:
         self, url, meth="GET", timeout=10, redirs=True, data=None, params=None
     ):
         try:
-            sleep(1)
             response = requests.request(
                 url=url,
                 headers=self.headers,
@@ -74,13 +79,19 @@ class target:
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if self.debug:
-                print(c.fg.lightred + "\nDEBUG: Sent the following---------------------")
+                print(
+                    c.fg.lightred + "\nDEBUG: Sent the following---------------------"
+                )
                 print(self.headers)
                 print(url, meth, data, params)
                 print("DEBUG: Received the following---------------------")
                 print(response.url)
                 print("\nDEBUG: RESPONSE HEADER---------------")
-                print('\n'.join('{}: {}'.format(k, v) for k, v in response.headers.items()))
+                print(
+                    "\n".join(
+                        "{}: {}".format(k, v) for k, v in response.headers.items()
+                    )
+                )
                 print("\nDEBUG: RESPONSE BODY---------------")
                 # print(json.dumps(response.json(), indent=2))
                 print(c.reset)
@@ -458,8 +469,12 @@ class target:
                         if "ipaddress" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_LASTIP", d["ipaddress"]))
-                        if "email_address" in d.keys() and self.not_exists(d["email_address"]):
-                            self.data.append(("LKLP_RELATED", d["email_address"].strip()))
+                        if "email_address" in d.keys() and self.not_exists(
+                            d["email_address"]
+                        ):
+                            self.data.append(
+                                ("LKLP_RELATED", d["email_address"].strip())
+                            )
 
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup (private)".format(
@@ -481,7 +496,7 @@ class target:
 
     def get_weleakinfo_priv(self, api_key, user_query):
         try:
-
+            sleep(0.4)
             url = "https://api.weleakinfo.com/v3/search"
             self.headers.update({"Authorization": "Bearer " + api_key})
             self.headers.update({"Content-Type": "application/x-www-form-urlencoded"})

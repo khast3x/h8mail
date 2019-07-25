@@ -65,7 +65,13 @@ def print_banner(b_type="intro"):
             c.reset,
         )
     elif "version" in b_type:
-        print("\t", c.bold, c.fg.green, 'Version ' + __version__ + ' - "Hunter2" ', c.reset)
+        print(
+            "\t",
+            c.bold,
+            c.fg.green,
+            "Version " + __version__ + ' - "SEASON_PRIMER" ',
+            c.reset,
+        )
 
 
 def fetch_emails(target, user_args):

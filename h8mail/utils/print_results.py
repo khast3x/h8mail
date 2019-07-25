@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .colors import colors as c
 
+
 def print_results(results, hide=False):
 
     for t in results:

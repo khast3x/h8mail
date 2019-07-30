@@ -30,7 +30,7 @@ def breachcomp_check(targets, breachcomp_path):
                 for line in split_output:
                     if ":" in line:
                         t.pwned += 1
-                        t.data.append(("BC_PASS", line.split(":")[1]))
+                        t.data.append(("BC_PASS", re.split("[;:]",line)[-1]))
                         c.good_news(
                             "Found BreachedCompilation entry {line}".format(line=line)
                         )

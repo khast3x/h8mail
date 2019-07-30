@@ -8,7 +8,7 @@ def gen_config_file():
         os.path.join(os.getcwd(), "h8mail_config.ini"), "w", newline=""
     ) as dest_config:
         config = """[h8mail]
-; h8mail will automatically detect present keys & launch service accordingly
+; h8mail will automatically detect present keys & launch services accordingly
 ; Uncomment to activate
 ;hunterio = 
 ;snusbase_url = 

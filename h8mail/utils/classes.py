@@ -93,7 +93,7 @@ class target:
                     )
                 )
                 print("\nDEBUG: RESPONSE BODY---------------")
-                # print(json.dumps(response.json(), indent=2))
+                print(json.dumps(response.json(), indent=2))
                 print(c.reset)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)

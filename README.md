@@ -81,8 +81,8 @@
 
 | Service                                                          	|                             Functions                             	|           Status           	|
 |------------------------------------------------------------------	|:-----------------------------------------------------------------:	|:--------------------------:	|
-| [HaveIBeenPwned](https://haveibeenpwned.com/)                    	|                      Number of email breaches                     	|     :white_check_mark:     	|
-| [HaveIBeenPwned Pastes](https://haveibeenpwned.com/Pastes) :new: 	| URLs of text files mentioning targets                             	| :white_check_mark:         	|
+| [HaveIBeenPwned(v3)](https://haveibeenpwned.com/)                    	|                      Number of email breaches                     	|     :white_check_mark: :key:    	|
+| [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) :new: 	| URLs of text files mentioning targets                             	| :white_check_mark: :key:         	|
 | [Hunter.io](https://hunter.io/) - Public                         	|                      Number of related emails                     	|     :white_check_mark:     	|
 | [Hunter.io](https://hunter.io/) - Service (free tier)            	|                 Cleartext related emails, Chasing                 	|  :white_check_mark: :key:  	|
 | [WeLeakInfo](https://weleakinfo.com/) - Public :new:             	|                Number of search-able breach results               	|  :white_check_mark: :key:  	|
@@ -238,6 +238,7 @@ optional arguments:
   --gen-config, -g      Generates a configuration file template in the current
                         working directory & exits. Will overwrite existing
                         h8mail_config.ini file
+
 ```
 
 -----
@@ -282,12 +283,28 @@ $ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE12
 $ h8mail -t JSmith89 -q username -k "weleakinfo_priv=ABCDE123"
 ```
 
+###### Query IP. Chase all related targets. Read keys from CLI
+
+
+```bash
+$ h8mail -t 42.202.0.42 -q ip -c h8mail_config_priv.ini -ch 2 --power-chase
+```
+
 -----
 
 ## :tangerine: Configuration file & keys
 
 h8mail can generate a template configuration file in the current working directory using `-g`.  
 h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
+
+*(links contain refs)*  
+You can purchase API keys for:  
+- [HaveIBeenPwned](https://haveibeenpwned.com/API/Key?ref=h8mail)  
+- [hunter.io](https://hunter.io/users/sign_up?utm_medium=api?ref=h8mail)
+- [Snusbase](https://snusbase.com/?ref=h8mail)
+- [WeLeakInfo](https://weleakinfo.com/?ref=h8mail)
+- [Leak-Lookup](https://leak-lookup.com/?ref=h8mail)
+
 
 The configuration file format is as follows:
 ```ini

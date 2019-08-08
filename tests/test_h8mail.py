@@ -27,7 +27,7 @@ class TestH8mail(unittest.TestCase):
     run.print_banner()
     start_time = time.time()
     target = classes.target("test@test.ca")
-    target.get_hibp()
+    target.get_emailrepio()
     target.get_hunterio_public()
     run.print_results([target])
     run.print_summary(start_time, [target])

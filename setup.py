@@ -4,6 +4,11 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+from distutils.util import convert_path
+import os
+
+here = os.path.abspath(os.path.dirname(__file__))
+exec(open(os.path.join(here, "h8mail/utils/version.py")).read())
 
 with open("README.md") as readme_file:
     readme = readme_file.read()
@@ -11,11 +16,11 @@ with open("README.md") as readme_file:
 # with open("HISTORY.rst") as history_file:
 #     history = history_file.read()
 
-requirements = ['requests']
+requirements = ["requests"]
 
-setup_requirements = ['requests']
+setup_requirements = ["requests"]
 
-test_requirements = ['requests']
+test_requirements = ["requests"]
 
 setup(
     author="khast3x",
@@ -32,7 +37,7 @@ setup(
     description="Email OSINT and password breach hunting. Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation torrent",
     install_requires=requirements,
     license="BSD license",
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     long_description=readme + "\n\n",
     # long_description=readme + "\n\n" + history,
     include_package_data=True,
@@ -42,6 +47,6 @@ setup(
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",
-    version="2.2.1",
+    version=__version__,
     zip_safe=False,
 )

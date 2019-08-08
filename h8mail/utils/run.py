@@ -17,13 +17,14 @@ from .helpers import (
     get_emails_from_file,
     print_banner,
     save_results_csv,
+    check_latest_version,
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
 from .chase import chase
 from .print_results import print_results
-
+from .gen_config import gen_config_file
 
 
 def target_factory(targets, user_args):
@@ -39,31 +40,50 @@ def target_factory(targets, user_args):
         api_keys = None
     init_targets_len = len(targets)
 
+    query = "email"
+    if user_args.user_query is not None:
+        query = user_args.user_query
+        user_args.skip_defaults = True
+
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
-        current_target = target(t)
+        if user_args.debug:
+            current_target = target(t, debug=True)
+        else:
+            current_target = target(t)
         if not user_args.skip_defaults:
             current_target.get_hibp()
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
         if api_keys is not None:
-            c.info_news("Factory is calling API keys")
-            if "hunterio" in api_keys:
+            if "hibp" in api_keys and query == "email":
+                current_target.get_hibp3(api_keys["hibp"])
+            if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
-            if user_args.chase_limit and counter < init_targets_len:
-                targets.extend(chase(current_target, user_args))
             if "snusbase_token" in api_keys:
+                if "snusbase_url" in api_keys:
+                    snusbase_url = api_keys["snusbase_url"]
+                else:
+                    snusbase_url = "http://api.snusbase.com/v2/search"
                 current_target.get_snusbase(
-                    api_keys["snusbase_url"], api_keys["snusbase_token"]
+                    snusbase_url, api_keys["snusbase_token"], query
                 )
             if "leak-lookup_priv" in api_keys:
-                current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"])
-            if "leak-lookup_pub" in api_keys:
+                current_target.get_leaklookup_priv(api_keys["leak-lookup_priv"], query)
+            if "leak-lookup_pub" in api_keys and query == "email":
                 current_target.get_leaklookup_pub(api_keys["leak-lookup_pub"])
-            if "weleakinfo_pub" in api_keys:
+            if "weleakinfo_pub" in api_keys and query == "email":
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
-                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"])
+                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
+            if user_args.chase_limit and counter < init_targets_len:
+                user_args_force_email = user_args
+                user_args_force_email.user_query = "email"
+                user_args_force_email.chase_limit -= 1
+                finished_chased = target_factory(
+                    chase(current_target, user_args), user_args_force_email
+                )
+                finished.extend((finished_chased))
         finished.append(current_target)
     return finished
 
@@ -74,24 +94,28 @@ def h8mail(user_args):
     Starts the target object factory loop; starts local searches after factory if in user inputs
     Prints results, saves to csv if in user inputs
     """
+    if not user_args.user_targets:
+        c.bad_news("Missing Target")
+        exit(1)
     targets = []
     start_time = time.time()
     c.good_news("Targets:")
 
     # Find targets in user input or file
-    for arg in user_args.target_emails:
-        user_stdin_target = fetch_emails(arg, user_args.loose)
+    for arg in user_args.user_targets:
+        user_stdin_target = fetch_emails(arg, user_args)
         if user_stdin_target:
             targets.extend(user_stdin_target)
         elif os.path.isfile(arg):
             c.info_news("Reading from file " + arg)
-            targets.extend(get_emails_from_file(arg, user_args.loose))
+            targets.extend(get_emails_from_file(arg, user_args))
         else:
             c.bad_news("No targets found in user input")
             exit(1)
 
     c.info_news("Removing duplicates")
     targets = list(set(targets))
+
     # Launch
     breached_targets = target_factory(targets, user_args)
 
@@ -139,10 +163,15 @@ def main():
     parser.add_argument(
         "-t",
         "--targets",
-        required=True,
-        dest="target_emails",
+        dest="user_targets",
         help="Either string inputs or files. Supports email pattern matching from input or file, filepath globing and multiple arguments",
         nargs="+",
+    )
+    parser.add_argument(
+        "-q",
+        "--custom-query",
+        dest="user_query",
+        help='Perform a custom query. Supports username, password, ip, hash, domain. Performs an implicit "loose" search when searching locally',
     )
     parser.add_argument(
         "--loose",
@@ -155,7 +184,7 @@ def main():
         "-c",
         "--config",
         dest="config_file",
-        help="Configuration file for API keys. Accepts keys from Snusbase, (WeLeakInfo, Citadel.pw), hunterio",
+        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and hunterio",
         nargs="+",
     )
     parser.add_argument(
@@ -165,7 +194,7 @@ def main():
         "-bc",
         "--breachcomp",
         dest="bc_path",
-        help="Path to the breachcompilation torrent folder. Uses the query.sh script included in the torrent. https://ghostbin.com/paste/2cbdn",
+        help="Path to the breachcompilation torrent folder. Uses the query.sh script included in the torrent",
     )
     parser.add_argument(
         "-sk",
@@ -208,9 +237,16 @@ def main():
         "-ch",
         "--chase",
         dest="chase_limit",
-        help="Add related emails from HunterIO to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
+        help="Add related emails from hunter.io to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
         type=int,
         nargs="?",
+    ),
+    parser.add_argument(
+        "--power-chase",
+        dest="power_chase",
+        help="Add related emails from ALL API services to ongoing target list. Use with --chase. Requires a private API key",
+        action="store_true",
+        default=False,
     ),
     parser.add_argument(
         "--hide",
@@ -219,9 +255,28 @@ def main():
         action="store_true",
         default=False,
     ),
+    parser.add_argument(
+        "--debug",
+        dest="debug",
+        help="Print request debug information",
+        action="store_true",
+        default=False,
+    ),
+    parser.add_argument(
+        "--gen-config",
+        "-g",
+        dest="gen_config",
+        help="Generates a configuration file template in the current working directory & exits. Will overwrite existing h8mail_config.ini file",
+        action="store_true",
+        default=False,
+    ),
 
     user_args = parser.parse_args()
     print_banner("warn")
     print_banner("version")
     print_banner()
+    check_latest_version()
+    if user_args.gen_config:
+        gen_config_file()
+        exit(0)
     h8mail(user_args)

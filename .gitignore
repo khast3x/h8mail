@@ -105,3 +105,6 @@ ENV/
 # mypy
 .mypy_cache/
 .vscode/settings.json
+h8mail_config.ini
+h8mail_keys.ini
+h8mail_config.ini

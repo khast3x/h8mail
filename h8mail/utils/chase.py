@@ -11,16 +11,25 @@ def chase(target, user_args):
     """
     new_targets = []
     chase_counter = 0
-    if user_args.chase_limit:
+    if user_args.debug:
+        print(c.fg.red, "\nCHASING DEBUG-----------")
+        print(f"Hunting targets from {target.target}")
+        print(f"Recursive Chase Stop is at {user_args.chase_limit}" + c.reset)
+    if user_args.chase_limit > 0:
         for d in target.data:
             if len(d) is not 2:
                 continue
-            if "HUNTER_RELATED" in d:
-                c.good_news(
-                    "Chasing {new_target} as new target".format(new_target=d[1])
-                )
-                new_targets.append(d[1])
-                chase_counter += 1
-            if chase_counter == user_args.chase_limit:
-                return new_targets
+
+            if user_args.power_chase:
+                if "RELATED" in d[0]:
+                    c.good_news(
+                        "Chasing {new_target} as new target".format(new_target=d[1])
+                    )
+                    new_targets.append(d[1])
+            else:
+                if "HUNTER_RELATED" in d[0]:
+                    c.good_news(
+                        "Chasing {new_target} as new target".format(new_target=d[1])
+                    )
+                    new_targets.append(d[1])
     return new_targets

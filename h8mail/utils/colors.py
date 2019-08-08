@@ -181,7 +181,20 @@ class colors:
                     colors.reset,
                 )
             )
-
+        elif "SOURCE" in source:
+            print(
+                "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
+                    colors.fg.lightblue,
+                    source,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
+                    target,
+                    colors.fg.lightgrey,
+                    colors.reset,
+                    data,
+                    colors.reset,
+                )
+            )
         else:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(

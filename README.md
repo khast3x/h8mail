@@ -310,6 +310,7 @@ The configuration file format is as follows:
 ```ini
 [h8mail]
 hunterio =
+hibp =
 snusbase_url =
 snusbase_token =
 ; leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263

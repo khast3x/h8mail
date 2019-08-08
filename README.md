@@ -71,10 +71,13 @@
 [![h8mail2demo6-1.gif](https://i.postimg.cc/DwbwqjwX/h8mail2demo6-1.gif)](https://postimg.cc/v4byyv9Y)
 
 
-##### With API services, local breach search & chasing enabled
+##### With API services & chasing enabled
 
 [![pwoerchase2.gif](https://i.postimg.cc/3rn1K07Z/pwoerchase2.gif)](https://postimg.cc/qg6ywRNt)
 
+##### Searching using username with API service, power chasing enabled
+
+[![username.gif](https://i.postimg.cc/DZCj0BR7/username.gif)](https://postimg.cc/LY1B0BHW)
 
 -----
 

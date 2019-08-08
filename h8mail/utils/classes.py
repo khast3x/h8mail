@@ -105,6 +105,8 @@ class target:
     def get_hibp(self):
         try:
             sleep(1.3)
+            c.info_news(c.bold + "HIBP free tier will stop working on the 2019/08/18")
+            c.info_news(c.bold + "You can already use a purchased API key using h8mail (config file)" + c.reset)
             url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
                 self.target
             )

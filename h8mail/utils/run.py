@@ -52,6 +52,7 @@ def target_factory(targets, user_args):
         else:
             current_target = target(t)
         if not user_args.skip_defaults:
+            current_target.get_hibp()
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
         if api_keys is not None:

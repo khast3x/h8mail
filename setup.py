@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """The setup script."""
-
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 from distutils.util import convert_path
 import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, "h8mail/utils/version.py")).read())
 
-with open("README.md") as readme_file:
+with open("PyPi.rst") as readme_file:
     readme = readme_file.read()
 
 # with open("HISTORY.rst") as history_file:
@@ -37,7 +36,7 @@ setup(
     description="Email OSINT and password breach hunting. Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation torrent",
     install_requires=requirements,
     license="BSD license",
-    long_description_content_type="text/markdown",
+    # long_description_content_type="text/markdown",
     long_description=readme + "\n\n",
     # long_description=readme + "\n\n" + history,
     include_package_data=True,

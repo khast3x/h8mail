@@ -264,16 +264,16 @@ class target:
 
             elif response.status_code == 404:
                 c.info_news(
-                    "No pastes found for {} using HIBP PASTE".format(self.target)
+                    "No pastes found for {} using HIBP v3 PASTE".format(self.target)
                 )
             else:
                 c.bad_news(
-                    "HIBP PASTE: got API response code {code} for {target}".format(
+                    "HIBP v3 PASTE: got API response code {code} for {target}".format(
                         code=response.status_code, target=self.target
                     )
                 )
         except Exception as ex:
-            c.bad_news("HIBP PASTE error: " + self.target)
+            c.bad_news("HIBP v3 PASTE error: " + self.target)
             print(ex)
 
     def get_emailrepio(self):
@@ -381,6 +381,12 @@ class target:
                 )
             )
             for result in response["result"]:
+                if result["tablenr"] and self.not_exists(result["tablenr"]):
+                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
+                if result["username"]:
+                    self.data.append(("SNUS_USERNAME", result["username"]))
+                if result["email"] and self.not_exists(result["email"]):
+                    self.data.append(("SNUS_RELATED", result["email"].strip()))
                 if result["password"]:
                     self.data.append(("SNUS_PASSWORD", result["password"]))
                     self.pwned += 1
@@ -396,14 +402,8 @@ class target:
                     else:
                         self.data.append(("SNUS_HASH", result["hash"]))
                         self.pwned += 1
-                if result["username"]:
-                    self.data.append(("SNUS_USERNAME", result["username"]))
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
-                if result["tablenr"] and self.not_exists(result["tablenr"]):
-                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
-                if result["email"] and self.not_exists(result["email"]):
-                    self.data.append(("SNUS_RELATED", result["email"].strip()))
 
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.target))

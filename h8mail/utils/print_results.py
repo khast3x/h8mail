@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .colors import colors as c
-
+from time import sleep
 
 def print_results(results, hide=False):
 
@@ -8,6 +8,7 @@ def print_results(results, hide=False):
         print()
         c.print_res_header(t.target)
         for i in range(len(t.data)):
+            sleep(0.001)
             if len(t.data) == 1:
                 print()
                 c.info_news("No results founds")

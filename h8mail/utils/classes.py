@@ -381,8 +381,6 @@ class target:
                 )
             )
             for result in response["result"]:
-                if result["tablenr"] and self.not_exists(result["tablenr"]):
-                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
                 if result["username"]:
                     self.data.append(("SNUS_USERNAME", result["username"]))
                 if result["email"] and self.not_exists(result["email"]):
@@ -404,6 +402,8 @@ class target:
                         self.pwned += 1
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
+                if result["tablenr"] and self.not_exists(result["tablenr"]):
+                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
 
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.target))

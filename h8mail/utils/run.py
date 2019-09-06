@@ -52,7 +52,6 @@ def target_factory(targets, user_args):
         else:
             current_target = target(t)
         if not user_args.skip_defaults:
-            current_target.get_hibp()
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
         if api_keys is not None:
@@ -135,7 +134,7 @@ def h8mail(user_args):
             else:
                 local_found = local_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found)
+                breached_targets = local_to_targets(breached_targets, local_found, user_args)
     # Handle gzip search
     if user_args.local_gzip_src:
         for arg in user_args.local_gzip_src:
@@ -145,7 +144,7 @@ def h8mail(user_args):
             else:
                 local_found = local_gzip_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found)
+                breached_targets = local_to_targets(breached_targets, local_found, user_args)
 
     print_results(breached_targets, user_args.hide)
 

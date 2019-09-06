@@ -11,7 +11,7 @@ from .classes import local_breach_target
 from .colors import colors as c
 
 
-def local_to_targets(targets, local_results):
+def local_to_targets(targets, local_results, user_args):
     """
     Appends data from local_breach_target objects using existing list of targets.
     Finds corresponding email in dest object list, and adds data to the t.data object variable.
@@ -29,6 +29,9 @@ def local_to_targets(targets, local_results):
                     )
                 )
                 t.pwned += 1
+                if user_args.debug:
+                    c.debug_news(f"DEBUG: Found following content matching {t.target.target}")
+                    l.target.dump()
     return targets
 
 

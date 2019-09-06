@@ -30,6 +30,7 @@ class local_breach_target:
         print("Path: {}".format(self.filepath))
         print("Line: {}".format(self.line))
         print("Content: {}".format(self.content))
+        print()
 
 
 class target:
@@ -79,29 +80,28 @@ class target:
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if self.debug:
-                print(
-                    c.fg.lightred + "\nDEBUG: Sent the following---------------------"
-                )
+                c.debug_news("DEBUG: Sent the following---------------------")
                 print(self.headers)
                 print(url, meth, data, params)
-                print("DEBUG: Received the following---------------------")
-                print(response.url)
-                print("\nDEBUG: RESPONSE HEADER---------------")
+                c.debug_news("DEBUG: Received the following---------------------")
+                c.debug_news(response.url)
+                c.debug_news("DEBUG: RESPONSE HEADER---------------------")
                 print(
                     "\n".join(
                         "{}: {}".format(k, v) for k, v in response.headers.items()
                     )
                 )
-                print("\nDEBUG: RESPONSE BODY---------------")
+                c.debug_news("DEBUG: RESPONSE BODY---------------------")
                 print(json.dumps(response.json(), indent=2))
-                print(c.reset)
+                print(response)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)
+            print(url)
             print(ex)
             print(response)
         return response
 
-    # Soon to be deprecated
+    # Deprecated
     def get_hibp(self):
         try:
             sleep(1.3)
@@ -142,7 +142,7 @@ class target:
             c.bad_news("HIBP error: " + self.target)
             print(ex)
 
-    # Soon to be deprecated
+    # Deprecated
     def get_hibp_pastes(self):
         try:
             sleep(1.3)
@@ -456,15 +456,6 @@ class target:
                     if self.not_exists(db):
                         self.data.append(("LKLP_SOURCE", db))
                     for d in data:
-                        if "password" in d.keys():
-                            if "plaintext" in d:
-                                self.pwned += 1
-                                self.data.append(("LKLP_HASH", d["password"]))
-                                b_counter += 1
-                            else:
-                                self.pwned += 1
-                                self.data.append(("LKLP_PASSWORD", d["password"]))
-                                b_counter += 1
                         if "username" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_USERNAME", d["username"]))
@@ -477,6 +468,15 @@ class target:
                             self.data.append(
                                 ("LKLP_RELATED", d["email_address"].strip())
                             )
+                        if "password" in d.keys():
+                            if "plaintext" in d:
+                                self.pwned += 1
+                                self.data.append(("LKLP_HASH", d["password"]))
+                                b_counter += 1
+                            else:
+                                self.pwned += 1
+                                self.data.append(("LKLP_PASSWORD", d["password"]))
+                                b_counter += 1
 
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup (private)".format(
@@ -533,18 +533,18 @@ class target:
                 if response["Total"] == 0:
                     return
                 for result in response["Data"]:
+                    if "Username" in result:
+                        self.data.append(("WLI_USERNAME", result["Username"]))
+                    if "Email" in result and self.not_exists(result["Email"]):
+                        self.data.append(("WLI_RELATED", result["Email"].strip()))
                     if "Password" in result:
                         self.data.append(("WLI_PASSWORD", result["Password"]))
                         self.pwned += 1
                     if "Hash" in result:
                         self.data.append(("WLI_HASH", result["Hash"]))
                         self.pwned += 1
-                    if "Username" in result:
-                        self.data.append(("WLI_USERNAME", result["Username"]))
                     if "Database" in result and self.not_exists(result["Database"]):
                         self.data.append(("WLI_SOURCE", result["Database"]))
-                    if "Email" in result and self.not_exists(result["Email"]):
-                        self.data.append(("WLI_RELATED", result["Email"].strip()))
         except Exception as ex:
             c.bad_news(
                 "WeLeakInfo error with {target} (private)".format(target=self.target)

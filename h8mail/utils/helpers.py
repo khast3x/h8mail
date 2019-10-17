@@ -69,7 +69,7 @@ def print_banner(b_type="intro"):
             "\t",
             c.bold,
             c.fg.green,
-            "Version " + __version__ + ' - "SEASON_PRIMER" ',
+            "Version " + __version__ + ' - "ECHO MIKE" ',
             c.reset,
         )
 

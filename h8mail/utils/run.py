@@ -55,6 +55,8 @@ def target_factory(targets, user_args):
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
             current_target.get_scylla()
+        else:
+            current_target.get_scylla(query)
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])

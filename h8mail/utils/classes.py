@@ -326,7 +326,18 @@ class target:
         try:
             sleep(0.5)
             self.headers.update({"Accept": "application/json"})
-            uri_scylla = 'Email: "' + self.target + '"'
+            if user_query == "email":
+                uri_scylla = 'Email: "' + self.target + '"'
+            elif user_query == "password":
+                uri_scylla = 'Password: "' + self.target + '"'
+            elif user_query == "username":
+                uri_scylla = 'User: "' + self.target + '"'
+            elif user_query == "ip":
+                uri_scylla = 'IP: "' + self.target + '"'
+            elif user_query == "hash":
+                uri_scylla = 'Hash: "' + self.target + '"'
+            elif user_query == "domain":
+                uri_scylla = 'Email: "*@' + self.target + '"'
             url = "https://scylla.sh/search?q={}".format(
                 requests.utils.requote_uri(uri_scylla)
             )
@@ -339,10 +350,12 @@ class target:
                 return
             data = response.json()
             for d in data:
-                print(d)
                 for field, k in d["_source"].items():
                     if "User" in field and k is not None:
                         self.data.append(("SCYLLA_USERNAME", k))
+                        self.pwned += 1
+                    if "Email" in field and k is not None and user_query is not "email":
+                        self.data.append(("SCYLLA_EMAIL", k))
                         self.pwned += 1
                     if "Password" in field and k is not None:
                         self.data.append(("SCYLLA_PASSWORD", k))

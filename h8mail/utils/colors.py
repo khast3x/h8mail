@@ -196,7 +196,7 @@ class colors:
                     colors.reset,
                 )
             )
-        else:
+        elif "IP" in source:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
                     colors.fg.lightblue,
@@ -206,6 +206,20 @@ class colors:
                     target,
                     colors.fg.lightgrey,
                     colors.fg.red,
+                    data,
+                    colors.reset,
+                )
+            )
+        else:
+            print(
+                "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
+                    colors.fg.lightblue,
+                    source,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
+                    target,
+                    colors.fg.lightgrey,
+                    colors.fg.lightgrey,
                     data,
                     colors.reset,
                 )

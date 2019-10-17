@@ -318,6 +318,27 @@ class target:
             c.bad_news("emailrep.io error: " + self.target)
             print(ex)
 
+    def get_scylla(self, user_query="email"):
+        try:
+            sleep(0.5)
+            self.headers.update({"Accept": "application/json"})
+            uri_scylla = "Email: \""+ self.target+"\""
+            url = "https://scylla.sh/search?q={}".format(requests.utils.requote_uri(uri_scylla))
+            response = self.make_request(url)
+            self.headers.popitem()
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact scylla.sh for " + self.target)
+                print(response.status_code)
+                print(response)
+                return
+            # print(response.content)
+            data = response.json()
+            for d in data:
+                print(d)
+        except Exception as ex:
+            c.bad_news("scylla.sh error: " + self.target)
+            print(ex)
+
     def get_hunterio_public(self):
         try:
             target_domain = self.target.split("@")[1]

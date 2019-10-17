@@ -106,7 +106,11 @@ class target:
         try:
             sleep(1.3)
             c.info_news(c.bold + "HIBP free tier will stop working on the 2019/08/18")
-            c.info_news(c.bold + "You can already use a purchased API key using h8mail (config file)" + c.reset)
+            c.info_news(
+                c.bold
+                + "You can already use a purchased API key using h8mail (config file)"
+                + c.reset
+            )
             url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
                 self.target
             )
@@ -322,8 +326,10 @@ class target:
         try:
             sleep(0.5)
             self.headers.update({"Accept": "application/json"})
-            uri_scylla = "Email: \""+ self.target+"\""
-            url = "https://scylla.sh/search?q={}".format(requests.utils.requote_uri(uri_scylla))
+            uri_scylla = 'Email: "' + self.target + '"'
+            url = "https://scylla.sh/search?q={}".format(
+                requests.utils.requote_uri(uri_scylla)
+            )
             response = self.make_request(url)
             self.headers.popitem()
             if response.status_code not in [200, 404]:
@@ -331,10 +337,28 @@ class target:
                 print(response.status_code)
                 print(response)
                 return
-            # print(response.content)
             data = response.json()
             for d in data:
                 print(d)
+                for field, k in d["_source"].items():
+                    if "User" in field and k is not None:
+                        self.data.append(("SCYLLA_USERNAME", k))
+                        self.pwned += 1
+                    if "Password" in field and k is not None:
+                        self.data.append(("SCYLLA_PASSWORD", k))
+                        self.pwned += 1
+                    if "PassHash" in field and k is not None:
+                        self.data.append(("SCYLLA_HASH", k))
+                        self.pwned += 1
+                    if "PassSalt" in field and k is not None:
+                        self.data.append(("SCYLLA_HASHSALT", k))
+                        self.pwned += 1
+                    if "IP" in field and k is not None:
+                        self.data.append(("SCYLLA_LASTIP", k))
+                        self.pwned += 1
+                    if "Domain" in field and k is not None:
+                        self.data.append(("SCYLLA_SOURCE", k))
+                        self.pwned += 1
         except Exception as ex:
             c.bad_news("scylla.sh error: " + self.target)
             print(ex)

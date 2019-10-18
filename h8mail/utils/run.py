@@ -18,6 +18,7 @@ from .helpers import (
     print_banner,
     save_results_csv,
     check_latest_version,
+    check_scylla_online
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
@@ -41,10 +42,13 @@ def target_factory(targets, user_args):
     init_targets_len = len(targets)
 
     query = "email"
+    
     if user_args.user_query is not None:
         query = user_args.user_query
         user_args.skip_defaults = True
-
+    
+    scylla_up = check_scylla_online()
+    
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
@@ -54,8 +58,7 @@ def target_factory(targets, user_args):
         if not user_args.skip_defaults:
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
-            current_target.get_scylla()
-        else:
+        if scylla_up:
             current_target.get_scylla(query)
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":

@@ -183,3 +183,17 @@ def check_latest_version():
                 current=__version__, latest=latest
             )
         )
+
+def check_scylla_online():
+    """
+    Checks if scylla.sh is online
+    """
+    try:
+        re = requests.head(
+            url="https://scylla.sh"
+        )
+        if re.status_code == 200:
+            c.good_news("scylla.sh is up")
+            return True
+    except Exception:
+        c.info_news("scylla.sh is down, skipping")

@@ -295,6 +295,10 @@ class target:
                 data = response.json()
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
+                    if data["references"] == 1:
+                        self.data.append(("EMAILREP_LEAKS", "{} leaked credential".format(data["references"])))
+                    else:
+                        self.data.append(("EMAILREP_LEAKS", "{} leaked credentials".format(data["references"])))
                     c.good_news(
                         "Found {num} breaches for {target} using emailrep.io".format(
                             num=data["references"], target=self.target

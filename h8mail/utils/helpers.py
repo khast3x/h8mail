@@ -51,13 +51,12 @@ def print_banner(b_type="intro"):
 	!_____! !_____! ;--------------------;
 	"""
         # print(c.bold, c.fg.pink, banner, c.reset)
-
         banner_tab = banner.splitlines()
-        code = 72
+        code = 17
         for b in banner_tab:
             clr = "\u001b[38;5;" + str(code) + "m "
             print(c.bold + clr + b + c.reset)
-            code += 5
+            code += 3
     elif "warn" in b_type:
         print(
             c.fg.green,
@@ -67,8 +66,7 @@ def print_banner(b_type="intro"):
     elif "version" in b_type:
         print(
             "\t",
-            c.bold,
-            c.fg.green,
+            c.fg.lightgrey,
             "Version " + __version__ + ' - "ECHO MIKE" ',
             c.reset,
         )

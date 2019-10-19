@@ -18,6 +18,7 @@ from .helpers import (
     print_banner,
     save_results_csv,
     check_latest_version,
+    check_scylla_online
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
@@ -41,20 +42,29 @@ def target_factory(targets, user_args):
     init_targets_len = len(targets)
 
     query = "email"
+    skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        user_args.skip_defaults = True
-
+        skip_default_queries = False
+    
+    scylla_up = False
+    
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
             current_target = target(t, debug=True)
         else:
             current_target = target(t)
-        if not user_args.skip_defaults:
-            current_target.get_hibp()
+
+        if skip_default_queries:
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
+
+        if not user_args.skip_defaults:
+            scylla_up = check_scylla_online()
+            if scylla_up:
+                current_target.get_scylla(query)
+
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
@@ -135,7 +145,7 @@ def h8mail(user_args):
             else:
                 local_found = local_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found)
+                breached_targets = local_to_targets(breached_targets, local_found, user_args)
     # Handle gzip search
     if user_args.local_gzip_src:
         for arg in user_args.local_gzip_src:
@@ -145,7 +155,7 @@ def h8mail(user_args):
             else:
                 local_found = local_gzip_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found)
+                breached_targets = local_to_targets(breached_targets, local_found, user_args)
 
     print_results(breached_targets, user_args.hide)
 

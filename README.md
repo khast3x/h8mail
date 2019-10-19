@@ -1,4 +1,4 @@
-<p align="center">
+ <p align="center">
 <a href="https://github.com/khast3x/h8mail/releases/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
 </p>
 
@@ -11,7 +11,7 @@
 
 ----
 <p align="center">
-<a href="https://khast3x.club/2019/08/14/h8mail_2.3-release/?ref=readmebutton" First Anniversary update, feedback and pull requests are welcomed heart birthday"> <img src="https://i.postimg.cc/L83gRWvc/button-click-here-to-read-the-official-write-up.png"  title="h8maillogo">
+<a href="https://khast3x.club/h8mail/2019/10/19/h8mail_2.4-release/?ref=readmebutton" First Anniversary update, feedback and pull requests are welcomed heart birthday"> <img src="https://i.postimg.cc/L83gRWvc/button-click-here-to-read-the-official-write-up.png"  title="h8maillogo">
 </p>
 
 
@@ -83,21 +83,21 @@
 
 ####  APIs
 
-| Service                                                          	|                             Functions                             	|           Status           	|
-|------------------------------------------------------------------	|:-----------------------------------------------------------------:	|:--------------------------:	|
-| [HaveIBeenPwned(v3)](https://haveibeenpwned.com/)                    	|                      Number of email breaches                     	|     :white_check_mark: :key:    	|
-| [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) :new: 	| URLs of text files mentioning targets                             	| :white_check_mark: :key:         	|
-| [Hunter.io](https://hunter.io/) - Public                         	|                      Number of related emails                     	|     :white_check_mark:     	|
-| [Hunter.io](https://hunter.io/) - Service (free tier)            	|                 Cleartext related emails, Chasing                 	|  :white_check_mark: :key:  	|
-| [WeLeakInfo](https://weleakinfo.com/) - Public :new:             	|                Number of search-able breach results               	|  :white_check_mark: :key:  	|
-| [WeLeakInfo](https://weleakinfo.com/) - Service :new:            	|        Cleartext passwords, hashs and salts, usernames, IPs       	|  :white_check_mark: :key:  	|
-| [Snusbase](https://snusbase.com/) - Service                      	| Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: 	|  :white_check_mark: :key:  	|
-| [Leak-Lookup](https://leak-lookup.com/) - Public :new:           	|                Number of search-able breach results               	| :white_check_mark: (:key:) 	|
-| [Leak-Lookup](https://leak-lookup.com/) - Service :new:          	|        Cleartext passwords, hashs and salts, usernames, IPs       	|  :white_check_mark: :key:  	|
-| [Emailrep.io](https://emailrep.io/) - :new:                      	|  Last seen in breaches, social media profiles                     	| :white_check_mark:         	|
+| Service                                                        |                             Functions                             |           Status           |
+|----------------------------------------------------------------|:-----------------------------------------------------------------:|:--------------------------:|
+| [HaveIBeenPwned(v3)](https://haveibeenpwned.com/)              |                      Number of email breaches                     |  :white_check_mark: :key:  |
+| [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) |               URLs of text files mentioning targets               |  :white_check_mark: :key:  |
+| [Hunter.io](https://hunter.io/) - Public                       |                      Number of related emails                     |     :white_check_mark:     |
+| [Hunter.io](https://hunter.io/) - Service (free tier)          |                 Cleartext related emails, Chasing                 |  :white_check_mark: :key:  |
+| [WeLeakInfo](https://weleakinfo.com/) - Public                 |                Number of search-able breach results               |  :white_check_mark: :key:  |
+| [WeLeakInfo](https://weleakinfo.com/) - Service                |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
+| [Snusbase](https://snusbase.com/) - Service                    | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: |  :white_check_mark: :key:  |
+| [Leak-Lookup](https://leak-lookup.com/) - Public               |                Number of search-able breach results               | :white_check_mark: (:key:) |
+| [Leak-Lookup](https://leak-lookup.com/) - Service              |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
+| [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark:     |
+| [Scylla.sh](https://scylla.sh/) - Service (free)               |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark:         |
 
 *:key: - API key required*  
-*:new: - new in h8mail v2+*
 
 
 -----
@@ -337,11 +337,12 @@ $ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610
 
 ## :tangerine: Supported custom queries
 
-|            | username | domain | hash | password |       ip       |
-|------------|:--------:|:------:|:----:|:--------:|:--------------:|
-| WeLeakInfo |    :white_check_mark:   |   :white_check_mark:  |  :white_check_mark: |    :white_check_mark:   |      :white_check_mark:       |
-| LeakLookup |    :white_check_mark:   |   :white_check_mark:  |      |    :white_check_mark:   |      :white_check_mark:       |
-| Snusbase   |    :white_check_mark:   |        |  :white_check_mark: |    :white_check_mark:   |      :white_check_mark:       |
+|            |      username      |       domain       |        hash        |      password      |         ip         |
+|------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| WeLeakInfo | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| LeakLookup | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: |
+| Snusbase   | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Scylla.sh  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 
 As of writing, some service providers are undergoing upgrades and might support additional queries.  
@@ -410,8 +411,8 @@ $ python3 -m h8mail -h
 * [WeLeakInfo](https://weleakinfo.com/) for being developer friendly  
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
-* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)
-
+* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
+* [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 
 -----
 

@@ -30,6 +30,7 @@ class local_breach_target:
         print("Path: {}".format(self.filepath))
         print("Line: {}".format(self.line))
         print("Content: {}".format(self.content))
+        print()
 
 
 class target:
@@ -79,34 +80,37 @@ class target:
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if self.debug:
-                print(
-                    c.fg.lightred + "\nDEBUG: Sent the following---------------------"
-                )
+                c.debug_news("DEBUG: Sent the following---------------------")
                 print(self.headers)
                 print(url, meth, data, params)
-                print("DEBUG: Received the following---------------------")
-                print(response.url)
-                print("\nDEBUG: RESPONSE HEADER---------------")
+                c.debug_news("DEBUG: Received the following---------------------")
+                c.debug_news(response.url)
+                c.debug_news("DEBUG: RESPONSE HEADER---------------------")
                 print(
                     "\n".join(
                         "{}: {}".format(k, v) for k, v in response.headers.items()
                     )
                 )
-                print("\nDEBUG: RESPONSE BODY---------------")
+                c.debug_news("DEBUG: RESPONSE BODY---------------------")
                 print(json.dumps(response.json(), indent=2))
-                print(c.reset)
+                print(response)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)
+            print(url)
             print(ex)
             print(response)
         return response
 
-    # Soon to be deprecated
+    # Deprecated
     def get_hibp(self):
         try:
             sleep(1.3)
             c.info_news(c.bold + "HIBP free tier will stop working on the 2019/08/18")
-            c.info_news(c.bold + "You can already use a purchased API key using h8mail (config file)" + c.reset)
+            c.info_news(
+                c.bold
+                + "You can already use a purchased API key using h8mail (config file)"
+                + c.reset
+            )
             url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
                 self.target
             )
@@ -142,7 +146,7 @@ class target:
             c.bad_news("HIBP error: " + self.target)
             print(ex)
 
-    # Soon to be deprecated
+    # Deprecated
     def get_hibp_pastes(self):
         try:
             sleep(1.3)
@@ -291,6 +295,10 @@ class target:
                 data = response.json()
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
+                    if data["references"] == 1:
+                        self.data.append(("EMAILREP_LEAKS", "{} leaked credential".format(data["references"])))
+                    else:
+                        self.data.append(("EMAILREP_LEAKS", "{} leaked credentials".format(data["references"])))
                     c.good_news(
                         "Found {num} breaches for {target} using emailrep.io".format(
                             num=data["references"], target=self.target
@@ -316,6 +324,60 @@ class target:
                 )
         except Exception as ex:
             c.bad_news("emailrep.io error: " + self.target)
+            print(ex)
+
+    def get_scylla(self, user_query="email"):
+        try:
+            sleep(0.5)
+            self.headers.update({"Accept": "application/json"})
+            if user_query == "email":
+                uri_scylla = 'Email: "' + self.target + '"'
+            elif user_query == "password":
+                uri_scylla = 'Password: "' + self.target + '"'
+            elif user_query == "username":
+                uri_scylla = 'User: "' + self.target + '"'
+            elif user_query == "ip":
+                uri_scylla = 'IP: "' + self.target + '"'
+            elif user_query == "hash":
+                uri_scylla = 'Hash: "' + self.target + '"'
+            elif user_query == "domain":
+                uri_scylla = 'Email: "*@' + self.target + '"'
+            url = "https://scylla.sh/search?q={}".format(
+                requests.utils.requote_uri(uri_scylla)
+            )
+            response = self.make_request(url)
+            self.headers.popitem()
+            if response.status_code not in [200, 404]:
+                c.bad_news("Could not contact scylla.sh for " + self.target)
+                print(response.status_code)
+                print(response)
+                return
+            data = response.json()
+            for d in data:
+                for field, k in d["_source"].items():
+                    if "User" in field and k is not None:
+                        self.data.append(("SCYLLA_USERNAME", k))
+                        self.pwned += 1
+                    if "Email" in field and k is not None and user_query is not "email":
+                        self.data.append(("SCYLLA_EMAIL", k))
+                        self.pwned += 1
+                    if "Password" in field and k is not None:
+                        self.data.append(("SCYLLA_PASSWORD", k))
+                        self.pwned += 1
+                    if "PassHash" in field and k is not None:
+                        self.data.append(("SCYLLA_HASH", k))
+                        self.pwned += 1
+                    if "PassSalt" in field and k is not None:
+                        self.data.append(("SCYLLA_HASHSALT", k))
+                        self.pwned += 1
+                    if "IP" in field and k is not None:
+                        self.data.append(("SCYLLA_LASTIP", k))
+                        self.pwned += 1
+                    if "Domain" in field and k is not None:
+                        self.data.append(("SCYLLA_SOURCE", k))
+                        self.pwned += 1
+        except Exception as ex:
+            c.bad_news("scylla.sh error: " + self.target)
             print(ex)
 
     def get_hunterio_public(self):
@@ -381,8 +443,6 @@ class target:
                 )
             )
             for result in response["result"]:
-                if result["tablenr"] and self.not_exists(result["tablenr"]):
-                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
                 if result["username"]:
                     self.data.append(("SNUS_USERNAME", result["username"]))
                 if result["email"] and self.not_exists(result["email"]):
@@ -404,6 +464,8 @@ class target:
                         self.pwned += 1
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
+                if result["tablenr"] and self.not_exists(result["tablenr"]):
+                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
 
         except Exception as ex:
             c.bad_news("Snusbase error with {target}".format(target=self.target))
@@ -456,15 +518,6 @@ class target:
                     if self.not_exists(db):
                         self.data.append(("LKLP_SOURCE", db))
                     for d in data:
-                        if "password" in d.keys():
-                            if "plaintext" in d:
-                                self.pwned += 1
-                                self.data.append(("LKLP_HASH", d["password"]))
-                                b_counter += 1
-                            else:
-                                self.pwned += 1
-                                self.data.append(("LKLP_PASSWORD", d["password"]))
-                                b_counter += 1
                         if "username" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_USERNAME", d["username"]))
@@ -477,6 +530,15 @@ class target:
                             self.data.append(
                                 ("LKLP_RELATED", d["email_address"].strip())
                             )
+                        if "password" in d.keys():
+                            if "plaintext" in d:
+                                self.pwned += 1
+                                self.data.append(("LKLP_HASH", d["password"]))
+                                b_counter += 1
+                            else:
+                                self.pwned += 1
+                                self.data.append(("LKLP_PASSWORD", d["password"]))
+                                b_counter += 1
 
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup (private)".format(
@@ -533,18 +595,18 @@ class target:
                 if response["Total"] == 0:
                     return
                 for result in response["Data"]:
+                    if "Username" in result:
+                        self.data.append(("WLI_USERNAME", result["Username"]))
+                    if "Email" in result and self.not_exists(result["Email"]):
+                        self.data.append(("WLI_RELATED", result["Email"].strip()))
                     if "Password" in result:
                         self.data.append(("WLI_PASSWORD", result["Password"]))
                         self.pwned += 1
                     if "Hash" in result:
                         self.data.append(("WLI_HASH", result["Hash"]))
                         self.pwned += 1
-                    if "Username" in result:
-                        self.data.append(("WLI_USERNAME", result["Username"]))
                     if "Database" in result and self.not_exists(result["Database"]):
                         self.data.append(("WLI_SOURCE", result["Database"]))
-                    if "Email" in result and self.not_exists(result["Email"]):
-                        self.data.append(("WLI_RELATED", result["Email"].strip()))
         except Exception as ex:
             c.bad_news(
                 "WeLeakInfo error with {target} (private)".format(target=self.target)

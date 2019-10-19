@@ -411,8 +411,8 @@ $ python3 -m h8mail -h
 * [WeLeakInfo](https://weleakinfo.com/) for being developer friendly  
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
-* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)
-
+* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
+* [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 
 -----
 

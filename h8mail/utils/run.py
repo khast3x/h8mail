@@ -42,12 +42,12 @@ def target_factory(targets, user_args):
     init_targets_len = len(targets)
 
     query = "email"
-    
+    skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        user_args.skip_defaults = True
+        skip_default_queries = False
     
-    scylla_up = check_scylla_online()
+    scylla_up = False
     
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
@@ -55,11 +55,16 @@ def target_factory(targets, user_args):
             current_target = target(t, debug=True)
         else:
             current_target = target(t)
-        if not user_args.skip_defaults:
+
+        if skip_default_queries:
             current_target.get_hunterio_public()
             current_target.get_emailrepio()
-        if scylla_up:
-            current_target.get_scylla(query)
+
+        if not user_args.skip_defaults:
+            scylla_up = check_scylla_online()
+            if scylla_up:
+                current_target.get_scylla(query)
+
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])

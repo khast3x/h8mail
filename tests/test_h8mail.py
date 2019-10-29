@@ -8,6 +8,7 @@ import unittest
 
 from h8mail.utils import run
 from h8mail.utils import classes
+from h8mail.utils import helpers
 import sys
 import time
 
@@ -29,5 +30,7 @@ class TestH8mail(unittest.TestCase):
     target = classes.target("test@test.ca")
     target.get_emailrepio()
     target.get_hunterio_public()
+    if helpers.check_scylla_online():
+        target.get_scylla()
     run.print_results([target])
     run.print_summary(start_time, [target])

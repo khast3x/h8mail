@@ -195,5 +195,6 @@ def check_scylla_online():
         if re.status_code == 200:
             c.good_news("scylla.sh is up")
             return True
+        return False
     except Exception:
         c.info_news("scylla.sh is down, skipping")

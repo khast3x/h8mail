@@ -66,7 +66,7 @@ class target:
         return True
 
     def make_request(
-        self, url, meth="GET", timeout=10, redirs=True, data=None, params=None
+        self, url, meth="GET", timeout=10, redirs=True, data=None, params=None, verify=True
     ):
         try:
             response = requests.request(
@@ -77,6 +77,7 @@ class target:
                 allow_redirects=redirs,
                 data=data,
                 params=params,
+                verify=verify,
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if self.debug:
@@ -92,8 +93,8 @@ class target:
                     )
                 )
                 c.debug_news("DEBUG: RESPONSE BODY---------------------")
-                print(json.dumps(response.json(), indent=2))
-                print(response)
+                print(response.content)
+                # print(response)
         except Exception as ex:
             c.bad_news("Request could not be made for " + self.target)
             print(url)
@@ -345,7 +346,7 @@ class target:
             url = "https://scylla.sh/search?q={}".format(
                 requests.utils.requote_uri(uri_scylla)
             )
-            response = self.make_request(url)
+            response = self.make_request(url, verify=False)
             self.headers.popitem()
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact scylla.sh for " + self.target)

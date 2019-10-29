@@ -186,12 +186,15 @@ def check_scylla_online():
     """
     Checks if scylla.sh is online
     """
+    # Supress SSL Warning on UI
     try:
+        requests.packages.urllib3.disable_warnings()
         re = requests.head(
-            url="https://scylla.sh"
+            url="https://scylla.sh", verify=False
         )
         if re.status_code == 200:
             c.good_news("scylla.sh is up")
             return True
+        return False
     except Exception:
         c.info_news("scylla.sh is down, skipping")

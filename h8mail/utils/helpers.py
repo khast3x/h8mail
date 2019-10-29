@@ -67,7 +67,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ECHO MIKE" ',
+            "Version " + __version__ + ' - "ECHO MIKE - HOTFIX 1" ',
             c.reset,
         )
 

@@ -210,7 +210,7 @@ def main():
         "-u",
         "--url",
         dest="user_urls",
-        help="Either string inputs or files. Supports URL pattern matching from input or file, filepath globing and multiple arguments. Will download passed URLs page and parse it for emails",
+        help="Either string inputs or files. Supports URL pattern matching from input or file, filepath globing and multiple arguments. Parse URLs page for emails. Requires http:// or https:// in URL.",
         nargs="+",
     )
     parser.add_argument(

@@ -181,8 +181,9 @@ $ docker run -ti kh4st3x00/h8mail -h
 ##  :tangerine: Usage
 
 ```bash
-usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]] [-q USER_QUERY]
-              [--loose] [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
+usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]]
+              [-u USER_URLS [USER_URLS ...]] [-q USER_QUERY] [--loose]
+              [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
@@ -197,6 +198,11 @@ optional arguments:
                         Either string inputs or files. Supports email pattern
                         matching from input or file, filepath globing and
                         multiple arguments
+  -u USER_URLS [USER_URLS ...], --url USER_URLS [USER_URLS ...]
+                        Either string inputs or files. Supports URL pattern
+                        matching from input or file, filepath globing and
+                        multiple arguments. Parse URLs page for emails.
+                        Requires http:// or https:// in URL.
   -q USER_QUERY, --custom-query USER_QUERY
                         Perform a custom query. Supports username, password,
                         ip, hash, domain. Performs an implicit "loose" search

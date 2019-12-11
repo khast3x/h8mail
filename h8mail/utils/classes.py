@@ -66,7 +66,7 @@ class target:
         return True
 
     def make_request(
-        self, url, meth="GET", timeout=10, redirs=True, data=None, params=None, verify=True
+        self, url, meth="GET", timeout=20, redirs=True, data=None, params=None, verify=True
     ):
         try:
             response = requests.request(

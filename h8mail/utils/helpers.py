@@ -67,7 +67,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ECHO MIKE - HOTFIX 1" ',
+            "Version " + __version__ + ' - "ECHO MIKE" ',
             c.reset,
         )
 
@@ -79,11 +79,11 @@ def fetch_emails(target, user_args):
     """
     if user_args.loose or user_args.user_query is not None:
         t = target.split(" ")
-        print(t)
+        # print(t)
         return t
     e = re.findall(r"[\w\.-]+@[\w\.-]+", target)
     if e:
-        print(", ".join(e), c.reset)
+        # print(", ".join(e), c.reset)
         return e
     return None
 
@@ -96,7 +96,7 @@ def get_emails_from_file(targets_file, user_args):
     email_obj_list = []
     try:
         target_fd = open(targets_file).readlines()
-        print(targets_file)
+        c.info_news("Parsing emails from" + targets_file)
         for line in target_fd:
             e = fetch_emails(line, user_args)
             if e is None:

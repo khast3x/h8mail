@@ -62,7 +62,7 @@ def target_factory(targets, user_args):
 
         if not skip_default_queries:
             current_target.get_hunterio_public()
-            current_target.get_emailrepio()
+            # current_target.get_emailrepio()
 
         if scylla_up:
             current_target.get_scylla(query)
@@ -70,6 +70,8 @@ def target_factory(targets, user_args):
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
+            if "emailrep" in api_keys and query == "email":
+                current_target.get_emailrepio(api_keys["emailrep"])
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if "snusbase_token" in api_keys:
@@ -125,6 +127,8 @@ def h8mail(user_args):
             c.bad_news("No targets found in URLs. Quitting")
             exit(0)
 
+    c.info_news("Removing duplicates")
+    targets = list(set(targets))
     c.good_news("Targets:")
     for t in targets:
         c.good_news(t)
@@ -148,8 +152,6 @@ def h8mail(user_args):
             exit(0)
 
 
-    c.info_news("Removing duplicates")
-    targets = list(set(targets))
 
     # Launch
     breached_targets = target_factory(targets, user_args)

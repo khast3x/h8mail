@@ -281,9 +281,12 @@ class target:
             c.bad_news("HIBP v3 PASTE error: " + self.target)
             print(ex)
 
-    def get_emailrepio(self):
+    def get_emailrepio(self, api_key=""):
         try:
             sleep(0.5)
+            if len(api_key) != 0:
+                self.headers.update({"Key": api_key})
+            
             url = "https://emailrep.io/{}".format(self.target)
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
@@ -305,13 +308,13 @@ class target:
                             num=data["references"], target=self.target
                         )
                     )
-                if "never" in data["details"]["last_seen"]:
-                    return
-                self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
                         self.data.append(("EMAILREP_SOCIAL", profile))
                 c.good_news("Found social profils")
+                if "never" in data["details"]["last_seen"]:
+                    return
+                self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
 
             elif response.status_code == 404:
                 c.info_news(
@@ -323,6 +326,8 @@ class target:
                         code=response.status_code, target=self.target
                     )
                 )
+            if len(api_key) != 0:
+                self.headers.popitem()
         except Exception as ex:
             c.bad_news("emailrep.io error: " + self.target)
             print(ex)

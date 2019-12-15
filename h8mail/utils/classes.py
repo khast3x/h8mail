@@ -286,7 +286,9 @@ class target:
             sleep(0.5)
             if len(api_key) != 0:
                 self.headers.update({"Key": api_key})
-            
+                c.info_news("["+self.target+"]>[emailrep.io+key]")
+            else:
+                c.info_news("["+self.target+"]>[emailrep.io]")
             url = "https://emailrep.io/{}".format(self.target)
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
@@ -334,6 +336,7 @@ class target:
 
     def get_scylla(self, user_query="email"):
         try:
+            c.info_news("["+self.target+"]>[scylla.sh]")
             sleep(0.5)
             self.headers.update({"Accept": "application/json"})
             if user_query == "email":

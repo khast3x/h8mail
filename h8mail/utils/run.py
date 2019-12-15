@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Most imports are after python2/3 check further down
 import configparser
-import tempfile
 import argparse
 import os
 import re
@@ -50,19 +49,20 @@ def target_factory(targets, user_args):
         skip_default_queries = False
 
     scylla_up = False
-    if not user_args.skip_defaults:
+    if user_args.skip_defaults is False:
         scylla_up = check_scylla_online()
 
+  
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
             current_target = target(t, debug=True)
         else:
             current_target = target(t)
-
         if not skip_default_queries:
-            current_target.get_hunterio_public()
-            # current_target.get_emailrepio()
+            if not user_args.skip_defaults:
+                current_target.get_hunterio_public()
+                current_target.get_emailrepio()
 
         if scylla_up:
             current_target.get_scylla(query)
@@ -121,17 +121,10 @@ def h8mail(user_args):
 
     targets = []
     if user_args.user_urls:
-        with tempfile.TemporaryDirectory() as tmpdir:  # os.path.join to use
-            targets = target_urls(user_args, tmpdir)
+        targets = target_urls(user_args)
         if len(targets) == 0:
             c.bad_news("No targets found in URLs. Quitting")
             exit(0)
-
-    c.info_news("Removing duplicates")
-    targets = list(set(targets))
-    c.good_news("Targets:")
-    for t in targets:
-        c.good_news(t)
 
     # If we found emails from URLs, `targets` array already has stuff
     if len(targets) != 0:
@@ -139,18 +132,25 @@ def h8mail(user_args):
             user_args.user_targets = []
             user_args.user_targets.extend(targets)
 
-    # Find targets in user input or file
-    for arg in user_args.user_targets:
-        user_stdin_target = fetch_emails(arg, user_args)
-        if user_stdin_target:
-            targets.extend(user_stdin_target)
-        elif os.path.isfile(arg):
-            c.info_news("Reading from file " + arg)
-            targets.extend(get_emails_from_file(arg, user_args))
-        else:
-            c.bad_news("No targets found in user input. Quitting")
-            exit(0)
+    else: # Find targets in user input or file
+        if user_args.user_targets is not None: 
+            for arg in user_args.user_targets:
+                user_stdin_target = fetch_emails(arg, user_args)
+                if user_stdin_target:
+                    targets.extend(user_stdin_target)
+                elif os.path.isfile(arg):
+                    c.info_news("Reading from file " + arg)
+                    targets.extend(get_emails_from_file(arg, user_args))
+                else:
+                    c.bad_news("No targets found in user input. Quitting")
+                    exit(0)
 
+
+    c.info_news("Removing duplicates")
+    targets = list(set(targets))
+    c.good_news("Targets:")
+    for t in targets:
+        c.good_news(t)
 
 
     # Launch
@@ -195,8 +195,11 @@ def h8mail(user_args):
         save_results_csv(user_args.output_file, breached_targets)
 
 
-def main():
-
+def parse_args(args):
+    """
+    Seperate functions to make it easier to run tests
+    Pass args as an array
+    """
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"
     )
@@ -319,11 +322,16 @@ def main():
         default=False,
     ),
 
-    user_args = parser.parse_args()
+    return parser.parse_args(args)
+
+def main():
+
+    
     print_banner("warn")
     print_banner("version")
     print_banner()
     check_latest_version()
+    user_args = parse_args(sys.argv[1:])
     if user_args.gen_config:
         gen_config_file()
         exit(0)

@@ -8,6 +8,7 @@ import requests
 from .colors import colors as c
 from .version import __version__
 from .helpers import get_emails_from_file
+from .helpers import fetch_emails
 
 def fetch_urls(target):
     """
@@ -30,7 +31,7 @@ def get_urls_from_file(targets_file):
     Returns list of URLs.
     """
     email_obj_list = []
-    c.info_news("Parsing urls from " + targets_file)
+    c.info_news("Parsing urls from \t" + targets_file)
     try:
         target_fd = open(targets_file).readlines()
         for line in target_fd:
@@ -46,35 +47,35 @@ def get_urls_from_file(targets_file):
 
 
 
-def worker_url(url, tmpdir):
+def worker_url(url):
     """
     Fetches the URL without the h8mail UA
     Saves result to tempdir
     """
-    paramsUA = {"User-Agent": "Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/71.0"}
+    paramsUA = {"User-Agent": "h8mail/5.0 (X11; Linux i586; rv:31.0)"}
     try:
-        r = requests.get(url, params = paramsUA, allow_redirects=True)
-        # use r.text and save to tempfile
-        fname = url + ".html"
-        fname = fname.replace("/", "")
-        dest = os.path.join(tmpdir, fname)
-        if r.status_code == 200:
-            fd = open(dest, "w")
-            fd.write(r.text)
-            fd.close()
-            c.good_news("Fetched URL " + url + " (" + tmpdir + ")")
-
-        return dest
+        c.info_news("Worker fetching")
+        r = requests.get(url, params = paramsUA, allow_redirects=False)
+        c.info_news("Worker done fetch url")
+        print(f"Status code: {r.status_code}")
+    
+        e = re.findall(r"[\w\.-]+@[\w\.-]+", r.text)
+        print("debug toto")
+        print(e)
+        if e:
+            print(", ".join(e), c.reset)
+            return e
+        return None
     except Exception as ex:
         c.bad_news("URL fetch worker error:")
         print(ex)
 
 
-def target_urls(user_args, tmpdir):
+def target_urls(user_args):
     """
     For each user input with --url, check if its a file.
     If yes open and parse each line with regexp, else parse the input with regexp directly.
-    Uses a temp dir to download & parse html pages from URLs.
+    Parse html pages from URLs for email patterns.
     Returns list of email targets
     """
     try:
@@ -92,8 +93,8 @@ def target_urls(user_args, tmpdir):
                 urls.extend(e)
         
         for url in urls:
-            tmpfile = worker_url(url, tmpdir)
-            e = get_emails_from_file(tmpfile, user_args)
+            e = worker_url(url)
+            # e = get_emails_from_file(tmpfile, user_args)
             if e is None:
                 continue
             else:

@@ -12,6 +12,7 @@ import shutil
 import contextlib
 import os
 import tarfile
+import gzip
 import argparse
 from h8mail.utils import run
 from h8mail.utils import classes
@@ -51,9 +52,10 @@ def make_temp_directory():
         fd_creds = open(os.path.join(temp_dir, "test-creds.txt"), "w")
         fd_creds.writelines(creds)
         fd_creds.close()
-        tar = tarfile.open(os.path.join(temp_dir, "test-creds.tar"), "w")
+        tar = tarfile.open(os.path.join(temp_dir, "test-creds.tar.gz"), "w:gz")
         tar.add(os.path.join(temp_dir, "test-creds.txt"))
         tar.close()
+
         return temp_dir
     except Exception as e:
         print(e)
@@ -69,7 +71,7 @@ class TestH8mail(unittest.TestCase):
         print(os.listdir(self.temp_dir))
         self.filetargets = os.path.join(self.temp_dir, "test-emails.txt")
         self.filetxt = os.path.join(self.temp_dir, "test-creds.txt")
-        self.filegz = os.path.join(self.temp_dir, "test-creds.gz")
+        self.filegz = os.path.join(self.temp_dir, "test-creds.tar.gz")
         print("Test files generated in : " + self.temp_dir)
 
         # a = open(self.filetxt, "r")
@@ -94,10 +96,16 @@ class TestH8mail(unittest.TestCase):
         print_test_banner("TXT LOCAL")
         user_args_lb = run.parse_args(["-t", self.filetargets, "-lb", self.filetxt, "-sk"])
         run.h8mail(user_args_lb)
+        print_test_banner("TXT LOCAL-SINGLFILE")
+        user_args_lb = run.parse_args(["-t", self.filetargets, "-lb", self.filetxt, "-sk", "-sf"])
+        run.h8mail(user_args_lb)
 
         run.print_banner()
         print_test_banner("GZ LOCAL")
         user_args_gz = run.parse_args(["-t", self.filetargets, "-gz", self.filegz, "-sk"])
+        run.h8mail(user_args_gz)
+        print_test_banner("GZ LOCAL-SINGLEFILE")
+        user_args_gz = run.parse_args(["-t", self.filetargets, "-gz", self.filegz, "-sk", "-sf"])
         run.h8mail(user_args_gz)
 
     def test_003_url(self):

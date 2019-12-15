@@ -19,7 +19,6 @@ def find_files(to_parse, pattern=""):
     Can check for patterns such as 'gz'.
     """
     allfiles = []
-
     if "*" in to_parse:
         glob_result = glob.glob(to_parse)
         for g in glob_result:

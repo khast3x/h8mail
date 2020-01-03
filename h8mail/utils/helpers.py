@@ -51,20 +51,20 @@ def print_banner(b_type="intro"):
 	"""
         # print(c.bold, c.fg.pink, banner, c.reset)
         banner_tab = banner.splitlines()
-        code = 32
+        code = 33
         keep = True
         for b in banner_tab:
             clr = "\u001b[38;5;" + str(code) + "m "
             print(c.bold + clr + b + c.reset)
             if keep:
-                code += 35
+                code += 36
                 keep = False
             else:
                 keep = True
     elif "warn" in b_type:
         print(
             c.fg.pink,
-            "\th8mail is free & open-source. Please report scammers.\n\n",
+            "\t  Check out the new wiki!\n\t  http://bit.ly/37xaQVh\n\n",
             c.reset,
         )
     elif "version" in b_type:

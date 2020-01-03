@@ -18,7 +18,8 @@ def gen_config_file():
 ;leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
 ;leak-lookup_priv = 
 ;emailrep = 
-;dehashed = 
+;dehashed_email = 
+;dehashed_key =
 """
         dest_config.write(config)
         c.good_news(

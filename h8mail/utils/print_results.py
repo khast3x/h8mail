@@ -51,4 +51,6 @@ def print_results(results, hide=False):
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
                 if "SCYLLA" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
+                if "DEHASHED" in t.data[i][0]:
+                    c.print_result(t.target, t.data[i][1], t.data[i][0])
     

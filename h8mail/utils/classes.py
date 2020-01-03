@@ -66,7 +66,7 @@ class target:
         return True
 
     def make_request(
-        self, url, meth="GET", timeout=20, redirs=True, data=None, params=None, verify=True
+        self, url, meth="GET", timeout=20, redirs=True, data=None, params=None, verify=True, auth=None
     ):
         try:
             response = requests.request(
@@ -78,6 +78,7 @@ class target:
                 data=data,
                 params=params,
                 verify=verify,
+                auth=auth,
             )
             # response = requests.request(url="http://127.0.0.1:8000", headers=self.headers, method=meth, timeout=timeout, allow_redirects=redirs, data=data, params=params)
             if self.debug:
@@ -653,11 +654,32 @@ class target:
                 "WeLeakInfo error with {target} (public)".format(target=self.target)
             )
             print(ex)
-    def get_dehashed(self, api_keys):
+    def get_dehashed(self, api_email, api_key, user_query):
         try:
-            url = "https://dehashed.com/search"
+            if user_query == "hash":
+                user_query == "hashed_password"
+            if user_query == "ip":
+                user_query == "ip_address"
+            url = "https://dehashed.com/search?query="
+            search_query = user_query + ":" + "\"" + self.target + "\""
             self.headers.update({'Accept': 'application/json'})
-            print("toto")
+            req = self.make_request(url + search_query, meth="GET", timeout=30, auth=(api_email, api_key))
+            if req.status_code == 200:
+                response = req.json()
+                for result in response["entries"]:
+                    # Maybe instead first check len of content - does it break if None?
+                    if "username" in result and result["username"] is not None:
+                        self.data.append(("DEHASHED_USERNAME", result["username"]))
+                    if "email" in result and self.not_exists(result["email"]) and result["email"] is not None:
+                        self.data.append(("DEHASHED_RELATED", result["email"].strip()))
+                    if "password" in result and result["password"] is not None:
+                        self.data.append(("DEHASHED_PASSWORD", result["password"]))
+                        self.pwned += 1
+                    if "hashed_password" in result and result["hashed_password"] is not None:
+                        self.data.append(("DEHASHED_HASH", result["hashed_password"]))
+                        self.pwned += 1
+                    if "obtained_from" in result and self.not_exists(result["obtained_from"]):
+                        self.data.append(("DEHASHED_SOURCE", result["obtained_from"]))
             self.headers.popitem()
         except Exception as ex:
             c.bad_news(

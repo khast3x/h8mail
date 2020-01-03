@@ -50,9 +50,8 @@ def get_urls_from_file(targets_file):
 def worker_url(url):
     """
     Fetches the URL without the h8mail UA
-    Saves result to tempdir
     """
-    paramsUA = {"User-Agent": "h8mail/5.0 (X11; Linux i586; rv:31.0)"}
+    paramsUA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"}
     try:
         c.info_news("Worker fetching")
         r = requests.get(url, params = paramsUA, allow_redirects=False)
@@ -60,7 +59,6 @@ def worker_url(url):
         print(f"Status code: {r.status_code}")
     
         e = re.findall(r"[\w\.-]+@[\w\.-]+", r.text)
-        print("debug toto")
         print(e)
         if e:
             print(", ".join(e), c.reset)

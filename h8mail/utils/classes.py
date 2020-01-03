@@ -669,17 +669,17 @@ class target:
                 for result in response["entries"]:
                     # Maybe instead first check len of content - does it break if None?
                     if "username" in result and result["username"] is not None:
-                        self.data.append(("DEHASHED_USERNAME", result["username"]))
+                        self.data.append(("DHASHD_USERNAME", result["username"]))
                     if "email" in result and self.not_exists(result["email"]) and result["email"] is not None:
-                        self.data.append(("DEHASHED_RELATED", result["email"].strip()))
+                        self.data.append(("DHASHD_RELATED", result["email"].strip()))
                     if "password" in result and result["password"] is not None:
-                        self.data.append(("DEHASHED_PASSWORD", result["password"]))
+                        self.data.append(("DHASHD_PASSWORD", result["password"]))
                         self.pwned += 1
                     if "hashed_password" in result and result["hashed_password"] is not None:
-                        self.data.append(("DEHASHED_HASH", result["hashed_password"]))
+                        self.data.append(("DHASHD_HASH", result["hashed_password"]))
                         self.pwned += 1
                     if "obtained_from" in result and self.not_exists(result["obtained_from"]):
-                        self.data.append(("DEHASHED_SOURCE", result["obtained_from"]))
+                        self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
             self.headers.popitem()
         except Exception as ex:
             c.bad_news(

@@ -20,24 +20,15 @@
 
 ## :book: Table of Content
 
+- [Table of Content](#book-Table-of-Content)
 - [Features](#tangerine-Features)
-- [Demo](#Demo)
-  - [Out of the box](#Out-of-the-box)
-  - [With API services, local breach search & chasing enabled](#With-API-services-local-breach-search--chasing-enabled)
-- [APIs](#APIs)
-- [Install](#tangerine-Install)
-- [Update](#Update)
-- [Docker](#Docker)
+    - [APIs](#APIs)
 - [Usage](#tangerine-Usage)
-- [Configuration file & keys](#tangerine-Configuration-file--keys)
-- [Supported custom queries](#tangerine-Supported-custom-queries)
-- [Troubleshooting](#tangerine-Troubleshooting)
-  - [Python version & Kali](#Python-version--Kali)
-  - [Windows](#Windows)
-  - [OSX](#OSX)
+- [Usage examples](#tangerine-Usage-examples)
 - [Thanks & Credits](#tangerine-Thanks--Credits)
 - [Related open source projects](#tangerine-Related-open-source-projects)
-- [Notes](#tangerine-Notes)
+
+
 ----
 
 
@@ -100,81 +91,7 @@
 *:key: - API key required*  
 
 
------
 
-## :tangerine: Install
-
-
-### Requirements
-
-h8mail 2.0 only requires the python `requests` module to run.
-
-### Stable release (best)
-
-**To install h8mail, run this command in your terminal:**  
-```bash
-$ pip3 install h8mail
-```
-
-**And that's basically it**.  
-This is the preferred method to install h8mail, as it will always install the most recent stable release.
-
-*Please note*:  
-If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
-you through the process.  
-For troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
-
-[![h8mail-install.gif](https://i.postimg.cc/Vs9vznN3/h8mail-install.gif)](https://postimg.cc/c6H0mKwm)
-*The above illustration showcases installing h8mail using `--user`*
-
-
-
-### From sources
-
-The sources for h8mail can be downloaded from the [Github repo](https://github.com/khast3x/h8mail).
-
-You can either clone the public repository:
-
-```bash
-$ git clone git://github.com/khast3x/h8mail
-```
-Or download the [tarball](https://github.com/khast3x/h8mail/tarball/master):
-
-```bash
-$ curl  -OL https://github.com/khast3x/h8mail/tarball/master
-```
-Next, decompress the downloaded archive.  
-Once you have a copy of the source, you can install it with:
-
-```bash
-$ cd h8mail/
-$ python setup.py install
-$ h8mail -h
-```
-
-Or just running it as a module:
-```bash
-$ cd h8mail/
-$ python -m h8mail -h
-```
-
-----
-
-## Update
-
-```bash
-$ pip3 install --upgrade h8mail
-```
-
-Use `--user` at the end if getting a permission message from pip
-
-----
-
-## Docker
-
-```bash
-$ docker run -ti kh4st3x00/h8mail -h
-```
 
 -----
 
@@ -300,112 +217,6 @@ $ h8mail -t JSmith89 -q username -k "weleakinfo_priv=ABCDE123"
 $ h8mail -t 42.202.0.42 -q ip -c h8mail_config_priv.ini -ch 2 --power-chase
 ```
 
------
-
-## :tangerine: Configuration file & keys
-
-h8mail can generate a template configuration file in the current working directory using `-g`.  
-h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
-
-*(links contain refs)*  
-You can purchase API keys for:  
-- [HaveIBeenPwned](https://haveibeenpwned.com/API/Key?ref=h8mail)  
-- [hunter.io](https://hunter.io/users/sign_up?utm_medium=api?ref=h8mail)
-- [Snusbase](https://snusbase.com/?ref=h8mail)
-- [WeLeakInfo](https://weleakinfo.com/?ref=h8mail)
-- [Leak-Lookup](https://leak-lookup.com/?ref=h8mail)
-
-
-The configuration file format is as follows:
-```ini
-[h8mail]
-hunterio =
-hibp =
-snusbase_url =
-snusbase_token =
-; leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
-leak-lookup_priv =
-weleakinfo_pub =
-weleakinfo_priv =
-```
-
-In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. To activate, uncomment the line and make sure to pass to config file. The API can sometimes timeout. If that's the case, simply relaunch. 
-
-
-
-Keys and their respective values can also be passed from the command line, with the `-k` option. Format is like so:  
-```
-$ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
-$ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610a6ff9263"
-```
-
------
-
-## :tangerine: Supported custom queries
-
-|            |      username      |       domain       |        hash        |      password      |         ip         |
-|------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| WeLeakInfo | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| LeakLookup | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: |
-| Snusbase   | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Scylla.sh  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-
-As of writing, some service providers are undergoing upgrades and might support additional queries.  
-To use a custom query, use `-q` followed by the appropriate keyword 
-
-
------
-
-## :tangerine: Troubleshooting
-
-
-
-### Python version & Kali
-
-* The above instructions assume you are running **python3 as default**. If unsure, type the following in your terminal.  
-It should be either `Python 3.*` or `Python 2.*` :
-```bash
-$ python --version
-``` 
-
-* If you are running python2 as default :  
-Make sure you have python3.6+ installed, then replace `python` commands with explicit `python3` commands.
-
-* If you have not set your venvs, you might get a permission error saying `Consider using the --user option or check the permissions.`  
-Simply add --user like so:
-```bash
-$ pip install --user h8mail
-```
-
-### Windows
-
-* `h8mail` uses ANSI color escape characters. Windows doesn't know how to show the colors, and will show gibberish instead.  
-Fortunately, you can use [Cmder](https://cmder.net/), which is an excellent Windows CMD prompt alternative
-* If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/). `pip` will also need to be in your `PATH` environment variable.
-* If you're still having trouble with `pip`, you can do the following:
-```bash
-# Check python version, should be 3.6+
-C:> python --version
-# To have python handle installation of pip
-C:> python -m ensurepip
-# To launch pip as a module
-C:> python -m pip install h8mail
-# To launch h8mail as a module
-C:> python -m h8mail --help
-```
-
-To find where `pip` installed h8mail, use `pip3 show h8mail`
-
-### OSX
-
-* As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.
-* If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
-* Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
-* Basically try this if installed and not executing, check Windows instructions for further examples:
-```bash
-$ python3 -m h8mail -h
-```  
 
 -----
 

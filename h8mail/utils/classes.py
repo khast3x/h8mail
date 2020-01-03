@@ -524,8 +524,6 @@ class target:
             if "false" in response["error"] and len(response["message"]) != 0:
                 b_counter = 0
                 for db, data in response["message"].items():
-                    if self.not_exists(db):
-                        self.data.append(("LKLP_SOURCE", db))
                     for d in data:
                         if "username" in d.keys():
                             self.pwned += 1
@@ -548,6 +546,8 @@ class target:
                                 self.pwned += 1
                                 self.data.append(("LKLP_PASSWORD", d["password"]))
                                 b_counter += 1
+                    if self.not_exists(db):
+                        self.data.append(("LKLP_SOURCE", db))
 
                 c.good_news(
                     "Found {num} entries for {target} using LeakLookup (private)".format(

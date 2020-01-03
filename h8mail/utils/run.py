@@ -90,6 +90,9 @@ def target_factory(targets, user_args):
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
+            if "dehashed" in api_keys:
+                current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
+            # Chasing
             if user_args.chase_limit and counter < init_targets_len:
                 user_args_force_email = user_args
                 user_args_force_email.user_query = "email"

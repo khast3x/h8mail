@@ -653,3 +653,14 @@ class target:
                 "WeLeakInfo error with {target} (public)".format(target=self.target)
             )
             print(ex)
+    def get_dehashed(self, api_keys):
+        try:
+            url = "https://dehashed.com/search"
+            self.headers.update({'Accept': 'application/json'})
+            print("toto")
+            self.headers.popitem()
+        except Exception as ex:
+            c.bad_news(
+                "Dehashed error with {target}".format(target=self.target)
+            )
+            print(ex)

@@ -33,8 +33,11 @@ def target_factory(targets, user_args):
     """
     Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
     For each target, launch target.methods() associated to found config artifacts.
-    Handles the hunter.io chase logic with counters from enumerate()
+    Handles chase logic with counters from enumerate()
     """
+    # Removing duplicates here to avoid dups from chasing
+    targets = list(set(targets))
+
     finished = []
     if user_args.config_file is not None or user_args.cli_apikeys is not None:
         api_keys = get_config_from_file(user_args)
@@ -46,7 +49,7 @@ def target_factory(targets, user_args):
     skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        skip_default_queries = False
+        skip_default_queries = True #??
 
     scylla_up = False
     if user_args.skip_defaults is False:
@@ -95,15 +98,15 @@ def target_factory(targets, user_args):
                     current_target.get_dehashed(api_keys["dehashed_email"], api_keys["dehashed_key"], query)
                 else:
                     c.bad_news("Missing Dehashed email")
-            # Chasing
-            if user_args.chase_limit and counter < init_targets_len:
-                user_args_force_email = user_args
-                user_args_force_email.user_query = "email"
-                user_args_force_email.chase_limit -= 1
-                finished_chased = target_factory(
-                    chase(current_target, user_args), user_args_force_email
-                )
-                finished.extend((finished_chased))
+        # Chasing
+        if user_args.chase_limit and counter <= init_targets_len:
+            user_args_force_email = user_args
+            user_args_force_email.user_query = "email"
+            user_args_force_email.chase_limit -= 1
+            finished_chased = target_factory(
+                chase(current_target, user_args), user_args_force_email
+            )
+            finished.extend((finished_chased))
         finished.append(current_target)
     return finished
 
@@ -151,13 +154,12 @@ def h8mail(user_args):
                     c.bad_news("No targets found in user input. Quitting")
                     exit(0)
 
-
     c.info_news("Removing duplicates")
     targets = list(set(targets))
+    
     c.good_news("Targets:")
     for t in targets:
         c.good_news(t)
-
 
     # Launch
     breached_targets = target_factory(targets, user_args)

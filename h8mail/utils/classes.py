@@ -368,22 +368,22 @@ class target:
                     if "User" in field and k is not None:
                         self.data.append(("SCYLLA_USERNAME", k))
                         self.pwned += 1
-                    if "Email" in field and k is not None and user_query is not "email":
+                    elif "Email" in field and k is not None and user_query is not "email":
                         self.data.append(("SCYLLA_EMAIL", k))
                         self.pwned += 1
-                    if "Password" in field and k is not None:
+                    elif "Password" in field and k is not None:
                         self.data.append(("SCYLLA_PASSWORD", k))
                         self.pwned += 1
-                    if "PassHash" in field and k is not None:
+                    elif "PassHash" in field and k is not None:
                         self.data.append(("SCYLLA_HASH", k))
                         self.pwned += 1
-                    if "PassSalt" in field and k is not None:
+                    elif "PassSalt" in field and k is not None:
                         self.data.append(("SCYLLA_HASHSALT", k))
                         self.pwned += 1
-                    if "IP" in field and k is not None:
+                    elif "IP" in field and k is not None:
                         self.data.append(("SCYLLA_LASTIP", k))
                         self.pwned += 1
-                    if "Domain" in field and k is not None:
+                    elif "Domain" in field and k is not None:
                         self.data.append(("SCYLLA_SOURCE", k))
                         self.pwned += 1
         except Exception as ex:

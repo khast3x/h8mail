@@ -85,6 +85,8 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Service              |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
 | [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark:     |
 | [Scylla.sh](https://scylla.sh/) - Service (free)               |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark:         |
+| [Dehashed.sh](https://dehashed.com/) - Service                 |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark: :key:   |
+
 
 *:key: - API key required*  
 
@@ -126,8 +128,8 @@ optional arguments:
                         recognition. Use spaces as pattern seperators
   -c CONFIG_FILE [CONFIG_FILE ...], --config CONFIG_FILE [CONFIG_FILE ...]
                         Configuration file for API keys. Accepts keys from
-                        Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and
-                        hunterio
+                        Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned,
+                        Emailrep, Dehashed and hunterio
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write CSV output
   -bc BC_PATH, --breachcomp BC_PATH
@@ -163,6 +165,7 @@ optional arguments:
   --gen-config, -g      Generates a configuration file template in the current
                         working directory & exits. Will overwrite existing
                         h8mail_config.ini file
+
 
 ```
 
@@ -228,7 +231,7 @@ $ h8mail -t 42.202.0.42 -q ip -c h8mail_config_priv.ini -ch 2 --power-chase
 * Logo generated using Hatchful by Shopify
 * [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
 * [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
-
+* [Dehashed](https://dehashed.com) for being developer friendly
 -----
 
 ## :tangerine: Related open source projects

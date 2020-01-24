@@ -243,7 +243,7 @@ def parse_args(args):
         "-c",
         "--config",
         dest="config_file",
-        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and hunterio",
+        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned, Emailrep, Dehashed and hunterio",
         nargs="+",
     )
     parser.add_argument(

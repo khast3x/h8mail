@@ -153,8 +153,8 @@ class colors:
                         colors.reset,
                     )
                 )
-
-        elif "HASH" in source:
+        # Underscore to avoid coloring like a HASH
+        elif "_HASH" in source:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
                     colors.fg.lightblue,

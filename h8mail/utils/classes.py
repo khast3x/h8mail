@@ -572,14 +572,34 @@ class target:
                         if "ipaddress" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_LASTIP", d["ipaddress"]))
-                            for tag in ["address", "address1", "address2", "country", "zip", "zipcode", "postcode", "state"]:
+                            for tag in [
+                                "address",
+                                "address1",
+                                "address2",
+                                "country",
+                                "zip",
+                                "zipcode",
+                                "postcode",
+                                "state",
+                            ]:
                                 if tag in d.keys():
                                     self.pwned += 1
-                                    self.data.append(("LKLP_GEO", d[tag] + " (" + tag + ")"))
-                            for tag in ["firstname", "middlename", "lastname", "mobile", "number", "userid"]:
+                                    self.data.append(
+                                        ("LKLP_GEO", d[tag] + " (type: " + tag + ")")
+                                    )
+                            for tag in [
+                                "firstname",
+                                "middlename",
+                                "lastname",
+                                "mobile",
+                                "number",
+                                "userid",
+                            ]:
                                 if tag in d.keys():
                                     self.pwned += 1
-                                    self.data.append(("LKLP_ID", d[tag] + " (" + tag + ")"))
+                                    self.data.append(
+                                        ("LKLP_ID", d[tag] + " (type: " + tag + ")")
+                                    )
                     if self.not_exists(db):
                         self.data.append(("LKLP_SOURCE", db))
 
@@ -730,6 +750,17 @@ class target:
                     ):
                         self.data.append(("DHASHD_HASH", result["hashed_password"]))
                         self.pwned += 1
+                    for tag in ["name", "vin", "address", "phone"]:
+                        if (
+                            tag in result
+                            and result[tag] is not None
+                            and len(result[tag].strip()) > 0
+                        ):
+                            self.data.append(
+                                ("DHASHD_ID", result[tag] + " (type: " + tag + ")")
+                            )
+                            self.pwned += 1
+
                     if "obtained_from" in result and self.not_exists(
                         result["obtained_from"]
                     ):

@@ -667,7 +667,6 @@ class target:
             if req.status_code == 200:
                 response = req.json()
                 for result in response["entries"]:
-                    # Maybe instead first check len of content - does it break if None?
                     if "username" in result and result["username"] is not None and len(result["username"].strip()) > 0:
                         self.data.append(("DHASHD_USERNAME", result["username"]))
                     if "email" in result and self.not_exists(result["email"]) and result["email"] is not None and len(result["email"].strip()) > 0:

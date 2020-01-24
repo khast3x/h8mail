@@ -66,7 +66,15 @@ class target:
         return True
 
     def make_request(
-        self, url, meth="GET", timeout=20, redirs=True, data=None, params=None, verify=True, auth=None
+        self,
+        url,
+        meth="GET",
+        timeout=20,
+        redirs=True,
+        data=None,
+        params=None,
+        verify=True,
+        auth=None,
     ):
         try:
             response = requests.request(
@@ -287,9 +295,9 @@ class target:
             sleep(0.5)
             if len(api_key) != 0:
                 self.headers.update({"Key": api_key})
-                c.info_news("["+self.target+"]>[emailrep.io+key]")
+                c.info_news("[" + self.target + "]>[emailrep.io+key]")
             else:
-                c.info_news("["+self.target+"]>[emailrep.io]")
+                c.info_news("[" + self.target + "]>[emailrep.io]")
             url = "https://emailrep.io/{}".format(self.target)
             response = self.make_request(url)
             if response.status_code not in [200, 404]:
@@ -303,9 +311,19 @@ class target:
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
                     if data["references"] == 1:
-                        self.data.append(("EMAILREP_LEAKS", "{} leaked credential".format(data["references"])))
+                        self.data.append(
+                            (
+                                "EMAILREP_LEAKS",
+                                "{} leaked credential".format(data["references"]),
+                            )
+                        )
                     else:
-                        self.data.append(("EMAILREP_LEAKS", "{} leaked credentials".format(data["references"])))
+                        self.data.append(
+                            (
+                                "EMAILREP_LEAKS",
+                                "{} leaked credentials".format(data["references"]),
+                            )
+                        )
                     c.good_news(
                         "Found {num} breaches for {target} using emailrep.io".format(
                             num=data["references"], target=self.target
@@ -337,7 +355,7 @@ class target:
 
     def get_scylla(self, user_query="email"):
         try:
-            c.info_news("["+self.target+"]>[scylla.sh]")
+            c.info_news("[" + self.target + "]>[scylla.sh]")
             sleep(0.5)
             self.headers.update({"Accept": "application/json"})
             if user_query == "email":
@@ -368,7 +386,9 @@ class target:
                     if "User" in field and k is not None:
                         self.data.append(("SCYLLA_USERNAME", k))
                         self.pwned += 1
-                    elif "Email" in field and k is not None and user_query is not "email":
+                    elif (
+                        "Email" in field and k is not None and user_query is not "email"
+                    ):
                         self.data.append(("SCYLLA_EMAIL", k))
                         self.pwned += 1
                     elif "Password" in field and k is not None:
@@ -474,6 +494,8 @@ class target:
                         self.pwned += 1
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
+                if result["name"]:
+                    self.data.append(("SNUS_NAME", result["name"]))
                 if result["tablenr"] and self.not_exists(result["tablenr"]):
                     self.data.append(("SNUS_SOURCE", result["tablenr"]))
 
@@ -654,6 +676,7 @@ class target:
                 "WeLeakInfo error with {target} (public)".format(target=self.target)
             )
             print(ex)
+
     def get_dehashed(self, api_email, api_key, user_query):
         try:
             if user_query == "hash":
@@ -661,27 +684,49 @@ class target:
             if user_query == "ip":
                 user_query == "ip_address"
             url = "https://api.dehashed.com/search?query="
-            search_query = user_query + ":" + "\"" + self.target + "\""
-            self.headers.update({'Accept': 'application/json'})
-            req = self.make_request(url + search_query, meth="GET", timeout=30, auth=(api_email, api_key))
+            search_query = user_query + ":" + '"' + self.target + '"'
+            self.headers.update({"Accept": "application/json"})
+            req = self.make_request(
+                url + search_query, meth="GET", timeout=60, auth=(api_email, api_key)
+            )
             if req.status_code == 200:
                 response = req.json()
                 for result in response["entries"]:
-                    if "username" in result and result["username"] is not None and len(result["username"].strip()) > 0:
+                    if (
+                        "username" in result
+                        and result["username"] is not None
+                        and len(result["username"].strip()) > 0
+                    ):
                         self.data.append(("DHASHD_USERNAME", result["username"]))
-                    if "email" in result and self.not_exists(result["email"]) and result["email"] is not None and len(result["email"].strip()) > 0:
+                    if (
+                        "email" in result
+                        and self.not_exists(result["email"])
+                        and result["email"] is not None
+                        and len(result["email"].strip()) > 0
+                    ):
                         self.data.append(("DHASHD_RELATED", result["email"].strip()))
-                    if "password" in result and result["password"] is not None and len(result["password"].strip()) > 0:
+                    if (
+                        "password" in result
+                        and result["password"] is not None
+                        and len(result["password"].strip()) > 0
+                    ):
                         self.data.append(("DHASHD_PASSWORD", result["password"]))
                         self.pwned += 1
-                    if "hashed_password" in result and result["hashed_password"] is not None and len(result["hashed_password"].strip()) > 0:
+                    if (
+                        "hashed_password" in result
+                        and result["hashed_password"] is not None
+                        and len(result["hashed_password"].strip()) > 0
+                    ):
                         self.data.append(("DHASHD_HASH", result["hashed_password"]))
                         self.pwned += 1
-                    if "obtained_from" in result and self.not_exists(result["obtained_from"]):
+                    if "obtained_from" in result and self.not_exists(
+                        result["obtained_from"]
+                    ):
                         self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
+            else:
+                c.bad_news("Dehashed error: status code " + req.status_code)
             self.headers.popitem()
         except Exception as ex:
-            c.bad_news(
-                "Dehashed error with {target}".format(target=self.target)
-            )
+            c.bad_news("Dehashed error with {target}".format(target=self.target))
             print(ex)
+

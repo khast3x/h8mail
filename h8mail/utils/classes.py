@@ -660,7 +660,7 @@ class target:
                 user_query == "hashed_password"
             if user_query == "ip":
                 user_query == "ip_address"
-            url = "https://dehashed.com/search?query="
+            url = "https://api.dehashed.com/search?query="
             search_query = user_query + ":" + "\"" + self.target + "\""
             self.headers.update({'Accept': 'application/json'})
             req = self.make_request(url + search_query, meth="GET", timeout=30, auth=(api_email, api_key))
@@ -668,14 +668,14 @@ class target:
                 response = req.json()
                 for result in response["entries"]:
                     # Maybe instead first check len of content - does it break if None?
-                    if "username" in result and result["username"] is not None:
+                    if "username" in result and result["username"] is not None and len(result["username"].strip()) > 0:
                         self.data.append(("DHASHD_USERNAME", result["username"]))
-                    if "email" in result and self.not_exists(result["email"]) and result["email"] is not None:
+                    if "email" in result and self.not_exists(result["email"]) and result["email"] is not None and len(result["email"].strip()) > 0:
                         self.data.append(("DHASHD_RELATED", result["email"].strip()))
-                    if "password" in result and result["password"] is not None:
+                    if "password" in result and result["password"] is not None and len(result["password"].strip()) > 0:
                         self.data.append(("DHASHD_PASSWORD", result["password"]))
                         self.pwned += 1
-                    if "hashed_password" in result and result["hashed_password"] is not None:
+                    if "hashed_password" in result and result["hashed_password"] is not None and len(result["hashed_password"].strip()) > 0:
                         self.data.append(("DHASHD_HASH", result["hashed_password"]))
                         self.pwned += 1
                     if "obtained_from" in result and self.not_exists(result["obtained_from"]):

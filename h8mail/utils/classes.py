@@ -473,10 +473,11 @@ class target:
                 )
             )
             for result in response["result"]:
-                if result["username"]:
-                    self.data.append(("SNUS_USERNAME", result["username"]))
                 if result["email"] and self.not_exists(result["email"]):
                     self.data.append(("SNUS_RELATED", result["email"].strip()))
+                if result["username"]:
+                    self.data.append(("SNUS_USERNAME", result["username"]))
+                    self.pwned += 1
                 if result["password"]:
                     self.data.append(("SNUS_PASSWORD", result["password"]))
                     self.pwned += 1
@@ -494,8 +495,10 @@ class target:
                         self.pwned += 1
                 if result["lastip"]:
                     self.data.append(("SNUS_LASTIP", result["lastip"]))
+                    self.pwned += 1
                 if result["name"]:
                     self.data.append(("SNUS_NAME", result["name"]))
+                    self.pwned += 1
                 if result["tablenr"] and self.not_exists(result["tablenr"]):
                     self.data.append(("SNUS_SOURCE", result["tablenr"]))
 
@@ -542,18 +545,12 @@ class target:
                 return
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": user_query, "query": self.target}
-            req = self.make_request(url, meth="POST", data=payload, timeout=30)
+            req = self.make_request(url, meth="POST", data=payload, timeout=60)
             response = req.json()
             if "false" in response["error"] and len(response["message"]) != 0:
                 b_counter = 0
                 for db, data in response["message"].items():
                     for d in data:
-                        if "username" in d.keys():
-                            self.pwned += 1
-                            self.data.append(("LKLP_USERNAME", d["username"]))
-                        if "ipaddress" in d.keys():
-                            self.pwned += 1
-                            self.data.append(("LKLP_LASTIP", d["ipaddress"]))
                         if "email_address" in d.keys() and self.not_exists(
                             d["email_address"]
                         ):
@@ -569,6 +566,20 @@ class target:
                                 self.pwned += 1
                                 self.data.append(("LKLP_PASSWORD", d["password"]))
                                 b_counter += 1
+                        if "username" in d.keys():
+                            self.pwned += 1
+                            self.data.append(("LKLP_USERNAME", d["username"]))
+                        if "ipaddress" in d.keys():
+                            self.pwned += 1
+                            self.data.append(("LKLP_LASTIP", d["ipaddress"]))
+                            for tag in ["address", "address1", "address2", "country", "zip", "zipcode", "postcode", "state"]:
+                                if tag in d.keys():
+                                    self.pwned += 1
+                                    self.data.append(("LKLP_GEO", d[tag] + " (" + tag + ")"))
+                            for tag in ["firstname", "middlename", "lastname", "mobile", "number", "userid"]:
+                                if tag in d.keys():
+                                    self.pwned += 1
+                                    self.data.append(("LKLP_ID", d[tag] + " (" + tag + ")"))
                     if self.not_exists(db):
                         self.data.append(("LKLP_SOURCE", db))
 

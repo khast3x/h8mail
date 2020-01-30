@@ -11,7 +11,7 @@
 
 ----
 <p align="center">
-<a href="https://github.com/khast3x/h8mail/tree/2.5/?ref=readmebutton" First Anniversary update, feedback and pull requests are welcomed heart birthday"> <img src="https://i.postimg.cc/R0VrXKFk/button-2.png"  title="Check out the branch">
+<a href="https://github.com/khast3x/h8mail/releases/tag/2.5.pre-release?ref=readmebutton" First Anniversary update, feedback and pull requests are welcomed heart birthday"> <img src="https://i.postimg.cc/R0VrXKFk/button-2.png"  title="Check out the branch">
 </p>
 
 

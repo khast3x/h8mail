@@ -558,6 +558,9 @@ class target:
                 b_counter = 0
                 for db, data in response["message"].items():
                     for d in data:
+                        if "username" in d.keys():
+                            self.pwned += 1
+                            self.data.append(("LKLP_USERNAME", d["username"]))
                         if "email_address" in d.keys() and self.not_exists(
                             d["email_address"]
                         ):
@@ -573,9 +576,6 @@ class target:
                                 self.pwned += 1
                                 self.data.append(("LKLP_PASSWORD", d["password"]))
                                 b_counter += 1
-                        if "username" in d.keys():
-                            self.pwned += 1
-                            self.data.append(("LKLP_USERNAME", d["username"]))
                         if "ipaddress" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_LASTIP", d["ipaddress"]))

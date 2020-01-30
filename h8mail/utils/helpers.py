@@ -64,7 +64,7 @@ def print_banner(b_type="intro"):
     elif "warn" in b_type:
         print(
             c.fg.pink,
-            "\t  Check out the new wiki!\n\t  http://bit.ly/37xaQVh\n\n",
+            "\t  Check out the new wiki!\n\t  https://bit.ly/37xaQVh\n\n",
             c.reset,
         )
     elif "version" in b_type:

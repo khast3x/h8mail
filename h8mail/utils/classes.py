@@ -205,6 +205,7 @@ class target:
     # New HIBP API
     def get_hibp3(self, api_key):
         try:
+            c.info_news("[" + self.target + "]>[hibp]")
             sleep(1.3)
             url = "https://haveibeenpwned.com/api/v3/breachedaccount/{}".format(
                 self.target
@@ -247,6 +248,7 @@ class target:
     # New HIBP API
     def get_hibp3_pastes(self):
         try:
+            c.info_news("[" + self.target + "]>[hibp-paste]")
             sleep(1.3)
             url = "https://haveibeenpwned.com/api/v3/pasteaccount/{}".format(
                 self.target
@@ -412,6 +414,7 @@ class target:
 
     def get_hunterio_public(self):
         try:
+            c.info_news("[" + self.target + "]>[hunter.io-public]")
             target_domain = self.target.split("@")[1]
             url = "https://api.hunter.io/v2/email-count?domain={}".format(target_domain)
             req = self.make_request(url)
@@ -429,6 +432,7 @@ class target:
 
     def get_hunterio_private(self, api_key):
         try:
+            c.info_news("[" + self.target + "]>[hunter.io-private]")
             target_domain = self.target.split("@")[1]
             url = "https://api.hunter.io/v2/domain-search?domain={target}&api_key={key}".format(
                 target=target_domain, key=api_key
@@ -461,6 +465,7 @@ class target:
                     "Snusbase does not support {} search (yet)".format(user_query)
                 )
                 return
+            c.info_news("[" + self.target + "]>[snusbase]")
             url = api_url
             self.headers.update({"Authorization": api_key})
             payload = {"type": user_query, "term": self.target}
@@ -508,6 +513,7 @@ class target:
 
     def get_leaklookup_pub(self, api_key):
         try:
+            c.info_news("[" + self.target + "]>[leaklookup-public]")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": "email_address", "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=20)
@@ -543,6 +549,7 @@ class target:
                     "Leaklookup does not support {} search (yet)".format(user_query)
                 )
                 return
+            c.info_news("[" + self.target + "]>[leaklookup-private]")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": user_query, "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=60)
@@ -623,6 +630,7 @@ class target:
 
     def get_weleakinfo_priv(self, api_key, user_query):
         try:
+            c.info_news("[" + self.target + "]>[weleakinfo-priv]")
             sleep(0.4)
             url = "https://api.weleakinfo.com/v3/search"
             self.headers.update({"Authorization": "Bearer " + api_key})
@@ -678,6 +686,7 @@ class target:
 
     def get_weleakinfo_pub(self, api_key):
         try:
+            c.info_news("[" + self.target + "]>[weleakinfo-public]")
             url = "https://api.weleakinfo.com/v3/public/email/{query}".format(
                 query=self.target
             )
@@ -714,6 +723,7 @@ class target:
                 user_query == "hashed_password"
             if user_query == "ip":
                 user_query == "ip_address"
+            c.info_news("[" + self.target + "]>[dehashed]")
             url = "https://api.dehashed.com/search?query="
             search_query = user_query + ":" + '"' + self.target + '"'
             self.headers.update({"Accept": "application/json"})

@@ -213,6 +213,13 @@ $ h8mail -t JSmith89 -q username -k "dehashed_email=user@email.com" "dehashed_ke
 $ h8mail -t 42.202.0.42 -q ip -c h8mail_config_priv.ini -ch 2 --power-chase
 ```
 
+###### Fetch URL content (CLI + file). Target all found emails
+
+
+```bash
+$ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
+```
+
 
 -----
 

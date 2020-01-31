@@ -9,7 +9,7 @@
 
 ----
 <p align="center">
-<a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"> <img src="https://i.postimg.cc/htg6xGmm/button.png"  title="To the wiki!">
+<a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"> <img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the wiki!">
 </p>
 
 

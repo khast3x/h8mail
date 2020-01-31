@@ -32,7 +32,7 @@
 
 ##  :tangerine: Features
 
-* :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
+<!-- * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
 * :earth_africa: Target list of URLs to directly find and target emails
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
@@ -47,9 +47,9 @@
 * :factory: Custom query premium APIs. Supports username, hash, ip, domain and password and more
 * :books: Regroup breach results for all targets and methods
 * :eyes: Includes option to hide passwords for demonstrations
-* :rainbow: Delicious colors
+* :rainbow: Delicious colors -->
 
-| h8mail 2.5 feature list                                                                        |
+| h8mail 2.5 Feature List                                                                         |
 |------------------------------------------------------------------------------------------------|
 | :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs       |
 | :earth_africa: Target list of URLs to directly find and target emails                          |

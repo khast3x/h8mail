@@ -25,7 +25,7 @@ setup(
     author="khast3x",
     author_email="k@khast3x.club",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Natural Language :: English",
@@ -33,7 +33,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Environment :: Console",
     ],
-    description="Email OSINT and password breach hunting. Use h8mail to find passwords through different breach and reconnaissance services, or the infamous Breached Compilation torrent",
+    description="Email OSINT and password breach hunting. Use h8mail to find passwords through different breach and reconnaissance services, or using your local data",
     install_requires=requirements,
     license="BSD license",
     # long_description_content_type="text/markdown",

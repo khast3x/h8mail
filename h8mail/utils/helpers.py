@@ -19,7 +19,6 @@ def find_files(to_parse, pattern=""):
     Can check for patterns such as 'gz'.
     """
     allfiles = []
-
     if "*" in to_parse:
         glob_result = glob.glob(to_parse)
         for g in glob_result:
@@ -52,22 +51,27 @@ def print_banner(b_type="intro"):
 	"""
         # print(c.bold, c.fg.pink, banner, c.reset)
         banner_tab = banner.splitlines()
-        code = 17
+        code = 33
+        keep = True
         for b in banner_tab:
             clr = "\u001b[38;5;" + str(code) + "m "
             print(c.bold + clr + b + c.reset)
-            code += 3
+            if keep:
+                code += 36
+                keep = False
+            else:
+                keep = True
     elif "warn" in b_type:
         print(
-            c.fg.green,
-            "\th8mail is free & open-source. Please report scammers.\n\n",
+            c.fg.pink,
+            "\t  Check out the new wiki!\n\t  https://bit.ly/37xaQVh\n\n",
             c.reset,
         )
     elif "version" in b_type:
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ECHO MIKE - HOTFIX 1" ',
+            "Version " + __version__ + ' - "ROCKSROCKSMASSON" ',
             c.reset,
         )
 
@@ -79,11 +83,11 @@ def fetch_emails(target, user_args):
     """
     if user_args.loose or user_args.user_query is not None:
         t = target.split(" ")
-        print(t)
+        # print(t)
         return t
     e = re.findall(r"[\w\.-]+@[\w\.-]+", target)
     if e:
-        print(", ".join(e), c.reset)
+        # print(", ".join(e), c.reset)
         return e
     return None
 
@@ -96,7 +100,7 @@ def get_emails_from_file(targets_file, user_args):
     email_obj_list = []
     try:
         target_fd = open(targets_file).readlines()
-        print(targets_file)
+        c.info_news("Parsing emails from" + targets_file)
         for line in target_fd:
             e = fetch_emails(line, user_args)
             if e is None:

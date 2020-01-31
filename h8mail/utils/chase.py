@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .colors import colors as c
-
+import re
 
 def chase(target, user_args):
     """
@@ -21,11 +21,22 @@ def chase(target, user_args):
                 continue
 
             if user_args.power_chase:
-                if "RELATED" in d[0]:
+                if "RELATED" in d[0] or "EMAIL" in d[0]:
                     c.good_news(
                         "Chasing {new_target} as new target".format(new_target=d[1])
                     )
                     new_targets.append(d[1])
+                else: # in case there is an email as a username
+                    e = re.findall(r"[\w\.-]+@[\w\.-]+", d[1])
+                    if e:
+                        for email in e:
+                            c.good_news(
+                                "Chasing {new_target} as new target (found as pattern)".format(
+                                    new_target=d[1]
+                                )
+                            )
+                            new_targets.append(d[1])
+
             else:
                 if "HUNTER_RELATED" in d[0]:
                     c.good_news(

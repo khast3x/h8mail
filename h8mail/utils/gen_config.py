@@ -11,13 +11,15 @@ def gen_config_file():
 ; h8mail will automatically detect present keys & launch services accordingly
 ; Uncomment to activate
 ;hunterio = 
-;snusbase_url = 
 ;snusbase_token = 
-;weleakinfo_priv = 
-;weleakinfo_pub = 
+;;weleakinfo_priv = 
+;;weleakinfo_pub = 
 ;hibp = 
 ;leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
-;leak-lookup_priv =
+;leak-lookup_priv = 
+;emailrep = 
+;dehashed_email = 
+;dehashed_key =
 """
         dest_config.write(config)
         c.good_news(

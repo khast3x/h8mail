@@ -18,7 +18,7 @@ from .helpers import (
     print_banner,
     save_results_csv,
     check_latest_version,
-    check_scylla_online
+    check_scylla_online,
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
@@ -26,14 +26,18 @@ from .summary import print_summary
 from .chase import chase
 from .print_results import print_results
 from .gen_config import gen_config_file
+from .url import target_urls
 
 
 def target_factory(targets, user_args):
     """
     Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
     For each target, launch target.methods() associated to found config artifacts.
-    Handles the hunter.io chase logic with counters from enumerate()
+    Handles chase logic with counters from enumerate()
     """
+    # Removing duplicates here to avoid dups from chasing
+    targets = list(set(targets))
+
     finished = []
     if user_args.config_file is not None or user_args.cli_apikeys is not None:
         api_keys = get_config_from_file(user_args)
@@ -45,29 +49,35 @@ def target_factory(targets, user_args):
     skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        skip_default_queries = False
-    
+        skip_default_queries = True  # ??
+
     scylla_up = False
-    
+    if user_args.skip_defaults is False:
+        scylla_up = check_scylla_online()
+
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
             current_target = target(t, debug=True)
         else:
             current_target = target(t)
+        if not skip_default_queries:
+            if not user_args.skip_defaults:
+                current_target.get_hunterio_public()
+                if api_keys is None or "emailrep" not in api_keys:
+                    current_target.get_emailrepio()
+                elif (
+                    api_keys is not None and "emailrep" in api_keys and query == "email"
+                ):
+                    current_target.get_emailrepio(api_keys["emailrep"])
 
-        if skip_default_queries:
-            current_target.get_hunterio_public()
-            current_target.get_emailrepio()
-
-        if not user_args.skip_defaults:
-            scylla_up = check_scylla_online()
-            if scylla_up:
-                current_target.get_scylla(query)
+        if scylla_up:
+            current_target.get_scylla(query)
 
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
+
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if "snusbase_token" in api_keys:
@@ -86,14 +96,22 @@ def target_factory(targets, user_args):
                 current_target.get_weleakinfo_pub(api_keys["weleakinfo_pub"])
             if "weleakinfo_priv" in api_keys:
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
-            if user_args.chase_limit and counter < init_targets_len:
-                user_args_force_email = user_args
-                user_args_force_email.user_query = "email"
-                user_args_force_email.chase_limit -= 1
-                finished_chased = target_factory(
-                    chase(current_target, user_args), user_args_force_email
-                )
-                finished.extend((finished_chased))
+            if "dehashed_key" in api_keys:
+                if "dehashed_email" in api_keys:
+                    current_target.get_dehashed(
+                        api_keys["dehashed_email"], api_keys["dehashed_key"], query
+                    )
+                else:
+                    c.bad_news("Missing Dehashed email")
+        # Chasing
+        if user_args.chase_limit and counter <= init_targets_len:
+            user_args_force_email = user_args
+            user_args_force_email.user_query = "email"
+            user_args_force_email.chase_limit -= 1
+            finished_chased = target_factory(
+                chase(current_target, user_args), user_args_force_email
+            )
+            finished.extend((finished_chased))
         finished.append(current_target)
     return finished
 
@@ -104,27 +122,49 @@ def h8mail(user_args):
     Starts the target object factory loop; starts local searches after factory if in user inputs
     Prints results, saves to csv if in user inputs
     """
-    if not user_args.user_targets:
-        c.bad_news("Missing Target")
-        exit(1)
-    targets = []
-    start_time = time.time()
-    c.good_news("Targets:")
 
-    # Find targets in user input or file
-    for arg in user_args.user_targets:
-        user_stdin_target = fetch_emails(arg, user_args)
-        if user_stdin_target:
-            targets.extend(user_stdin_target)
-        elif os.path.isfile(arg):
-            c.info_news("Reading from file " + arg)
-            targets.extend(get_emails_from_file(arg, user_args))
-        else:
-            c.bad_news("No targets found in user input")
-            exit(1)
+    if user_args.user_targets and user_args.user_urls:
+        c.bad_news("Cannot use --url with --target. Use one or the other.")
+        exit(1)
+
+    if not user_args.user_targets and not user_args.user_urls:
+        c.bad_news("Missing Target or URL")
+        exit(1)
+
+    start_time = time.time()
+
+    targets = []
+    if user_args.user_urls:
+        targets = target_urls(user_args)
+        if len(targets) == 0:
+            c.bad_news("No targets found in URLs. Quitting")
+            exit(0)
+
+    # If we found emails from URLs, `targets` array already has stuff
+    if len(targets) != 0:
+        if user_args.user_targets is None:
+            user_args.user_targets = []
+            user_args.user_targets.extend(targets)
+
+    else:  # Find targets in user input or file
+        if user_args.user_targets is not None:
+            for arg in user_args.user_targets:
+                user_stdin_target = fetch_emails(arg, user_args)
+                if user_stdin_target:
+                    targets.extend(user_stdin_target)
+                elif os.path.isfile(arg):
+                    c.info_news("Reading from file " + arg)
+                    targets.extend(get_emails_from_file(arg, user_args))
+                else:
+                    c.bad_news("No targets found in user input. Quitting")
+                    exit(0)
 
     c.info_news("Removing duplicates")
     targets = list(set(targets))
+
+    c.good_news("Targets:")
+    for t in targets:
+        c.good_news(t)
 
     # Launch
     breached_targets = target_factory(targets, user_args)
@@ -145,7 +185,9 @@ def h8mail(user_args):
             else:
                 local_found = local_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found, user_args)
+                breached_targets = local_to_targets(
+                    breached_targets, local_found, user_args
+                )
     # Handle gzip search
     if user_args.local_gzip_src:
         for arg in user_args.local_gzip_src:
@@ -155,7 +197,9 @@ def h8mail(user_args):
             else:
                 local_found = local_gzip_search(res, targets)
             if local_found is not None:
-                breached_targets = local_to_targets(breached_targets, local_found, user_args)
+                breached_targets = local_to_targets(
+                    breached_targets, local_found, user_args
+                )
 
     print_results(breached_targets, user_args.hide)
 
@@ -164,8 +208,11 @@ def h8mail(user_args):
         save_results_csv(user_args.output_file, breached_targets)
 
 
-def main():
-
+def parse_args(args):
+    """
+    Seperate functions to make it easier to run tests
+    Pass args as an array
+    """
     parser = argparse.ArgumentParser(
         description="Email information and password lookup tool", prog="h8mail"
     )
@@ -175,6 +222,13 @@ def main():
         "--targets",
         dest="user_targets",
         help="Either string inputs or files. Supports email pattern matching from input or file, filepath globing and multiple arguments",
+        nargs="+",
+    )
+    parser.add_argument(
+        "-u",
+        "--url",
+        dest="user_urls",
+        help="Either string inputs or files. Supports URL pattern matching from input or file, filepath globing and multiple arguments. Parse URLs page for emails. Requires http:// or https:// in URL.",
         nargs="+",
     )
     parser.add_argument(
@@ -194,7 +248,7 @@ def main():
         "-c",
         "--config",
         dest="config_file",
-        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and hunterio",
+        help="Configuration file for API keys. Accepts keys from Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned, Emailrep, Dehashed and hunterio",
         nargs="+",
     )
     parser.add_argument(
@@ -281,11 +335,16 @@ def main():
         default=False,
     ),
 
-    user_args = parser.parse_args()
+    return parser.parse_args(args)
+
+
+def main():
+
     print_banner("warn")
     print_banner("version")
     print_banner()
     check_latest_version()
+    user_args = parse_args(sys.argv[1:])
     if user_args.gen_config:
         gen_config_file()
         exit(0)

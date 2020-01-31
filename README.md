@@ -1,52 +1,51 @@
- <p align="center">
-<a href="https://github.com/khast3x/h8mail/releases/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
-</p>
+<h1 align="center">
+  <a href="https://github.com/khast3x/h8mail/releases/"><img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo"></a>
+</h1>
 
 [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![Downloads](https://pepy.tech/badge/h8mail)](https://pepy.tech/project/h8mail)    [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)   
 [![Docker Pulls](https://img.shields.io/docker/pulls/kh4st3x00/h8mail.svg)](https://hub.docker.com/r/kh4st3x00/h8mail) [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/kh4st3x00/h8mail.svg?color=ok)](https://hub.docker.com/r/kh4st3x00/h8mail/builds)  
-> Powerful and user-friendly password hunting tool.  
-> Use h8mail to find passwords through [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
-> First Anniversary update, feedback and pull requests are welcomed :heart: :birthday:
+**h8mail** is an email OSINT and breach hunting tool using [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
 
 ----
-<p align="center">
-<a href="https://github.com/khast3x/h8mail/releases/tag/2.5.pre-release?ref=readmebutton" First Anniversary update, feedback and pull requests are welcomed heart birthday"> <img src="https://i.postimg.cc/R0VrXKFk/button-2.png"  title="Check out the branch">
-</p>
 
+
+<h1 align="center">
+  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the Wiki!"></a>
+</h1>
+
+
+
+![h8mailScreenCap](https://i.imgur.com/91pd2D2.png)  
+:arrow_up: *Simple email lookup with `--hide` argument*
+
+![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png)
+:arrow_up: *Searching local breach for every `@gmail.com` email*
 
 ----
 
 
 ## :book: Table of Content
 
+- [Table of Content](#book-Table-of-Content)
 - [Features](#tangerine-Features)
-- [Demo](#Demo)
-  - [Out of the box](#Out-of-the-box)
-  - [With API services, local breach search & chasing enabled](#With-API-services-local-breach-search--chasing-enabled)
-- [APIs](#APIs)
-- [Install](#tangerine-Install)
-- [Update](#Update)
-- [Docker](#Docker)
+    - [APIs](#APIs)
 - [Usage](#tangerine-Usage)
-- [Configuration file & keys](#tangerine-Configuration-file--keys)
-- [Supported custom queries](#tangerine-Supported-custom-queries)
-- [Troubleshooting](#tangerine-Troubleshooting)
-  - [Python version & Kali](#Python-version--Kali)
-  - [Windows](#Windows)
-  - [OSX](#OSX)
+- [Usage examples](#tangerine-Usage-examples)
 - [Thanks & Credits](#tangerine-Thanks--Credits)
 - [Related open source projects](#tangerine-Related-open-source-projects)
-- [Notes](#tangerine-Notes)
+
+
 ----
 
 
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
+* :earth_africa: Pass URLs to directly find and target emails in pages
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
-* :white_check_mark: CLI or Bulk file-reading for targeting
+* :white_check_mark: Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
 * :house: Search cleartext and compressed .gz files locally using multiprocessing
@@ -54,7 +53,7 @@
 * :fire: Get related emails
 * :dragon_face: Chase related emails by adding them to the ongoing search
 * :crown: Supports premium lookup services for advanced users
-* :factory: Custom query premium APIs. Supports username, hash, ip, domain and password
+* :factory: Custom query premium APIs. Supports username, hash, ip, domain and password and more
 * :books: Regroup breach results for all targets and methods
 * :eyes: Includes option to hide passwords for demonstrations
 * :rainbow: Delicious colors
@@ -65,21 +64,6 @@
 
 -----
 
-#### Demo
-
-##### Out of the box
-[![h8mail2demo6-1.gif](https://i.postimg.cc/DwbwqjwX/h8mail2demo6-1.gif)](https://postimg.cc/v4byyv9Y)
-
-
-##### With API services & chasing enabled
-
-[![pwoerchase2.gif](https://i.postimg.cc/3rn1K07Z/pwoerchase2.gif)](https://postimg.cc/qg6ywRNt)
-
-##### Searching using username with API service, power chasing enabled
-
-[![username.gif](https://i.postimg.cc/DZCj0BR7/username.gif)](https://postimg.cc/LY1B0BHW)
-
------
 
 ####  APIs
 
@@ -89,100 +73,29 @@
 | [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) |               URLs of text files mentioning targets               |  :white_check_mark: :key:  |
 | [Hunter.io](https://hunter.io/) - Public                       |                      Number of related emails                     |     :white_check_mark:     |
 | [Hunter.io](https://hunter.io/) - Service (free tier)          |                 Cleartext related emails, Chasing                 |  :white_check_mark: :key:  |
-| [WeLeakInfo](https://weleakinfo.com/) - Public                 |                Number of search-able breach results               |  :white_check_mark: :key:  |
-| [WeLeakInfo](https://weleakinfo.com/) - Service                |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
+| ~~[WeLeakInfo](https://weleakinfo.com/) - Public~~             |                Number of search-able breach results               |:white_large_square: :key: |
+| ~~[WeLeakInfo](https://weleakinfo.com/) - Service~~            |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |:white_large_square: :key:  |
 | [Snusbase](https://snusbase.com/) - Service                    | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: |  :white_check_mark: :key:  |
 | [Leak-Lookup](https://leak-lookup.com/) - Public               |                Number of search-able breach results               | :white_check_mark: (:key:) |
 | [Leak-Lookup](https://leak-lookup.com/) - Service              |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
 | [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark:     |
 | [Scylla.sh](https://scylla.sh/) - Service (free)               |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark:         |
+| [Dehashed.sh](https://dehashed.com/) - Service                 |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark: :key:   |
+
 
 *:key: - API key required*  
 
 
------
 
-## :tangerine: Install
-
-
-### Requirements
-
-h8mail 2.0 only requires the python `requests` module to run.
-
-### Stable release (best)
-
-**To install h8mail, run this command in your terminal:**  
-```bash
-$ pip3 install h8mail
-```
-
-**And that's basically it**.  
-This is the preferred method to install h8mail, as it will always install the most recent stable release.
-
-*Please note*:  
-If you don't have [`pip`](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide
-you through the process.  
-For troubleshooting, check the [Troubleshooting](#tangerine-troubleshooting) section.
-
-[![h8mail-install.gif](https://i.postimg.cc/Vs9vznN3/h8mail-install.gif)](https://postimg.cc/c6H0mKwm)
-*The above illustration showcases installing h8mail using `--user`*
-
-
-
-### From sources
-
-The sources for h8mail can be downloaded from the [Github repo](https://github.com/khast3x/h8mail).
-
-You can either clone the public repository:
-
-```bash
-$ git clone git://github.com/khast3x/h8mail
-```
-Or download the [tarball](https://github.com/khast3x/h8mail/tarball/master):
-
-```bash
-$ curl  -OL https://github.com/khast3x/h8mail/tarball/master
-```
-Next, decompress the downloaded archive.  
-Once you have a copy of the source, you can install it with:
-
-```bash
-$ cd h8mail/
-$ python setup.py install
-$ h8mail -h
-```
-
-Or just running it as a module:
-```bash
-$ cd h8mail/
-$ python -m h8mail -h
-```
-
-----
-
-## Update
-
-```bash
-$ pip3 install --upgrade h8mail
-```
-
-Use `--user` at the end if getting a permission message from pip
-
-----
-
-## Docker
-
-```bash
-$ docker run -ti kh4st3x00/h8mail -h
-```
 
 -----
 
 ##  :tangerine: Usage
 
 ```bash
-usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]] [-q USER_QUERY]
-              [--loose] [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
+usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]]
+              [-u USER_URLS [USER_URLS ...]] [-q USER_QUERY] [--loose]
+              [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
@@ -197,6 +110,11 @@ optional arguments:
                         Either string inputs or files. Supports email pattern
                         matching from input or file, filepath globing and
                         multiple arguments
+  -u USER_URLS [USER_URLS ...], --url USER_URLS [USER_URLS ...]
+                        Either string inputs or files. Supports URL pattern
+                        matching from input or file, filepath globing and
+                        multiple arguments. Parse URLs page for emails.
+                        Requires http:// or https:// in URL.
   -q USER_QUERY, --custom-query USER_QUERY
                         Perform a custom query. Supports username, password,
                         ip, hash, domain. Performs an implicit "loose" search
@@ -205,8 +123,8 @@ optional arguments:
                         recognition. Use spaces as pattern seperators
   -c CONFIG_FILE [CONFIG_FILE ...], --config CONFIG_FILE [CONFIG_FILE ...]
                         Configuration file for API keys. Accepts keys from
-                        Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned and
-                        hunterio
+                        Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned,
+                        Emailrep, Dehashed and hunterio
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write CSV output
   -bc BC_PATH, --breachcomp BC_PATH
@@ -242,6 +160,7 @@ optional arguments:
   --gen-config, -g      Generates a configuration file template in the current
                         working directory & exits. Will overwrite existing
                         h8mail_config.ini file
+
 
 ```
 
@@ -284,7 +203,7 @@ $ h8mail -t admin@evilcorp.com -lb /tmp/4k_Combo.txt -ch 10 -k "hunterio=ABCDE12
 ###### Query username. Read keys from CLI
 
 ```bash
-$ h8mail -t JSmith89 -q username -k "weleakinfo_priv=ABCDE123"
+$ h8mail -t JSmith89 -q username -k "dehashed_email=user@email.com" "dehashed_key=ABCDE123"
 ```
 
 ###### Query IP. Chase all related targets. Read keys from CLI
@@ -294,112 +213,13 @@ $ h8mail -t JSmith89 -q username -k "weleakinfo_priv=ABCDE123"
 $ h8mail -t 42.202.0.42 -q ip -c h8mail_config_priv.ini -ch 2 --power-chase
 ```
 
------
-
-## :tangerine: Configuration file & keys
-
-h8mail can generate a template configuration file in the current working directory using `-g`.  
-h8mail can read keys by using a `config.ini` file with `-c`, or by passing keys from the command line directly with `-k`.
-
-*(links contain refs)*  
-You can purchase API keys for:  
-- [HaveIBeenPwned](https://haveibeenpwned.com/API/Key?ref=h8mail)  
-- [hunter.io](https://hunter.io/users/sign_up?utm_medium=api?ref=h8mail)
-- [Snusbase](https://snusbase.com/?ref=h8mail)
-- [WeLeakInfo](https://weleakinfo.com/?ref=h8mail)
-- [Leak-Lookup](https://leak-lookup.com/?ref=h8mail)
+###### Fetch URL content (CLI + file). Target all found emails
 
 
-The configuration file format is as follows:
-```ini
-[h8mail]
-hunterio =
-hibp =
-snusbase_url =
-snusbase_token =
-; leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
-leak-lookup_priv =
-weleakinfo_pub =
-weleakinfo_priv =
-```
-
-In the above example, you'll notice a Leak-lookup public key, graciously generated for h8mail users. To activate, uncomment the line and make sure to pass to config file. The API can sometimes timeout. If that's the case, simply relaunch. 
-
-
-
-Keys and their respective values can also be passed from the command line, with the `-k` option. Format is like so:  
-```
-$ h8mail -t john.smith@evilcorp.com -k "K=V, K=V" "K=V"
-$ h8mail -t john.smith@evilcorp.com -k "leak-lookup_pub=1bf94ff907f68d511de9a610a6ff9263"
-```
-
------
-
-## :tangerine: Supported custom queries
-
-|            |      username      |       domain       |        hash        |      password      |         ip         |
-|------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| WeLeakInfo | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| LeakLookup | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: |
-| Snusbase   | :white_check_mark: |                    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Scylla.sh  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-
-As of writing, some service providers are undergoing upgrades and might support additional queries.  
-To use a custom query, use `-q` followed by the appropriate keyword 
-
-
------
-
-## :tangerine: Troubleshooting
-
-
-
-### Python version & Kali
-
-* The above instructions assume you are running **python3 as default**. If unsure, type the following in your terminal.  
-It should be either `Python 3.*` or `Python 2.*` :
 ```bash
-$ python --version
-``` 
-
-* If you are running python2 as default :  
-Make sure you have python3.6+ installed, then replace `python` commands with explicit `python3` commands.
-
-* If you have not set your venvs, you might get a permission error saying `Consider using the --user option or check the permissions.`  
-Simply add --user like so:
-```bash
-$ pip install --user h8mail
+$ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 ```
 
-### Windows
-
-* `h8mail` uses ANSI color escape characters. Windows doesn't know how to show the colors, and will show gibberish instead.  
-Fortunately, you can use [Cmder](https://cmder.net/), which is an excellent Windows CMD prompt alternative
-* If you're having trouble with python and pip, chances are you need to [add python to your PATH](https://geek-university.com/python/add-python-to-the-windows-path/). `pip` will also need to be in your `PATH` environment variable.
-* If you're still having trouble with `pip`, you can do the following:
-```bash
-# Check python version, should be 3.6+
-C:> python --version
-# To have python handle installation of pip
-C:> python -m ensurepip
-# To launch pip as a module
-C:> python -m pip install h8mail
-# To launch h8mail as a module
-C:> python -m h8mail --help
-```
-
-To find where `pip` installed h8mail, use `pip3 show h8mail`
-
-### OSX
-
-* As described for Windows, you might encounter issues with python if your installation is incomplete, or `pip`'s installation directory is not in your PATH.
-* If thats the case, you can try invoking `pip` and `h8mail` with the same command lines as Windows.
-* Make sure the `python` command refers to Python 3 with `python --version`, otherwise replace `python` with `python3` in the instructions.
-* Basically try this if installed and not executing, check Windows instructions for further examples:
-```bash
-$ python3 -m h8mail -h
-```  
 
 -----
 
@@ -413,7 +233,7 @@ $ python3 -m h8mail -h
 * Logo generated using Hatchful by Shopify
 * [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
 * [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
-
+* [Dehashed](https://dehashed.com) for being developer friendly
 -----
 
 ## :tangerine: Related open source projects
@@ -445,7 +265,16 @@ ___
 
 *If you wish to stay updated on this project:*
 
-<p align="center">
-<a href="https://twitter.com/kh4st3x"> <img src="https://i.imgur.com/S79Nimd.png" width="420" title="h8maillogo">
-</p>
 
+<h1 align="center">
+  <a href="https://twitter.com/kh4st3x"><img src="https://i.imgur.com/S79Nimd.png" width="420" title="Twitter"></a>
+</h1>
+
+
+
+*If you wish to get smart on this project:*
+
+
+<h1 align="center">
+  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the Wiki!"></a>
+</h1>

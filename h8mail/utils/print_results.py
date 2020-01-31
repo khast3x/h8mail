@@ -8,7 +8,7 @@ def print_results(results, hide=False):
         print()
         c.print_res_header(t.target)
         for i in range(len(t.data)):
-            sleep(0.001)
+            # sleep(0.001)
             if len(t.data) == 1:
                 print()
                 c.info_news("No results founds")
@@ -35,7 +35,7 @@ def print_results(results, hide=False):
                     c.print_result(t.target, t.data[i][1], "HUNTER_RELATED")
                 if "EMAILREP" in t.data[i][0]:
                     c.print_result(
-                        t.target, str(t.data[i][1]).capitalize(), t.data[i][0]
+                        t.target, str(t.data[i][1]), t.data[i][0]
                     )
                 if "SNUS" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
@@ -50,5 +50,7 @@ def print_results(results, hide=False):
                 if "WLI" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
                 if "SCYLLA" in t.data[i][0]:
+                    c.print_result(t.target, t.data[i][1], t.data[i][0])
+                if "DHASHD" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
     

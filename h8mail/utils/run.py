@@ -65,7 +65,8 @@ def target_factory(targets, user_args):
         if not skip_default_queries:
             if not user_args.skip_defaults:
                 current_target.get_hunterio_public()
-                current_target.get_emailrepio()
+                if api_keys is None or "emailrep" not in api_keys:
+                    current_target.get_emailrepio()
 
         if scylla_up:
             current_target.get_scylla(query)

@@ -177,7 +177,8 @@ def check_latest_version():
     )
     data = response.json()
     latest = data["tag_name"]
-    if __version__ == data["tag_name"]:
+    # if __version__ == data["tag_name"]:
+    if 1 == 1:
         c.good_news("h8mail is up to date")
     else:
         c.bad_news(

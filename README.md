@@ -1,6 +1,11 @@
- <p align="center">
-<a href="https://github.com/khast3x/h8mail/releases/"> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
-</p>
+ <!-- <p align="center">
+<a href=""> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
+</p> -->
+
+<h1 align="center">
+  <br>
+  <a href="https://github.com/khast3x/h8mail/releases/"><img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo"></a>
+</h1>
 
 [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![Downloads](https://pepy.tech/badge/h8mail)](https://pepy.tech/project/h8mail)    [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)   
@@ -8,9 +13,17 @@
 > Use h8mail to recover leaked passwords through [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
 
 ----
-<p align="center">
+
+<!-- <p align="center">
 <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"> <img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the wiki!">
-</p>
+</p> -->
+
+<h1 align="center">
+  <br>
+  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="h8maillogo"></a>
+
+</h1>
+
 
 
 ----

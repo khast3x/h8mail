@@ -17,7 +17,7 @@
 
 
 ![h8mailScreenCap](https://i.imgur.com/91pd2D2.png)  
-:arrow_up: *Simple email lookup, hide passwords mode for demos*
+:arrow_up: *Simple email lookup with `--hide` argument*
 
 ![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png)
 :arrow_up: *Searching local breach for every `@gmail.com` email*
@@ -42,7 +42,7 @@
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
-* :earth_africa: Target list of URLs to directly find and target emails
+* :earth_africa: Pass URLs to directly find and target emails in pages
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
 * :white_check_mark: Bulk file-reading for targeting

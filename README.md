@@ -16,16 +16,16 @@
 
 
 <h1 align="center">
-  <img src="https://i.imgur.com/91pd2D2.png" width="420" title="Simple Targeting">
-<br><h4 align=center>
-:arrow_up: *Simple email lookup with `--hide` argument*</h4>
+  <img src="https://i.imgur.com/91pd2D2.png" width="520" title="Simple Targeting">
+<br><h4 align=center><i>
+:arrow_up: Simple email lookup with `--hide` argument</i></h4>
 </h1>
 
 
 <h1 align="center">
-  <img src="https://i.imgur.com/rpyPgC6.png" width="420" title="Targeting With Local Breach">
-<br><h4 align=center>
-:arrow_up: *Searching local breach for every `@gmail.com` email*</h4>
+  <img src="https://i.imgur.com/rpyPgC6.png" width="520" title="Targeting With Local Breach">
+<br><h4 align=center><i>
+:arrow_up: Searching local breach for every `@gmail.com` email</i></h4>
 </h1>
 
 

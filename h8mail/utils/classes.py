@@ -309,13 +309,25 @@ class target:
                 return
 
             if response.status_code == 429:
-                c.info_news("[warning] emailrep.io: Unauthenticated API requests limit reached. Get a free API key here: https://bit.ly/3b1e7Pw")
+                c.info_news(
+                    "[warning] emailrep.io: Unauthenticated API requests limit reached. Get a free API key here: https://bit.ly/3b1e7Pw"
+                )
             elif response.status_code == 404:
                 c.info_news(
                     "No data found for {} using emailrep.io".format(self.target)
                 )
             elif response.status_code == 200:
                 data = response.json()
+
+                self.data.append(
+                        (
+                            "EMAILREP_INFO",
+                            "Reputation: {rep} | Deliverable: {deli}".format(
+                        rep=data["reputation"].capitalize(), deli=data["details"]["deliverable"]
+                    )
+                        )
+                    )
+                
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
                     if data["references"] == 1:
@@ -339,10 +351,11 @@ class target:
                     )
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
-                        self.data.append(("EMAILREP_SOCIAL", profile))
+                        self.data.append(("EMAILREP_SOCIAL", profile.capitalize()))
                 c.good_news("Found social profils")
                 if "never" in data["details"]["last_seen"]:
                     return
+                self.data.append(("EMAILREP_1ST_SN", data["details"]["first_seen"]))
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
             else:
                 c.bad_news(
@@ -384,6 +397,16 @@ class target:
                 print(response)
                 return
             data = response.json()
+            total = 0
+            for d in data:
+                for field, k in d["_source"].items():
+                    if k is not None:
+                        total += 1
+            c.good_news(
+                "Found {num} entries for {target} using Scylla.sh ".format(
+                    num=total, target=self.target
+                )
+            )
             for d in data:
                 for field, k in d["_source"].items():
                     if "User" in field and k is not None:
@@ -723,7 +746,7 @@ class target:
                 user_query == "hashed_password"
             if user_query == "ip":
                 user_query == "ip_address"
-             
+
             c.info_news("[" + self.target + "]>[dehashed]")
             url = "https://api.dehashed.com/search?query="
             if user_query == "domain":
@@ -736,6 +759,12 @@ class target:
             )
             if req.status_code == 200:
                 response = req.json()
+                if response["total"] is not None:
+                    c.good_news(
+                        "Found {num} entries for {target} using Dehashed.com".format(
+                            num=str(response["total"]), target=self.target
+                        )
+                    )
 
                 for result in response["entries"]:
                     if (
@@ -780,9 +809,14 @@ class target:
                         result["obtained_from"]
                     ):
                         self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
-                
+
                 if response["balance"] is not None:
-                    self.data.append(("DHASHD_CREDITS", str(response["balance"]) + " DEHASHED CREDITS REMAINING"))
+                    self.data.append(
+                        (
+                            "DHASHD_CREDITS",
+                            str(response["balance"]) + " DEHASHED CREDITS REMAINING",
+                        )
+                    )
             else:
                 c.bad_news("Dehashed error: status code " + req.status_code)
             self.headers.popitem()

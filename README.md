@@ -15,6 +15,14 @@
 
 ----
 
+![h8mailScreenCap](https://i.imgur.com/fpotSQv.png)  
+*Simple email lookup*
+
+![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png)
+*Searching local breach for every `@gmail.com` email*
+
+----
+
 
 ## :book: Table of Content
 

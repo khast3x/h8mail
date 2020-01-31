@@ -49,13 +49,12 @@ def target_factory(targets, user_args):
     skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        skip_default_queries = True #??
+        skip_default_queries = True  # ??
 
     scylla_up = False
     if user_args.skip_defaults is False:
         scylla_up = check_scylla_online()
 
-  
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
@@ -67,6 +66,10 @@ def target_factory(targets, user_args):
                 current_target.get_hunterio_public()
                 if api_keys is None or "emailrep" not in api_keys:
                     current_target.get_emailrepio()
+                elif (
+                    api_keys is not None and "emailrep" in api_keys and query == "email"
+                ):
+                    current_target.get_emailrepio(api_keys["emailrep"])
 
         if scylla_up:
             current_target.get_scylla(query)
@@ -74,8 +77,7 @@ def target_factory(targets, user_args):
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
-            if "emailrep" in api_keys and query == "email":
-                current_target.get_emailrepio(api_keys["emailrep"])
+
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if "snusbase_token" in api_keys:
@@ -96,7 +98,9 @@ def target_factory(targets, user_args):
                 current_target.get_weleakinfo_priv(api_keys["weleakinfo_priv"], query)
             if "dehashed_key" in api_keys:
                 if "dehashed_email" in api_keys:
-                    current_target.get_dehashed(api_keys["dehashed_email"], api_keys["dehashed_key"], query)
+                    current_target.get_dehashed(
+                        api_keys["dehashed_email"], api_keys["dehashed_key"], query
+                    )
                 else:
                     c.bad_news("Missing Dehashed email")
         # Chasing
@@ -142,8 +146,8 @@ def h8mail(user_args):
             user_args.user_targets = []
             user_args.user_targets.extend(targets)
 
-    else: # Find targets in user input or file
-        if user_args.user_targets is not None: 
+    else:  # Find targets in user input or file
+        if user_args.user_targets is not None:
             for arg in user_args.user_targets:
                 user_stdin_target = fetch_emails(arg, user_args)
                 if user_stdin_target:
@@ -157,7 +161,7 @@ def h8mail(user_args):
 
     c.info_news("Removing duplicates")
     targets = list(set(targets))
-    
+
     c.good_news("Targets:")
     for t in targets:
         c.good_news(t)
@@ -333,9 +337,9 @@ def parse_args(args):
 
     return parser.parse_args(args)
 
+
 def main():
 
-    
     print_banner("warn")
     print_banner("version")
     print_banner()

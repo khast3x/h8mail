@@ -71,7 +71,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "PIERROT" ',
+            "Version " + __version__ + ' - "ROCKSROCKSMASSON" ',
             c.reset,
         )
 
@@ -177,8 +177,7 @@ def check_latest_version():
     )
     data = response.json()
     latest = data["tag_name"]
-    # if __version__ == data["tag_name"]:
-    if 1 == 1:
+    if __version__ == data["tag_name"]:
         c.good_news("h8mail is up to date")
     else:
         c.bad_news(

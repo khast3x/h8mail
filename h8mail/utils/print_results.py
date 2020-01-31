@@ -35,7 +35,7 @@ def print_results(results, hide=False):
                     c.print_result(t.target, t.data[i][1], "HUNTER_RELATED")
                 if "EMAILREP" in t.data[i][0]:
                     c.print_result(
-                        t.target, str(t.data[i][1]).capitalize(), t.data[i][0]
+                        t.target, str(t.data[i][1]), t.data[i][0]
                     )
                 if "SNUS" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])

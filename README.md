@@ -16,10 +16,10 @@
 
 
 
-![h8mailScreenCap](https://i.imgur.com/91pd2D2.png)  
+![h8mailScreenCap](https://i.imgur.com/91pd2D2.png | width=420)  
 :arrow_up: *Simple email lookup with `--hide` argument*
 
-![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png)
+![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png | width=420)
 :arrow_up: *Searching local breach for every `@gmail.com` email*
 
 ----

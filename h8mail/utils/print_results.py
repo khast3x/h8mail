@@ -8,7 +8,7 @@ def print_results(results, hide=False):
         print()
         c.print_res_header(t.target)
         for i in range(len(t.data)):
-            sleep(0.001)
+            # sleep(0.001)
             if len(t.data) == 1:
                 print()
                 c.info_news("No results founds")

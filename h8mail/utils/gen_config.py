@@ -12,8 +12,8 @@ def gen_config_file():
 ; Uncomment to activate
 ;hunterio = 
 ;snusbase_token = 
-;weleakinfo_priv = 
-;weleakinfo_pub = 
+;;weleakinfo_priv = 
+;;weleakinfo_pub = 
 ;hibp = 
 ;leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
 ;leak-lookup_priv = 

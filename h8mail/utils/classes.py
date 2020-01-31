@@ -302,13 +302,19 @@ class target:
                 c.info_news("[" + self.target + "]>[emailrep.io]")
             url = "https://emailrep.io/{}".format(self.target)
             response = self.make_request(url)
-            if response.status_code not in [200, 404]:
+            if response.status_code not in [200, 404, 429]:
                 c.bad_news("Could not contact emailrep for " + self.target)
                 print(response.status_code)
                 print(response)
                 return
 
-            if response.status_code == 200:
+            if response.status_code == 429:
+                c.info_news("[warning] emailrep.io: Unauthenticated API requests limit reached. Get a free API key here: https://bit.ly/3b1e7Pw")
+            elif response.status_code == 404:
+                c.info_news(
+                    "No data found for {} using emailrep.io".format(self.target)
+                )
+            elif response.status_code == 200:
                 data = response.json()
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
@@ -338,11 +344,6 @@ class target:
                 if "never" in data["details"]["last_seen"]:
                     return
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
-
-            elif response.status_code == 404:
-                c.info_news(
-                    "No data found for {} using emailrep.io".format(self.target)
-                )
             else:
                 c.bad_news(
                     "emailrep.io: got API response code {code} for {target}".format(
@@ -414,7 +415,7 @@ class target:
 
     def get_hunterio_public(self):
         try:
-            c.info_news("[" + self.target + "]>[hunter.io-public]")
+            c.info_news("[" + self.target + "]>[hunter.io public]")
             target_domain = self.target.split("@")[1]
             url = "https://api.hunter.io/v2/email-count?domain={}".format(target_domain)
             req = self.make_request(url)
@@ -432,7 +433,7 @@ class target:
 
     def get_hunterio_private(self, api_key):
         try:
-            c.info_news("[" + self.target + "]>[hunter.io-private]")
+            c.info_news("[" + self.target + "]>[hunter.io private]")
             target_domain = self.target.split("@")[1]
             url = "https://api.hunter.io/v2/domain-search?domain={target}&api_key={key}".format(
                 target=target_domain, key=api_key
@@ -513,7 +514,7 @@ class target:
 
     def get_leaklookup_pub(self, api_key):
         try:
-            c.info_news("[" + self.target + "]>[leaklookup-public]")
+            c.info_news("[" + self.target + "]>[leaklookup public]")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": "email_address", "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=20)
@@ -549,7 +550,7 @@ class target:
                     "Leaklookup does not support {} search (yet)".format(user_query)
                 )
                 return
-            c.info_news("[" + self.target + "]>[leaklookup-private]")
+            c.info_news("[" + self.target + "]>[leaklookup private]")
             url = "https://leak-lookup.com/api/search"
             payload = {"key": api_key, "type": user_query, "query": self.target}
             req = self.make_request(url, meth="POST", data=payload, timeout=60)
@@ -568,14 +569,13 @@ class target:
                                 ("LKLP_RELATED", d["email_address"].strip())
                             )
                         if "password" in d.keys():
-                            if "plaintext" in d:
-                                self.pwned += 1
-                                self.data.append(("LKLP_HASH", d["password"]))
-                                b_counter += 1
-                            else:
-                                self.pwned += 1
-                                self.data.append(("LKLP_PASSWORD", d["password"]))
-                                b_counter += 1
+                            self.pwned += 1
+                            self.data.append(("LKLP_PASSWORD", d["password"]))
+                            b_counter += 1
+                        if "hash" in d.keys():
+                            self.pwned += 1
+                            self.data.append(("LKLP_HASH", d["password"]))
+                            b_counter += 1
                         if "ipaddress" in d.keys():
                             self.pwned += 1
                             self.data.append(("LKLP_LASTIP", d["ipaddress"]))
@@ -630,7 +630,7 @@ class target:
 
     def get_weleakinfo_priv(self, api_key, user_query):
         try:
-            c.info_news("[" + self.target + "]>[weleakinfo-priv]")
+            c.info_news("[" + self.target + "]>[weleakinfo priv]")
             sleep(0.4)
             url = "https://api.weleakinfo.com/v3/search"
             self.headers.update({"Authorization": "Bearer " + api_key})
@@ -686,7 +686,7 @@ class target:
 
     def get_weleakinfo_pub(self, api_key):
         try:
-            c.info_news("[" + self.target + "]>[weleakinfo-public]")
+            c.info_news("[" + self.target + "]>[weleakinfo public]")
             url = "https://api.weleakinfo.com/v3/public/email/{query}".format(
                 query=self.target
             )
@@ -723,15 +723,20 @@ class target:
                 user_query == "hashed_password"
             if user_query == "ip":
                 user_query == "ip_address"
+             
             c.info_news("[" + self.target + "]>[dehashed]")
             url = "https://api.dehashed.com/search?query="
-            search_query = user_query + ":" + '"' + self.target + '"'
+            if user_query == "domain":
+                search_query = "email" + ":" + '"*@' + self.target + '"'
+            else:
+                search_query = user_query + ":" + '"' + self.target + '"'
             self.headers.update({"Accept": "application/json"})
             req = self.make_request(
                 url + search_query, meth="GET", timeout=60, auth=(api_email, api_key)
             )
             if req.status_code == 200:
                 response = req.json()
+
                 for result in response["entries"]:
                     if (
                         "username" in result
@@ -775,6 +780,9 @@ class target:
                         result["obtained_from"]
                     ):
                         self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
+                
+                if response["balance"] is not None:
+                    self.data.append(("DHASHD_CREDITS", str(response["balance"]) + " DEHASHED CREDITS REMAINING"))
             else:
                 c.bad_news("Dehashed error: status code " + req.status_code)
             self.headers.popitem()

@@ -33,9 +33,10 @@
 ##  :tangerine: Features
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
+* :earth_africa: Target list of URLs to directly find and target emails
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
-* :white_check_mark: CLI or Bulk file-reading for targeting
+* :white_check_mark: Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
 * :house: Search cleartext and compressed .gz files locally using multiprocessing
@@ -43,10 +44,28 @@
 * :fire: Get related emails
 * :dragon_face: Chase related emails by adding them to the ongoing search
 * :crown: Supports premium lookup services for advanced users
-* :factory: Custom query premium APIs. Supports username, hash, ip, domain and password
+* :factory: Custom query premium APIs. Supports username, hash, ip, domain and password and more
 * :books: Regroup breach results for all targets and methods
 * :eyes: Includes option to hide passwords for demonstrations
 * :rainbow: Delicious colors
+|                                     h8mail 2.5 feature list                                    |
+|:----------------------------------------------------------------------------------------------:|
+|    :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs    |
+|              :earth_africa: Target list of URLs to directly find and target emails             |
+|              :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")              |
+|        :package: Painless install. Available through  `pip` , only requires  `requests`        |
+|                       :white_check_mark: Bulk file-reading for targeting                       |
+|                                    :memo: Output to CSV file                                   |
+|                :muscle: Compatible with the "Breach Compilation" torrent scripts               |
+|         :house: Search cleartext and compressed .gz files locally using multiprocessing        |
+|                                    :fire: Get related emails                                   |
+|             :dragon_face: Chase related emails by adding them to the ongoing search            |
+|                   :crown: Supports premium lookup services for advanced users                  |
+| :factory: Custom query premium APIs. Supports username, hash, ip, domain and password and more |
+|                   :books: Regroup breach results for all targets and methods                   |
+|                   :eyes: Includes option to hide passwords for demonstrations                  |
+|                                   :rainbow: Delicious colors                                   |
+
 
 ---
 

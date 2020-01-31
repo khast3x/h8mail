@@ -1,9 +1,4 @@
- <!-- <p align="center">
-<a href=""> <img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo">
-</p> -->
-
 <h1 align="center">
-  <br>
   <a href="https://github.com/khast3x/h8mail/releases/"><img src="https://i.postimg.cc/LXR6Jq8Y/logo-transparent.png" width="420" title="h8maillogo"></a>
 </h1>
 
@@ -14,22 +9,15 @@
 
 ----
 
-<!-- <p align="center">
-<a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"> <img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the wiki!">
-</p> -->
 
 <h1 align="center">
-  <br>
-  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="h8maillogo"></a>
-
+  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the Wiki!"></a>
 </h1>
 
 
 
-----
-
 ![h8mailScreenCap](https://i.imgur.com/fpotSQv.png)  
-*Simple email lookup*
+*Simple email lookup with demonstration mode hidding passwords*
 
 ![h8mailScreenCap2](https://i.imgur.com/rpyPgC6.png)
 *Searching local breach for every `@gmail.com` email*

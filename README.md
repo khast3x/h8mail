@@ -18,14 +18,14 @@
 <h1 align="center">
   <img src="https://i.imgur.com/91pd2D2.png" width="520" title="Simple Targeting">
 <h4 align=center><i>
-:arrow_up: Simple email lookup with `--hide` argument</i></h4>
+Simple email lookup with --hide argument</i></h4>
 </h1>
 
 
 <h1 align="center">
   <img src="https://i.imgur.com/rpyPgC6.png" width="520" title="Targeting With Local Breach">
 <h4 align=center><i>
-:arrow_up: Searching local breach for every @gmail.com email</i></h4>
+Searching local breach for every @gmail.com email</i></h4>
 </h1>
 
 

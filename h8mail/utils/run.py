@@ -55,6 +55,8 @@ def target_factory(targets, user_args):
     if user_args.skip_defaults is False:
         scylla_up = check_scylla_online()
 
+
+
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
@@ -132,6 +134,10 @@ def h8mail(user_args):
         exit(1)
 
     start_time = time.time()
+
+    import warnings
+
+    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
     targets = []
     if user_args.user_urls:

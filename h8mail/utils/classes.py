@@ -389,8 +389,11 @@ class target:
             url = "https://scylla.sh/search?q={}".format(
                 requests.utils.requote_uri(uri_scylla)
             )
-            response = self.make_request(url, verify=False)
+
+            # https://github.com/khast3x/h8mail/issues/64
+            response = self.make_request(url, verify=False, auth=requests.auth.HTTPBasicAuth("sammy","BasicPassword!"))
             self.headers.popitem()
+
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact scylla.sh for " + self.target)
                 print(response.status_code)

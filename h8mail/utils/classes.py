@@ -310,7 +310,7 @@ class target:
 
             if response.status_code == 429:
                 c.info_news(
-                    "[warning] emailrep.io: Unauthenticated API requests limit reached. Get a free API key here: https://bit.ly/3b1e7Pw"
+                    "[warning] Is your emailrep key working? Get a free API key here: https://bit.ly/3b1e7Pw"
                 )
             elif response.status_code == 404:
                 c.info_news(

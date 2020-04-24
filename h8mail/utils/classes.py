@@ -310,7 +310,7 @@ class target:
 
             if response.status_code == 429:
                 c.info_news(
-                    "[warning] emailrep.io: Unauthenticated API requests limit reached. Get a free API key here: https://bit.ly/3b1e7Pw"
+                    "[warning] Is your emailrep key working? Get a free API key here: https://bit.ly/3b1e7Pw"
                 )
             elif response.status_code == 404:
                 c.info_news(
@@ -320,14 +320,15 @@ class target:
                 data = response.json()
 
                 self.data.append(
-                        (
-                            "EMAILREP_INFO",
-                            "Reputation: {rep} | Deliverable: {deli}".format(
-                        rep=data["reputation"].capitalize(), deli=data["details"]["deliverable"]
+                    (
+                        "EMAILREP_INFO",
+                        "Reputation: {rep} | Deliverable: {deli}".format(
+                            rep=data["reputation"].capitalize(),
+                            deli=data["details"]["deliverable"],
+                        ),
                     )
-                        )
-                    )
-                
+                )
+
                 if data["details"]["credentials_leaked"] is True:
                     self.pwned += int(data["references"])  # or inc num references
                     if data["references"] == 1:
@@ -352,11 +353,25 @@ class target:
                 if len(data["details"]["profiles"]) != 0:
                     for profile in data["details"]["profiles"]:
                         self.data.append(("EMAILREP_SOCIAL", profile.capitalize()))
-                c.good_news("Found social profils")
+                c.good_news(
+                    "Found {num} social profiles linked to {target} using emailrep.io".format(
+                        num=len(data["details"]["profiles"]), target=self.target
+                    )
+                )
                 if "never" in data["details"]["last_seen"]:
                     return
                 self.data.append(("EMAILREP_1ST_SN", data["details"]["first_seen"]))
+                c.good_news(
+                    "{target} was first seen on the {data}".format(
+                        data=data["details"]["first_seen"], target=self.target
+                    )
+                )
                 self.data.append(("EMAILREP_LASTSN", data["details"]["last_seen"]))
+                c.good_news(
+                    "{target} was last seen on the {data}".format(
+                        data=data["details"]["last_seen"], target=self.target
+                    )
+                )
             else:
                 c.bad_news(
                     "emailrep.io: got API response code {code} for {target}".format(
@@ -389,8 +404,15 @@ class target:
             url = "https://scylla.sh/search?q={}".format(
                 requests.utils.requote_uri(uri_scylla)
             )
-            response = self.make_request(url, verify=False)
+
+            # https://github.com/khast3x/h8mail/issues/64
+            response = self.make_request(
+                url,
+                verify=False,
+                auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"),
+            )
             self.headers.popitem()
+
             if response.status_code not in [200, 404]:
                 c.bad_news("Could not contact scylla.sh for " + self.target)
                 print(response.status_code)
@@ -403,7 +425,7 @@ class target:
                     if k is not None:
                         total += 1
             c.good_news(
-                "Found {num} entries for {target} using Scylla.sh ".format(
+                "Found {num} entries for {target} using scylla.sh ".format(
                     num=total, target=self.target
                 )
             )
@@ -742,6 +764,11 @@ class target:
 
     def get_dehashed(self, api_email, api_key, user_query):
         try:
+            # New Dehashed API needs fixing, waiting for devs to respond
+            c.bad_news("Dehashed is temporarily unavailable")
+            c.bad_news("This should be fixed in the next updated\n")
+            return
+
             if user_query == "hash":
                 user_query == "hashed_password"
             if user_query == "ip":
@@ -823,4 +850,3 @@ class target:
         except Exception as ex:
             c.bad_news("Dehashed error with {target}".format(target=self.target))
             print(ex)
-

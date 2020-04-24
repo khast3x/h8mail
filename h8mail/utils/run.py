@@ -49,11 +49,13 @@ def target_factory(targets, user_args):
     skip_default_queries = False
     if user_args.user_query is not None:
         query = user_args.user_query
-        skip_default_queries = True  # ??
+        skip_default_queries = True  # custom query skips default query automatically
 
     scylla_up = False
     if user_args.skip_defaults is False:
         scylla_up = check_scylla_online()
+
+
 
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
@@ -64,12 +66,13 @@ def target_factory(targets, user_args):
         if not skip_default_queries:
             if not user_args.skip_defaults:
                 current_target.get_hunterio_public()
-                if api_keys is None or "emailrep" not in api_keys:
-                    current_target.get_emailrepio()
-                elif (
-                    api_keys is not None and "emailrep" in api_keys and query == "email"
-                ):
-                    current_target.get_emailrepio(api_keys["emailrep"])
+                ## emailrep seems to insta-block h8mail user agent without a key
+                # if api_keys is None or "emailrep" not in api_keys:
+                #     current_target.get_emailrepio()
+                # elif (
+                #     api_keys is not None and "emailrep" in api_keys and query == "email"
+                # ):
+                #     current_target.get_emailrepio(api_keys["emailrep"])
 
         if scylla_up:
             current_target.get_scylla(query)
@@ -132,6 +135,10 @@ def h8mail(user_args):
         exit(1)
 
     start_time = time.time()
+
+    import warnings
+
+    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
     targets = []
     if user_args.user_urls:

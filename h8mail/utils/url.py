@@ -27,7 +27,7 @@ def fetch_urls(target):
 
 def get_urls_from_file(targets_file):
     """
-    For each line in file, check for URLs using fetch_urls()(todo).
+    For each line in file, check for URLs using fetch_urls().
     Returns list of URLs.
     """
     email_obj_list = []

@@ -71,7 +71,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ROCKSROCKSMASSON" ',
+            "Version " + __version__ + ' - "ROCKSMASSON.1" ',
             c.reset,
         )
 
@@ -191,14 +191,16 @@ def check_scylla_online():
     Checks if scylla.sh is online
     """
     # Supress SSL Warning on UI
+    # https://github.com/khast3x/h8mail/issues/64
     try:
-        requests.packages.urllib3.disable_warnings()
         re = requests.head(
-            url="https://scylla.sh", verify=False
+            url="https://scylla.sh", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!")
         )
         if re.status_code == 200:
             c.good_news("scylla.sh is up")
             return True
+        else:
+            c.info_news("scylla.sh is down, skipping")
         return False
     except Exception:
         c.info_news("scylla.sh is down, skipping")

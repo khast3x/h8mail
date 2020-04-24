@@ -71,7 +71,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ROCKSROCKSMASSON" ',
+            "Version " + __version__ + ' - "ROCKSMASSON.1" ',
             c.reset,
         )
 

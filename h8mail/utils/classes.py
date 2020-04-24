@@ -764,6 +764,11 @@ class target:
 
     def get_dehashed(self, api_email, api_key, user_query):
         try:
+            # New Dehashed API needs fixing, waiting for devs to respond
+            c.bad_news("Dehashed is temporarily unavailable")
+            c.bad_news("This should be fixed in the next updated\n")
+            return
+
             if user_query == "hash":
                 user_query == "hashed_password"
             if user_query == "ip":

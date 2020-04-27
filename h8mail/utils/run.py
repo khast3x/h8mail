@@ -74,13 +74,11 @@ def target_factory(targets, user_args):
                 # ):
                 #     current_target.get_emailrepio(api_keys["emailrep"])
 
-        if scylla_up:
-            current_target.get_scylla(query)
-
         if api_keys is not None:
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
-
+            if "emailrep" in api_keys and query == "email":
+                current_target.get_emailrepio(api_keys["emailrep"])
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if "snusbase_token" in api_keys:
@@ -106,6 +104,9 @@ def target_factory(targets, user_args):
                     )
                 else:
                     c.bad_news("Missing Dehashed email")
+        if scylla_up:
+            current_target.get_scylla(query)
+
         # Chasing
         if user_args.chase_limit and counter <= init_targets_len:
             user_args_force_email = user_args

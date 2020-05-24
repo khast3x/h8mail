@@ -72,7 +72,7 @@
 | [Snusbase](https://snusbase.com/) - Service                    | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: |  :white_check_mark: :key:  |
 | [Leak-Lookup](https://leak-lookup.com/) - Public               |                Number of search-able breach results               | :white_check_mark: (:key:) |
 | [Leak-Lookup](https://leak-lookup.com/) - Service              |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
-| [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark:     |
+| [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark: :key:    |
 | [Scylla.sh](https://scylla.sh/) - Service (free)               |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark:         |
 | [Dehashed.sh](https://dehashed.com/) - Service                 |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_large_square: :key:   |
 

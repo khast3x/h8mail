@@ -264,11 +264,3 @@ ___
   <a href="https://twitter.com/kh4st3x"><img src="https://i.imgur.com/S79Nimd.png" width="420" title="Twitter"></a>
 </h1>
 
-
-
-*If you wish to get smart on this project:*
-
-
-<h1 align="center">
-  <a href="https://github.com/khast3x/h8mail/wiki?ref=readmebutton"><img src="https://i.postimg.cc/htg6xGmm/button.png" width="420" title="To the Wiki!"></a>
-</h1>

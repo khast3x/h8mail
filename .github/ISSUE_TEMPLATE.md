@@ -1,3 +1,11 @@
+*Issues not respecting the issue template will be closed without being read, thank you.*
+
+### Checkbox
+
+- [ ] I have thoroughly checked the answer is not in the [wiki](https://github.com/khast3x/h8mail/wiki).
+
+### Env
+
 * h8mail version:
 * Python version:
 * Operating System:

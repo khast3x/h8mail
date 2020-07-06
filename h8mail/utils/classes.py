@@ -296,12 +296,28 @@ class target:
             intelx = i(key=api_key)
             c.info_news("[" + self.target + "]>[intelx.io]")
             cap = intelx.GET_CAPABILITIES()
+            print(cap["buckets"])
             c.info_news("IntelX Search credits remaining : {creds}".format(creds=cap["paths"]["/intelligent/search"]["Credit"]))
-            search = intelx.search(self.target)
+            search = intelx.search(self.target, buckets=["leaks.public"], maxresults=4)
+            from .localsearch import local_search_single
             for record in search['records']:
-                # print(record)
-                contents = intelx.FILE_VIEW(record['type'], record['media'], record['storageid'], record['bucket'])
-                print(contents) # Contains search data
+                if record['media'] is not 24:
+                    c.info_news("Not text ({type}), skipping {name}".format(type=record['mediah'], name=record['name']))
+                    continue
+                c.good_news("Analysing " + record['name'])
+                intelx.FILE_READ(record['systemid'], 0, record['bucket'], "file1.bin")
+                found_list = local_search_single(["file1.bin"], [self.target])
+                for f in found_list:
+                    self.data.append(
+                    (
+                        "INTELX.IO",
+                        "File: {name} | {content}".format(
+                            name=record['name'].capitalize(),
+                            content=f.content.strip(),
+                        ),
+                    )
+                )
+                # print(contents) # Contains search data
                 print(f"Found media type {record['media']} in {record['bucket']}")
                 print("----------")
 

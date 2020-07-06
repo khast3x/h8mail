@@ -300,14 +300,19 @@ class target:
             c.info_news("IntelX Search credits remaining : {creds}".format(creds=cap["paths"]["/intelligent/search"]["Credit"]))
             search = intelx.search(self.target, buckets=["leaks.public"], maxresults=4)
             from .localsearch import local_search_single
+            from os import remove
             for record in search['records']:
+                filename = record['systemid'].strip() + ".txt"
+                # filename = "IntelXtmp.txt"
+                print("FILENAME: " + filename)
                 if record['media'] is not 24:
-                    c.info_news("Not text ({type}), skipping {name}".format(type=record['mediah'], name=record['name']))
+                    c.info_news("Skipping {name}, not text ({type})".format(type=record['mediah'], name=record['name']))
                     continue
                 c.good_news("Analysing " + record['name'])
-                intelx.FILE_READ(record['systemid'], 0, record['bucket'], "file1.bin")
-                found_list = local_search_single(["file1.bin"], [self.target])
+                intelx.FILE_READ(record['systemid'], 0, record['bucket'], filename)
+                found_list = local_search_single([filename], [self.target])
                 for f in found_list:
+                    self.pwned += 1
                     self.data.append(
                     (
                         "INTELX.IO",
@@ -319,6 +324,8 @@ class target:
                 )
                 # print(contents) # Contains search data
                 print(f"Found media type {record['media']} in {record['bucket']}")
+                c.info_news("Removing {file}".format(file=filename))
+                remove(filename)
                 print("----------")
 
 

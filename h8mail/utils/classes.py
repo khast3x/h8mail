@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+from .intelx import intelx as i
 from time import sleep
 from .colors import colors as c
 import requests
@@ -290,6 +289,21 @@ class target:
                 )
         except Exception as ex:
             c.bad_news("HIBP v3 PASTE error: " + self.target)
+            print(ex)
+
+    def get_intelx(self, api_key=""):
+        try:
+            intelx = i(key=api_key)
+            cap = intelx.GET_CAPABILITIES()
+            c.info_news("IntelX Search credits remaining : {creds}".format(creds=cap["paths"]["/intelligent/search"]["Credit"]))
+            search = intelx.search(self.target)
+            for record in search['records']:
+                print(record)
+                print(f"Found media type {record['media']} in {record['bucket']}")
+                print("----------")
+
+        except Exception as ex:
+            c.bad_news("intelx.io error: " + self.target)
             print(ex)
 
     def get_emailrepio(self, api_key=""):

@@ -294,13 +294,17 @@ class target:
     def get_intelx(self, api_key=""):
         try:
             intelx = i(key=api_key)
+            c.info_news("[" + self.target + "]>[intelx.io]")
             cap = intelx.GET_CAPABILITIES()
             c.info_news("IntelX Search credits remaining : {creds}".format(creds=cap["paths"]["/intelligent/search"]["Credit"]))
             search = intelx.search(self.target)
             for record in search['records']:
-                print(record)
+                # print(record)
+                contents = intelx.FILE_VIEW(record['type'], record['media'], record['storageid'], record['bucket'])
+                print(contents) # Contains search data
                 print(f"Found media type {record['media']} in {record['bucket']}")
                 print("----------")
+
 
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)

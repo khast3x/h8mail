@@ -110,97 +110,6 @@ class target:
             print(response)
         return response
 
-    # Deprecated
-    def get_hibp(self):
-        try:
-            sleep(1.3)
-            c.info_news(c.bold + "HIBP free tier will stop working on the 2019/08/18")
-            c.info_news(
-                c.bold
-                + "You can already use a purchased API key using h8mail (config file)"
-                + c.reset
-            )
-            url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
-                self.target
-            )
-            response = self.make_request(url)
-            if response.status_code not in [200, 404]:
-                c.bad_news("Could not contact HIBP for " + self.target)
-                print(response.status_code)
-                return
-
-            if response.status_code == 200:
-                data = response.json()
-                for d in data:  # Returned type is a dict of Name : Service
-                    for _, ser in d.items():
-                        self.data.append(("HIBP", ser))
-                        self.pwned += 1
-
-                c.good_news(
-                    "Found {num} breaches for {target} using HIBP".format(
-                        num=len(self.data) - 1, target=self.target
-                    )
-                )
-                self.get_hibp_pastes()
-
-            elif response.status_code == 404:
-                c.info_news("No breaches found for {} using HIBP".format(self.target))
-            else:
-                c.bad_news(
-                    "HIBP: got API response code {code} for {target}".format(
-                        code=response.status_code, target=self.target
-                    )
-                )
-        except Exception as ex:
-            c.bad_news("HIBP error: " + self.target)
-            print(ex)
-
-    # Deprecated
-    def get_hibp_pastes(self):
-        try:
-            sleep(1.3)
-            url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(
-                self.target
-            )
-            response = self.make_request(url)
-            if response.status_code not in [200, 404]:
-                c.bad_news("Could not contact HIBP PASTE for " + self.target)
-                print(response.status_code)
-                print(response)
-                return
-
-            if response.status_code == 200:
-
-                data = response.json()
-                for d in data:  # Returned type is a dict of Name : Service
-                    self.pwned += 1
-                    if "Pastebin" in d["Source"]:
-                        self.data.append(
-                            ("HIBP_PASTE", "https://pastebin.com/" + d["Id"])
-                        )
-                    else:
-                        self.data.append(("HIBP_PASTE", d["Id"]))
-
-                c.good_news(
-                    "Found {num} pastes for {target} using HIBP".format(
-                        num=len(data), target=self.target
-                    )
-                )
-
-            elif response.status_code == 404:
-                c.info_news(
-                    "No pastes found for {} using HIBP PASTE".format(self.target)
-                )
-            else:
-                c.bad_news(
-                    "HIBP PASTE: got API response code {code} for {target}".format(
-                        code=response.status_code, target=self.target
-                    )
-                )
-        except Exception as ex:
-            c.bad_news("HIBP PASTE error: " + self.target)
-            print(ex)
-
     # New HIBP API
     def get_hibp3(self, api_key):
         try:
@@ -296,38 +205,71 @@ class target:
             intelx = i(key=api_key)
             c.info_news("[" + self.target + "]>[intelx.io]")
             cap = intelx.GET_CAPABILITIES()
-            print(cap["buckets"])
-            c.info_news("IntelX Search credits remaining : {creds}".format(creds=cap["paths"]["/intelligent/search"]["Credit"]))
-            search = intelx.search(self.target, buckets=["leaks.public"], maxresults=4)
+            intel_files = []
+            # print(cap["buckets"])
+            # import json
+            # print(json.dumps(cap, indent=4))
+            c.info_news(
+                "IntelX Search credits remaining : {creds}".format(
+                    creds=cap["paths"]["/intelligent/search"]["Credit"]
+                )
+            )
+            search = intelx.search(
+                self.target,
+                buckets=["leaks.public", "leaks.private", "pastes"],
+                maxresults=10,
+                media=24,
+            )
+            import json
+
+            print(json.dumps(search, indent=4))
+            c.good_news("IntelX Search returned the following files:")
+            for record in search["records"]:
+                c.good_news("Name: " + record["name"])
+                c.good_news("Bucket: " + record["bucket"])
+                c.good_news("Size: " + '{:,.0f}'.format(record["size"]/float(1<<20))+" MB")
+                c.info_news("SID: " + record["storageid"])
+                print("------")
+
             from .localsearch import local_search_single
-            from os import remove
-            for record in search['records']:
-                filename = record['systemid'].strip() + ".txt"
-                # filename = "IntelXtmp.txt"
-                print("FILENAME: " + filename)
-                if record['media'] is not 24:
-                    c.info_news("Skipping {name}, not text ({type})".format(type=record['mediah'], name=record['name']))
+            from os import remove, fspath
+
+            for record in search["records"]:
+                filename = record["systemid"].strip() + ".txt"
+                intel_files.append(filename)
+                if record["media"] is not 24:
+                    c.info_news(
+                        "Skipping {name}, not text ({type})".format(
+                            type=record["mediah"], name=record["name"]
+                        )
+                    )
                     continue
-                c.good_news("Analysing " + record['name'])
-                intelx.FILE_READ(record['systemid'], 0, record['bucket'], filename)
+                c.good_news(
+                    "Fetching "
+                    + record["name"]
+                    + " as file "
+                    + filename
+                    + " ("
+                    + '{:,.0f}'.format(record["size"]/float(1<<20))
+                    + " MB)"
+                )
+                intelx.FILE_READ(record["systemid"], 0, record["bucket"], filename)
                 found_list = local_search_single([filename], [self.target])
                 for f in found_list:
                     self.pwned += 1
                     self.data.append(
-                    (
-                        "INTELX.IO",
-                        "File: {name} | {content}".format(
-                            name=record['name'].capitalize(),
-                            content=f.content.strip(),
-                        ),
+                        (
+                            "INTELX.IO",
+                            "File: {name} | {content}".format(
+                                name=record["name"].strip(), content=f.content.strip(),
+                            ),
+                        )
                     )
-                )
                 # print(contents) # Contains search data
-                print(f"Found media type {record['media']} in {record['bucket']}")
-                c.info_news("Removing {file}".format(file=filename))
-                remove(filename)
                 print("----------")
-
+            for f in intel_files:
+                c.info_news("Removing {file}".format(file=f))
+                remove(f)
 
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)

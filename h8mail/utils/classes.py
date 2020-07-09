@@ -200,43 +200,21 @@ class target:
             c.bad_news("HIBP v3 PASTE error: " + self.target)
             print(ex)
 
-    def get_intelx(self, api_key=""):
+    def get_intelx(self, api_keys):
         try:
-            intelx = i(key=api_key)
-            c.info_news("[" + self.target + "]>[intelx.io]")
-            cap = intelx.GET_CAPABILITIES()
             intel_files = []
-            # print(cap["buckets"])
-            # import json
-            # print(json.dumps(cap, indent=4))
-            c.info_news(
-                "[intelx.io] Search credits remaining : {creds}".format(
-                    creds=cap["paths"]["/intelligent/search"]["Credit"]
-                )
-            )
-            c.info_news("[intelx.io] Search in progress")
-            search = intelx.search(
-                self.target,
-                buckets=["leaks.public", "leaks.private", "pastes"],
-                maxresults=10,
-                media=24,
-            )
-            if self.debug:
-                import json
-
-                print(json.dumps(search, indent=4))
-            c.good_news("[intelx.io] Search returned the following files:")
-            for record in search["records"]:
-                c.good_news("Name: " + record["name"])
-                c.good_news("Bucket: " + record["bucket"])
-                c.good_news(
-                    "Size: " + "{:,.0f}".format(record["size"] / float(1 << 20)) + " MB"
-                )
-                c.info_news("SID: " + record["storageid"])
-                print("------")
-
+            intelx = i(key=api_keys["intelx_key"])
+            from .intelx_helpers import intelx_getsearch
             from .localsearch import local_search
             from os import remove, fspath
+
+            maxfile = 10
+            if api_keys["intelx_maxfile"]:
+                maxfile = int(api_keys["intelx_maxfile"])
+            search = intelx_getsearch(self.target, intelx, maxfile)
+            if self.debug:
+                import json
+                print(json.dumps(search, indent=4))
 
             for record in search["records"]:
                 filename = record["systemid"].strip() + ".txt"
@@ -249,7 +227,7 @@ class target:
                     )
                     continue
                 c.good_news(
-                    "[intelx.io] Fetching "
+                    "[" + self.target + "]>[intelx.io] Fetching "
                     + record["name"]
                     + " as file "
                     + filename
@@ -264,16 +242,19 @@ class target:
                     self.data.append(
                         (
                             "INTELX.IO",
-                            "File: {name} | {content}".format(
-                                name=record["name"].strip(), content=f.content.strip(),
+                            "File: {name} | Line: {line} | {content}".format(
+                                name=record["name"].strip(), line=f.line, content=f.content.strip(),
                             ),
                         )
                     )
                 # print(contents) # Contains search data
                 print("----------")
             for f in intel_files:
-                c.info_news("[intelx.io] Removing {file}".format(file=f))
-                remove(f)
+                if self.debug:
+                    c.info_news("[" + self.target + "]>[intelx.io] [DEBUG] Keeping {file}".format(file=f))
+                else:
+                    c.info_news("[" + self.target + "]>[intelx.io] Removing {file}".format(file=f))
+                    remove(f)
 
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)

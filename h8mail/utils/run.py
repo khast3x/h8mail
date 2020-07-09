@@ -82,7 +82,7 @@ def target_factory(targets, user_args):
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
             if "intelx_key" in api_keys:
-                current_target.get_intelx(api_keys["intelx_key"])
+                current_target.get_intelx(api_keys)
             if "snusbase_token" in api_keys:
                 if "snusbase_url" in api_keys:
                     snusbase_url = api_keys["snusbase_url"]

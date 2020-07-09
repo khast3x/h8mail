@@ -203,7 +203,11 @@ class target:
     def get_intelx(self, api_keys):
         try:
             intel_files = []
-            intelx = i(key=api_keys["intelx_key"])
+            intelx = i(key=api_keys["intelx_key"], ua="h8mail-v.{h8ver}-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+                h8ver=__version__,
+                pyver=sys.version.split(" ")[0],
+                platfrm=platform.platform().split("-")[0],
+            ))
             from .intelx_helpers import intelx_getsearch
             from .localsearch import local_search
             from os import remove, fspath
@@ -211,7 +215,7 @@ class target:
             maxfile = 10
             if api_keys["intelx_maxfile"]:
                 maxfile = int(api_keys["intelx_maxfile"])
-            search = intelx_getsearch(self.target, intelx, maxfile)
+            search, search_id = intelx_getsearch(self.target, intelx, maxfile)
             if self.debug:
                 import json
 
@@ -245,10 +249,10 @@ class target:
                     self.data.append(
                         (
                             "INTELX.IO",
-                            "File: {name} | Line: {line} - {content}".format(
+                            "{name} | Line: {line} - {content}".format(
                                 name=record["name"].strip(),
                                 line=f.line,
-                                content=f.content.strip(),
+                                content=" ".join(f.content.split()),
                             ),
                         )
                     )
@@ -268,7 +272,9 @@ class target:
                         + "]>[intelx.io] Removing {file}".format(file=f)
                     )
                     remove(f)
-
+            c.info_news(f"Terminating search {search_id}")
+            terminate = intelx.INTEL_TERMINATE_SEARCH(search_id)
+            print(terminate)
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)
             print(ex)

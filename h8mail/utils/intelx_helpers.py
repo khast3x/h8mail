@@ -19,20 +19,22 @@ def intelx_getsearch(target, intelx, maxfile):
             creds=cap["paths"]["/intelligent/search"]["Credit"]
         )
     )
-    c.info_news("[" + target + "]>[intelx.io] Search in progress (max results: "+ str(maxfile) + ")")
-    search = intelx.search(
+    c.info_news("[" + target + "]>[intelx.io] Search in progress (max results : "+ str(maxfile) + ")")
+    search, search_id = intelx.search(
         target,
-        buckets=["leaks.public", "leaks.private", "pastes"],
+        buckets=["leaks.public", "leaks.private", "pastes", "darknet.tor"],
+        # buckets=[],
         maxresults=maxfile,
         media=24,
     )
-    c.good_news("[" + target + "]>[intelx.io] Search returned the following files:\n----")
+    c.good_news("[" + target + "]>[intelx.io] Search returned the following files :\n----")
     for record in search["records"]:
         c.good_news("Name: " + record["name"])
         c.good_news("Bucket: " + record["bucket"])
         c.good_news(
             "Size: " + "{:,.0f}".format(record["size"] / float(1 << 20)) + " MB"
         )
-        c.info_news("SID: " + record["storageid"])
+        c.info_news("Storage ID: " + record["storageid"])
         print("------")
-    return search
+    
+    return search, search_id

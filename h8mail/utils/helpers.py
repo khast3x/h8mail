@@ -59,18 +59,18 @@ def print_banner(b_type="intro"):
             if keep:
                 code += 36
                 keep = False
-            else:
+            else:   
                 keep = True
     elif "warn" in b_type:
         print(
-            c.fg.pink,
-            "\t  Check out the new wiki!\n\t  https://bit.ly/37xaQVh\n\n",
+            c.fg.lightgrey,
+            "\t\t  h8mail 2.5.3 release post: \n\t\t  https://khast3x.club/posts/h2-5-3/\n\n",
             c.reset,
         )
     elif "version" in b_type:
         print(
             "\t",
-            c.fg.lightgrey,
+            c.fg.pink,
             "Version " + __version__ + ' - "ROCKSMASSON.3" ',
             c.reset,
         )

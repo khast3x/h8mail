@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-## This file is taken directly from the IntelX SDK here :
-## https://github.com/IntelligenceX/SDK/blob/master/Python/intelxapi.py
-
 
 import requests
 import time
@@ -16,9 +11,10 @@ class intelx:
 	# API_ROOT = 'https://public.intelx.io'
 	API_ROOT = ''
 	API_KEY  = ''
+	USER_AGENT = ''
 
 	# If an API key isn't supplied, it will use the free API key (limited functionality)
-	def __init__(self, key="01a61412-7629-4288-b18a-b287266f2798"):
+	def __init__(self, key="01a61412-7629-4288-b18a-b287266f2798", ua='IX-Python/0.5'):
 		"""
 		Initialize API by setting the API key.
 		"""
@@ -28,6 +24,7 @@ class intelx:
 			self.API_ROOT 	= "https://2.intelx.io"
 
 		self.API_KEY = key
+		self.USER_AGENT = ua
 
 	def get_error(self, code):
 		"""
@@ -60,7 +57,7 @@ class intelx:
 		"""
 		Return a JSON object with the current user's API capabilities
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		r = requests.get(f"{self.API_ROOT}/authenticate/info", headers=h)
 		return r.json()
 
@@ -77,6 +74,7 @@ class intelx:
 	def FILE_VIEW(self, ctype, mediatype, sid, bucket='',escape=0):
 		"""
 		Show a file's contents based on its storageid (sid), convert to text where necessary.
+
 		format option:
 		- 0: textview of content
 		- 1: hex view of content
@@ -111,18 +109,22 @@ class intelx:
 	def FILE_READ(self, id, type=0, bucket="", filename=""):
 		"""
 		Read a file's raw contents. Use this for direct data download.
+
 		id option:
 		- Specifies the item's system ID to read.
+
 		type option:
 		- Specifies content disposition or not.
 		- 0: No content disposition. Returns raw binary file.
 		- 1: Content disposition. May fix line endings to CR LF for text files.
+
 		bucket option:
 		- Optional bucket value.
+
 		name option:
 		- Specify the name to save the file as (e.g document.pdf).
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		r = requests.get(f"{self.API_ROOT}/file/read?type={type}&systemid={id}&bucket={bucket}", headers=h, stream=True)
 		with open(f"{filename}", "wb") as f:
 			f.write(r.content)
@@ -144,24 +146,30 @@ class intelx:
 	def INTEL_SEARCH(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
 		"""
 		Initialize an intelligent search and return the ID of the task/search for further processing.
+
 		maxresults option:
 		- Tells how many results to query maximum per bucket.
 		- Example: maxresults=100
+
 		buckets option:
 		- Specify the buckets to search
 		- Example: buckets=[]
 		- Example: buckets=['pastes', 'darknet.i2p']
+
 		timeout option:
 		- Set a timeout value for the search.
 		- Example: timeout=5
+
 		datefrom option:
 		- Set a starting date to begin the search from.
 		- Example: 2020-01-01 00:00:00
 		- Example: 2020-01-01 12:00:00
+
 		dateto option:
 		- Set an ending date to finish the search from.
 		- Example: 2020-02-02 23:59:59
 		- Example: 2020-02-02 00:00:00
+
 		sort option:
 		- Define the way to sort search results.
 		- 0: No sorting.
@@ -169,6 +177,7 @@ class intelx:
 		- 2: X-Score DESC. Most relevant items first.
 		- 3: Date ASC. Oldest items first.
 		- 4: Date DESC. Newest items first.
+
 		media option:
 		- Define the type of media to search for.
 		- 0: Not set. (All media types)
@@ -196,6 +205,7 @@ class intelx:
 		- 22: Container files including ZIP, RAR, TAR and others
 		- 23: HTML file
 		- 24: Text file
+
 		The term must be a strong selector. These selector types are currently supported:
 		- Email address
 		- Domain, including wildcards like *.example.com
@@ -212,9 +222,10 @@ class intelx:
 		- Simhash
 		- Credit card number
 		- IBAN
+
 		Soft selectors (generic terms) are not supported!
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		p = {
 			"term": term,
 			"buckets": buckets,
@@ -236,11 +247,13 @@ class intelx:
 	def INTEL_SEARCH_RESULT(self, id, limit):
 		"""
 		Return results from an initialized search based on its ID
+
 		status (results status):
 		- 0: Sucess with results.
 		- 1: No more results available.
 		- 2: Search ID not found.
 		- 3: No results yet, but keep trying.
+
 		type (low-level data type of result):
 		- 0: Binary/unspecified
 		- 1: Plain text
@@ -254,6 +267,7 @@ class intelx:
 		- 1002: Leak
 		- 1004: URL
 		- 1005: Forum
+
 		media (high-level data type):
 		- 0: Invalid
 		- 1: Paste document
@@ -280,28 +294,39 @@ class intelx:
 		- 22: Container files
 		- 23: HTML file
 		- 24: Text file
+
 		added:
 		- When the item was indexed.
+
 		date:
 		- The date of the original record if available.
+
 		name:
 		- Name of title
+
 		description:
 		- Typically not used
+
 		xscore:
 		- Relevancy score, between 0-100
+
 		simhash:
 		- Similarity hash, depending on the content type
+
 		bucket:
 		- The bucket in which the result was found.
+
 		keyvalues:
 		- Not used
+
 		tags:
 		- Additional information on the item
+
 		relations:
 		- Identifiers of related items
+
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		r = requests.get(self.API_ROOT + f'/intelligent/search/result?id={id}&limit={limit}', headers=h)
 		if(r.status_code == 200):
 			return r.json()
@@ -312,18 +337,18 @@ class intelx:
 		"""
 		Terminate a previously initialized search based on its UUID.
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		r = requests.get(self.API_ROOT + f'/intelligent/search/terminate?id={uuid}', headers=h)
 		if(r.status_code == 200):
 			return True
 		else:
-			return r.status_code()
+			return r.status_code
 	
 	def PHONEBOOK_SEARCH(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
 		"""
 		Initialize a phonebook search and return the ID of the task/search for further processing
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		p = {
 			"term": term,
 			"buckets": buckets,
@@ -356,7 +381,7 @@ class intelx:
 		- 2: Search ID not found.
 		- 3: No results yet, but keep trying.
 		"""
-		h = {'x-key' : self.API_KEY}
+		h = {'x-key' : self.API_KEY, 'User-Agent': self.USER_AGENT}
 		r = requests.get(self.API_ROOT + f'/phonebook/search/result?id={id}&limit={limit}&offset={offset}', headers=h)
 		if(r.status_code == 200):
 			return r.json()
@@ -387,21 +412,26 @@ class intelx:
 		maxresults option:
 		- Tells how many results to query maximum per bucket.
 		- Example: maxresults=100
+
 		buckets option:
 		- Specify the buckets to search
 		- Example: buckets=[]
 		- Example: buckets=['pastes', 'darknet.i2p']
+
 		timeout option:
 		- Set a timeout value for the search.
 		- Example: timeout=5
+
 		datefrom option:
 		- Set a starting date to begin the search from.
 		- Example: 2020-01-01 00:00:00
 		- Example: 2020-01-01 12:00:00
+
 		dateto option:
 		- Set an ending date to finish the search from.
 		- Example: 2020-02-02 23:59:59
 		- Example: 2020-02-02 00:00:00
+
 		sort option:
 		- Define the way to sort search results.
 		- 0: No sorting.
@@ -409,6 +439,7 @@ class intelx:
 		- 2: X-Score DESC. Most relevant items first.
 		- 3: Date ASC. Oldest items first.
 		- 4: Date DESC. Newest items first.
+
 		media option:
 		- Define the type of media to search for.
 		- 0: Not set. (All media types)
@@ -436,6 +467,7 @@ class intelx:
 		- 22: Container files including ZIP, RAR, TAR and others
 		- 23: HTML file
 		- 24: Text file
+
 		The term must be a strong selector. These selector types are currently supported:
 		- Email address
 		- Domain, including wildcards like *.example.com
@@ -452,6 +484,7 @@ class intelx:
 		- Simhash
 		- Credit card number
 		- IBAN
+
 		Soft selectors (generic terms) are not supported!
 		
 		"""
@@ -469,7 +502,8 @@ class intelx:
 			maxresults -= len(r['records'])
 			if(r['status'] == 1 or r['status'] == 2 or maxresults <= 0):
 				done = True
-		return {'records': results}
+		
+		return {'records': results}, search_id
 
 	def phonebooksearch(self, term, maxresults=1000, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
 		"""

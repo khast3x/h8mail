@@ -61,21 +61,21 @@
 
 ####  APIs
 
-| Service                                                        |                             Functions                             |           Status           |
-|----------------------------------------------------------------|:-----------------------------------------------------------------:|:--------------------------:|
-| [HaveIBeenPwned(v3)](https://haveibeenpwned.com/)              |                      Number of email breaches                     |  :white_check_mark: :key:  |
-| [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) |               URLs of text files mentioning targets               |  :white_check_mark: :key:  |
-| [Hunter.io](https://hunter.io/) - Public                       |                      Number of related emails                     |     :white_check_mark:     |
-| [Hunter.io](https://hunter.io/) - Service (free tier)          |                 Cleartext related emails, Chasing                 |  :white_check_mark: :key:  |
-| ~~[WeLeakInfo](https://weleakinfo.com/) - Public~~             |                Number of search-able breach results               |:white_large_square: :key: |
-| ~~[WeLeakInfo](https://weleakinfo.com/) - Service~~            |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |:white_large_square: :key:  |
-| [Snusbase](https://snusbase.com/) - Service                    | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: |  :white_check_mark: :key:  |
-| [Leak-Lookup](https://leak-lookup.com/) - Public               |                Number of search-able breach results               | :white_check_mark: (:key:) |
-| [Leak-Lookup](https://leak-lookup.com/) - Service              |    Cleartext passwords, hashs and salts, usernames, IPs, domain   |  :white_check_mark: :key:  |
-| [Emailrep.io](https://emailrep.io/) - Service (free)           |            Last seen in breaches, social media profiles           |     :white_check_mark: :key:    |
-| [Scylla.sh](https://scylla.sh/) - Service (free)               |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_check_mark:         |
-| [Dehashed.sh](https://dehashed.com/) - Service                 |  Cleartext passwords, hashs and salts, usernames, IPs, domain     | :white_large_square: :key:   |
-
+| Service | Functions | Status |
+|-|-|-|
+| [HaveIBeenPwned(v3)](https://haveibeenpwned.com/) | Number of email breaches | :white_check_mark: :key: |
+| [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) | URLs of text files mentioning targets | :white_check_mark: :key: |
+| [Hunter.io](https://hunter.io/) - Public | Number of related emails | :white_check_mark: |
+| [Hunter.io](https://hunter.io/) - Service (free tier) | Cleartext related emails, Chasing | :white_check_mark: :key: |
+| ~~[WeLeakInfo](https://weleakinfo.com/) - Public~~ | Number of search-able breach results | :red_circle: :key: |
+| ~~[WeLeakInfo](https://weleakinfo.com/) - Service~~ | Cleartext passwords, hashs and salts, usernames, IPs, domain | :red_circle: :key: |
+| [Snusbase](https://snusbase.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: | :white_check_mark: :key: |
+| [Leak-Lookup](https://leak-lookup.com/) - Public | Number of search-able breach results | :white_check_mark: (:key:) |
+| [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
+| [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
+| [Scylla.sh](https://scylla.sh/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
+| [Dehashed.sh](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :red_circle: :key: |
+| [IntelX.io](https://intelx.io/signup) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
 
 *:key: - API key required*  
 

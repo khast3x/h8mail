@@ -214,6 +214,7 @@ class target:
             search = intelx_getsearch(self.target, intelx, maxfile)
             if self.debug:
                 import json
+
                 print(json.dumps(search, indent=4))
 
             for record in search["records"]:
@@ -227,7 +228,9 @@ class target:
                     )
                     continue
                 c.good_news(
-                    "[" + self.target + "]>[intelx.io] Fetching "
+                    "["
+                    + self.target
+                    + "]>[intelx.io] Fetching "
                     + record["name"]
                     + " as file "
                     + filename
@@ -242,8 +245,10 @@ class target:
                     self.data.append(
                         (
                             "INTELX.IO",
-                            "File: {name} | Line: {line} | {content}".format(
-                                name=record["name"].strip(), line=f.line, content=f.content.strip(),
+                            "File: {name} | Line: {line} - {content}".format(
+                                name=record["name"].strip(),
+                                line=f.line,
+                                content=f.content.strip(),
                             ),
                         )
                     )
@@ -251,9 +256,17 @@ class target:
                 print("----------")
             for f in intel_files:
                 if self.debug:
-                    c.info_news("[" + self.target + "]>[intelx.io] [DEBUG] Keeping {file}".format(file=f))
+                    c.info_news(
+                        "["
+                        + self.target
+                        + "]>[intelx.io] [DEBUG] Keeping {file}".format(file=f)
+                    )
                 else:
-                    c.info_news("[" + self.target + "]>[intelx.io] Removing {file}".format(file=f))
+                    c.info_news(
+                        "["
+                        + self.target
+                        + "]>[intelx.io] Removing {file}".format(file=f)
+                    )
                     remove(f)
 
         except Exception as ex:

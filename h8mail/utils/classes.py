@@ -210,28 +210,32 @@ class target:
             # import json
             # print(json.dumps(cap, indent=4))
             c.info_news(
-                "IntelX Search credits remaining : {creds}".format(
+                "[intelx.io] Search credits remaining : {creds}".format(
                     creds=cap["paths"]["/intelligent/search"]["Credit"]
                 )
             )
+            c.info_news("[intelx.io] Search in progress")
             search = intelx.search(
                 self.target,
                 buckets=["leaks.public", "leaks.private", "pastes"],
                 maxresults=10,
                 media=24,
             )
-            import json
+            if self.debug:
+                import json
 
-            print(json.dumps(search, indent=4))
-            c.good_news("IntelX Search returned the following files:")
+                print(json.dumps(search, indent=4))
+            c.good_news("[intelx.io] Search returned the following files:")
             for record in search["records"]:
                 c.good_news("Name: " + record["name"])
                 c.good_news("Bucket: " + record["bucket"])
-                c.good_news("Size: " + '{:,.0f}'.format(record["size"]/float(1<<20))+" MB")
+                c.good_news(
+                    "Size: " + "{:,.0f}".format(record["size"] / float(1 << 20)) + " MB"
+                )
                 c.info_news("SID: " + record["storageid"])
                 print("------")
 
-            from .localsearch import local_search_single
+            from .localsearch import local_search
             from os import remove, fspath
 
             for record in search["records"]:
@@ -245,16 +249,16 @@ class target:
                     )
                     continue
                 c.good_news(
-                    "Fetching "
+                    "[intelx.io] Fetching "
                     + record["name"]
                     + " as file "
                     + filename
                     + " ("
-                    + '{:,.0f}'.format(record["size"]/float(1<<20))
+                    + "{:,.0f}".format(record["size"] / float(1 << 20))
                     + " MB)"
                 )
                 intelx.FILE_READ(record["systemid"], 0, record["bucket"], filename)
-                found_list = local_search_single([filename], [self.target])
+                found_list = local_search([filename], [self.target])
                 for f in found_list:
                     self.pwned += 1
                     self.data.append(
@@ -268,7 +272,7 @@ class target:
                 # print(contents) # Contains search data
                 print("----------")
             for f in intel_files:
-                c.info_news("Removing {file}".format(file=f))
+                c.info_news("[intelx.io] Removing {file}".format(file=f))
                 remove(f)
 
         except Exception as ex:
@@ -456,7 +460,7 @@ class target:
                 )
             )
         except Exception as ex:
-            c.bad_news("hunter.io (pubic API) error: " + self.target)
+            c.bad_news("hunter.io (public API) error: " + self.target)
             print(ex)
 
     def get_hunterio_private(self, api_key):
@@ -749,7 +753,7 @@ class target:
         try:
             # New Dehashed API needs fixing, waiting for devs to respond
             c.bad_news("Dehashed is temporarily unavailable")
-            c.bad_news("This should be fixed in the next updated\n")
+            c.bad_news("This should be fixed in the next updates\n")
             return
 
             if user_query == "hash":

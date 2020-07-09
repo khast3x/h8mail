@@ -56,13 +56,12 @@ def worker(filepath, target_list):
             found_list = []
             size = os.stat(filepath).st_size
             c.info_news(
-                "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
-                    PID=os.getpid(), filepath=filepath, size=size
+                "Worker [{PID}] is searching for targets in {filepath} ({size:,.0f} MB)".format(
+                    PID=os.getpid(), filepath=filepath, size=size / float(1 << 20))
                 )
-            )
             for cnt, line in enumerate(fp):
                 for t in target_list:
-                    if t in str(line):
+                    if t in str(line, "cp437"):
                         try:
                             decoded = str(line, "cp437")
                             found_list.append(

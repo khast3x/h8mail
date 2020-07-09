@@ -71,7 +71,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.lightgrey,
-            "Version " + __version__ + ' - "ROCKSMASSON.2" ',
+            "Version " + __version__ + ' - "ROCKSMASSON.3" ',
             c.reset,
         )
 
@@ -102,7 +102,7 @@ def get_emails_from_file(targets_file, user_args):
         target_fd = open(targets_file).readlines()
         c.info_news("Parsing emails from" + targets_file)
         for line in target_fd:
-            e = fetch_emails(line, user_args)
+            e = fetch_emails(line.strip(), user_args)
             if e is None:
                 continue
             else:
@@ -172,20 +172,22 @@ def check_latest_version():
     """
     Fetches local version and compares it to github api tag version
     """
-    response = requests.request(
-        url="https://api.github.com/repos/khast3x/h8mail/releases/latest", method="GET"
-    )
-    data = response.json()
-    latest = data["tag_name"]
-    if __version__ == data["tag_name"]:
-        c.good_news("h8mail is up to date")
-    else:
-        c.bad_news(
-            "Not running latest h8mail version. [Current: {current} | Latest: {latest}]".format(
-                current=__version__, latest=latest
-            )
+    try:
+        response = requests.request(
+            url="https://api.github.com/repos/khast3x/h8mail/releases/latest", method="GET"
         )
-
+        data = response.json()
+        latest = data["tag_name"]
+        if __version__ == data["tag_name"]:
+            c.good_news("h8mail is up to date")
+        else:
+            c.bad_news(
+                "Not running latest h8mail version. [Current: {current} | Latest: {latest}]".format(
+                    current=__version__, latest=latest
+                )
+            )
+    except Exception:
+        c.bad_news("Could not check for updates. Is Github blocking requests?")
 def check_scylla_online():
     """
     Checks if scylla.sh is online

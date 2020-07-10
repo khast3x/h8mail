@@ -20,7 +20,7 @@ def intelx_getsearch(target, intelx, maxfile):
         )
     )
     c.info_news("[" + target + "]>[intelx.io] Search in progress (max results : "+ str(maxfile) + ")")
-    search, search_id = intelx.search(
+    search = intelx.search(
         target,
         buckets=["leaks.public", "leaks.private", "pastes", "darknet.tor"],
         # buckets=[],
@@ -36,5 +36,4 @@ def intelx_getsearch(target, intelx, maxfile):
         )
         c.info_news("Storage ID: " + record["storageid"])
         print("----------")
-    print("")
-    return search, search_id
+    return search

@@ -215,7 +215,7 @@ class target:
             maxfile = 10
             if api_keys["intelx_maxfile"]:
                 maxfile = int(api_keys["intelx_maxfile"])
-            search, search_id = intelx_getsearch(self.target, intelx, maxfile)
+            search = intelx_getsearch(self.target, intelx, maxfile)
             if self.debug:
                 import json
 
@@ -257,7 +257,6 @@ class target:
                         )
                     )
                 # print(contents) # Contains search data
-                print("----------")
             for f in intel_files:
                 if self.debug:
                     c.info_news(
@@ -272,9 +271,9 @@ class target:
                         + "]>[intelx.io] Removing {file}".format(file=f)
                     )
                     remove(f)
-            c.info_news(f"Terminating search {search_id} ({self.target})")
-            terminate = intelx.INTEL_TERMINATE_SEARCH(search_id)
-            c.info_news(f"Terminated with {terminate}")
+            # c.info_news(f"Terminating search {search_id} ({self.target})")
+            # terminate = intelx.INTEL_TERMINATE_SEARCH(search_id)
+            # c.info_news(f"Terminated with {terminate}")
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)
             print(ex)

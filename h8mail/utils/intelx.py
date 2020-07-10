@@ -331,7 +331,7 @@ class intelx:
 		if(r.status_code == 200):
 			return r.json()
 		else:
-			return r.status_code()
+			return r.status_code
 
 	def INTEL_TERMINATE_SEARCH(self, uuid):
 		"""
@@ -386,7 +386,7 @@ class intelx:
 		if(r.status_code == 200):
 			return r.json()
 		else:
-			return r.status_code()
+			return r.status_code
 
 	def query_results(self, id, limit):
 		"""
@@ -501,9 +501,10 @@ class intelx:
 				results.append(a)
 			maxresults -= len(r['records'])
 			if(r['status'] == 1 or r['status'] == 2 or maxresults <= 0):
+				if(maxresults <= 0):
+					self.INTEL_TERMINATE_SEARCH(search_id)
 				done = True
-		
-		return {'records': results}, search_id
+		return {'records': results}
 
 	def phonebooksearch(self, term, maxresults=1000, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
 		"""
@@ -522,6 +523,8 @@ class intelx:
 			results.append(r)
 			maxresults -= len(r['selectors'])
 			if(r['status'] == 1 or r['status'] == 2 or maxresults <= 0):
+				if(maxresults <= 0):
+					self.INTEL_TERMINATE_SEARCH(search_id)
 				done = True
 		return results
 

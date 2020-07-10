@@ -272,9 +272,9 @@ class target:
                         + "]>[intelx.io] Removing {file}".format(file=f)
                     )
                     remove(f)
-            c.info_news(f"Terminating search {search_id}")
+            c.info_news(f"Terminating search {search_id} ({self.target})")
             terminate = intelx.INTEL_TERMINATE_SEARCH(search_id)
-            print(terminate)
+            c.info_news(f"Terminated with {terminate}")
         except Exception as ex:
             c.bad_news("intelx.io error: " + self.target)
             print(ex)

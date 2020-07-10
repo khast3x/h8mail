@@ -7,7 +7,7 @@ from .colors import colors as c
 
 def intelx_getsearch(target, intelx, maxfile):
 
-    c.info_news("[" + target + "]>[intelx.io]")
+    c.info_news("[" + target + "]>[intelx.io] Starting search")
     cap = intelx.GET_CAPABILITIES()
     # print(cap["buckets"])
     # import json
@@ -27,7 +27,7 @@ def intelx_getsearch(target, intelx, maxfile):
         maxresults=maxfile,
         media=24,
     )
-    c.good_news("[" + target + "]>[intelx.io] Search returned the following files :\n----")
+    c.good_news("[" + target + "]>[intelx.io] Search returned the following files :")
     for record in search["records"]:
         c.good_news("Name: " + record["name"])
         c.good_news("Bucket: " + record["bucket"])
@@ -35,6 +35,6 @@ def intelx_getsearch(target, intelx, maxfile):
             "Size: " + "{:,.0f}".format(record["size"] / float(1 << 20)) + " MB"
         )
         c.info_news("Storage ID: " + record["storageid"])
-        print("------")
-    
+        print("----------")
+    print("")
     return search, search_id

@@ -95,7 +95,7 @@ usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
               [-ch [CHASE_LIMIT]] [--power-chase] [--hide] [--debug]
               [--gen-config]
-
+              
 Email information and password lookup tool
 
 optional arguments:
@@ -144,18 +144,16 @@ optional arguments:
   -ch [CHASE_LIMIT], --chase [CHASE_LIMIT]
                         Add related emails from hunter.io to ongoing target
                         list. Define number of emails per target to chase.
-                        Requires hunter.io private API key
+                        Requires hunter.io private API key if used without
+                        power-chase
   --power-chase         Add related emails from ALL API services to ongoing
-                        target list. Use with --chase. Requires a private API
-                        key
+                        target list. Use with --chase
   --hide                Only shows the first 4 characters of found passwords
                         to output. Ideal for demonstrations
   --debug               Print request debug information
   --gen-config, -g      Generates a configuration file template in the current
                         working directory & exits. Will overwrite existing
                         h8mail_config.ini file
-
-
 ```
 
 -----

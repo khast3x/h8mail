@@ -227,10 +227,10 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 * [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 * [IntelX](https://intelx.io) for being developer friendly
 
-**They include h8mail in their tools:**  
+:purple_heart: h8mail can be found in:  
 * [BlackArch Linux](https://blackarch.org/recon.html)
-* [Tsurugi DFIR & OSINT VM](https://tsurugi-linux.org/)
-* [Trace Labs OSINT VM](https://www.tracelabs.org/trace-labs-osint-vm/)
+* [Tsurugi DFIR](https://tsurugi-linux.org/)
+* [Trace Labs OSINT](https://www.tracelabs.org/trace-labs-osint-vm/)
 
 
 -----

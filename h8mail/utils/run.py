@@ -81,6 +81,8 @@ def target_factory(targets, user_args):
                 current_target.get_emailrepio(api_keys["emailrep"])
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
+            if "intelx_key" in api_keys:
+                current_target.get_intelx(api_keys)
             if "snusbase_token" in api_keys:
                 if "snusbase_url" in api_keys:
                     snusbase_url = api_keys["snusbase_url"]
@@ -158,11 +160,11 @@ def h8mail(user_args):
         if user_args.user_targets is not None:
             for arg in user_args.user_targets:
                 user_stdin_target = fetch_emails(arg, user_args)
-                if user_stdin_target:
-                    targets.extend(user_stdin_target)
-                elif os.path.isfile(arg):
+                if os.path.isfile(arg):
                     c.info_news("Reading from file " + arg)
                     targets.extend(get_emails_from_file(arg, user_args))
+                elif user_stdin_target:
+                    targets.extend(user_stdin_target)
                 else:
                     c.bad_news("No targets found in user input. Quitting")
                     exit(0)
@@ -309,14 +311,14 @@ def parse_args(args):
         "-ch",
         "--chase",
         dest="chase_limit",
-        help="Add related emails from hunter.io to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key",
+        help="Add related emails from hunter.io to ongoing target list. Define number of emails per target to chase. Requires hunter.io private API key if used without power-chase",
         type=int,
         nargs="?",
     ),
     parser.add_argument(
         "--power-chase",
         dest="power_chase",
-        help="Add related emails from ALL API services to ongoing target list. Use with --chase. Requires a private API key",
+        help="Add related emails from ALL API services to ongoing target list. Use with --chase",
         action="store_true",
         default=False,
     ),

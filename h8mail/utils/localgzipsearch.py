@@ -30,8 +30,8 @@ def gzip_worker(filepath, target_list):
         size = os.stat(filepath).st_size
         with gzip.open(filepath, "r") as gzipfile:
             c.info_news(
-                "Worker [{PID}] is searching for targets in {filepath} ({size} bytes)".format(
-                    PID=os.getpid(), filepath=filepath, size=size
+                "Worker [{PID}] is searching for targets in {filepath} ({size:,.0f} MB)".format(
+                    PID=os.getpid(), filepath=filepath, size=size / float(1 << 20)
                 )
             )
             for cnt, line in enumerate(gzipfile):

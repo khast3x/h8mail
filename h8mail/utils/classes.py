@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+from .intelx import intelx as i
 from time import sleep
 from .colors import colors as c
 import requests
@@ -111,97 +110,6 @@ class target:
             print(response)
         return response
 
-    # Deprecated
-    def get_hibp(self):
-        try:
-            sleep(1.3)
-            c.info_news(c.bold + "HIBP free tier will stop working on the 2019/08/18")
-            c.info_news(
-                c.bold
-                + "You can already use a purchased API key using h8mail (config file)"
-                + c.reset
-            )
-            url = "https://haveibeenpwned.com/api/v2/breachedaccount/{}?truncateResponse=true".format(
-                self.target
-            )
-            response = self.make_request(url)
-            if response.status_code not in [200, 404]:
-                c.bad_news("Could not contact HIBP for " + self.target)
-                print(response.status_code)
-                return
-
-            if response.status_code == 200:
-                data = response.json()
-                for d in data:  # Returned type is a dict of Name : Service
-                    for _, ser in d.items():
-                        self.data.append(("HIBP", ser))
-                        self.pwned += 1
-
-                c.good_news(
-                    "Found {num} breaches for {target} using HIBP".format(
-                        num=len(self.data) - 1, target=self.target
-                    )
-                )
-                self.get_hibp_pastes()
-
-            elif response.status_code == 404:
-                c.info_news("No breaches found for {} using HIBP".format(self.target))
-            else:
-                c.bad_news(
-                    "HIBP: got API response code {code} for {target}".format(
-                        code=response.status_code, target=self.target
-                    )
-                )
-        except Exception as ex:
-            c.bad_news("HIBP error: " + self.target)
-            print(ex)
-
-    # Deprecated
-    def get_hibp_pastes(self):
-        try:
-            sleep(1.3)
-            url = "https://haveibeenpwned.com/api/v2/pasteaccount/{}".format(
-                self.target
-            )
-            response = self.make_request(url)
-            if response.status_code not in [200, 404]:
-                c.bad_news("Could not contact HIBP PASTE for " + self.target)
-                print(response.status_code)
-                print(response)
-                return
-
-            if response.status_code == 200:
-
-                data = response.json()
-                for d in data:  # Returned type is a dict of Name : Service
-                    self.pwned += 1
-                    if "Pastebin" in d["Source"]:
-                        self.data.append(
-                            ("HIBP_PASTE", "https://pastebin.com/" + d["Id"])
-                        )
-                    else:
-                        self.data.append(("HIBP_PASTE", d["Id"]))
-
-                c.good_news(
-                    "Found {num} pastes for {target} using HIBP".format(
-                        num=len(data), target=self.target
-                    )
-                )
-
-            elif response.status_code == 404:
-                c.info_news(
-                    "No pastes found for {} using HIBP PASTE".format(self.target)
-                )
-            else:
-                c.bad_news(
-                    "HIBP PASTE: got API response code {code} for {target}".format(
-                        code=response.status_code, target=self.target
-                    )
-                )
-        except Exception as ex:
-            c.bad_news("HIBP PASTE error: " + self.target)
-            print(ex)
-
     # New HIBP API
     def get_hibp3(self, api_key):
         try:
@@ -290,6 +198,82 @@ class target:
                 )
         except Exception as ex:
             c.bad_news("HIBP v3 PASTE error: " + self.target)
+            print(ex)
+
+    def get_intelx(self, api_keys):
+        try:
+            intel_files = []
+            intelx = i(key=api_keys["intelx_key"], ua="h8mail-v.{h8ver}-OSINT-and-Education-Tool (PythonVersion={pyver}; Platform={platfrm})".format(
+                h8ver=__version__,
+                pyver=sys.version.split(" ")[0],
+                platfrm=platform.platform().split("-")[0],
+            ))
+            from .intelx_helpers import intelx_getsearch
+            from .localsearch import local_search
+            from os import remove, fspath
+
+            maxfile = 10
+            if api_keys["intelx_maxfile"]:
+                maxfile = int(api_keys["intelx_maxfile"])
+            search = intelx_getsearch(self.target, intelx, maxfile)
+            if self.debug:
+                import json
+
+                print(json.dumps(search, indent=4))
+
+            for record in search["records"]:
+                filename = record["systemid"].strip() + ".txt"
+                intel_files.append(filename)
+                if record["media"] is not 24:
+                    c.info_news(
+                        "Skipping {name}, not text ({type})".format(
+                            type=record["mediah"], name=record["name"]
+                        )
+                    )
+                    continue
+                c.good_news(
+                    "["
+                    + self.target
+                    + "]>[intelx.io] Fetching "
+                    + record["name"]
+                    + " as file "
+                    + filename
+                    + " ("
+                    + "{:,.0f}".format(record["size"] / float(1 << 20))
+                    + " MB)"
+                )
+                intelx.FILE_READ(record["systemid"], 0, record["bucket"], filename)
+                found_list = local_search([filename], [self.target])
+                for f in found_list:
+                    self.pwned += 1
+                    self.data.append(
+                        (
+                            "INTELX.IO",
+                            "{name} | Line: {line} - {content}".format(
+                                name=record["name"].strip(),
+                                line=f.line,
+                                content=" ".join(f.content.split()),
+                            ),
+                        )
+                    )
+                # print(contents) # Contains search data
+            for f in intel_files:
+                if self.debug:
+                    c.info_news(
+                        "["
+                        + self.target
+                        + "]>[intelx.io] [DEBUG] Keeping {file}".format(file=f)
+                    )
+                else:
+                    c.info_news(
+                        "["
+                        + self.target
+                        + "]>[intelx.io] Removing {file}".format(file=f)
+                    )
+                    remove(f)
+
+        except Exception as ex:
+            c.bad_news("intelx.io error: " + self.target)
             print(ex)
 
     def get_emailrepio(self, api_key=""):
@@ -473,7 +457,7 @@ class target:
                 )
             )
         except Exception as ex:
-            c.bad_news("hunter.io (pubic API) error: " + self.target)
+            c.bad_news("hunter.io (public API) error: " + self.target)
             print(ex)
 
     def get_hunterio_private(self, api_key):
@@ -766,7 +750,7 @@ class target:
         try:
             # New Dehashed API needs fixing, waiting for devs to respond
             c.bad_news("Dehashed is temporarily unavailable")
-            c.bad_news("This should be fixed in the next updated\n")
+            c.bad_news("This should be fixed in the next updates\n")
             return
 
             if user_query == "hash":

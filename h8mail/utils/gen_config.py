@@ -20,6 +20,8 @@ def gen_config_file():
 ;emailrep = 
 ;dehashed_email = 
 ;dehashed_key =
+;intelx_key =
+;intelx_maxfile = 10
 """
         dest_config.write(config)
         c.good_news(

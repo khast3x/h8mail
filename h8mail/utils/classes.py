@@ -473,7 +473,7 @@ class target:
             for e in response["data"]["emails"]:
                 self.data.append(("HUNTER_RELATED", e["value"]))
                 b_counter += 1
-                if self.pwned is not 0:
+                if self.pwned != 0:
                     self.pwned += 1
             c.good_news(
                 "Found {num} related emails for {target} using hunter.io (private)".format(

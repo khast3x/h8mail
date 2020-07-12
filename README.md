@@ -67,8 +67,6 @@
 | [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) | URLs of text files mentioning targets | :white_check_mark: :key: |
 | [Hunter.io](https://hunter.io/) - Public | Number of related emails | :white_check_mark: |
 | [Hunter.io](https://hunter.io/) - Service (free tier) | Cleartext related emails, Chasing | :white_check_mark: :key: |
-| ~~[WeLeakInfo](https://weleakinfo.com/) - Public~~ | Number of search-able breach results | :construction: :key: |
-| ~~[WeLeakInfo](https://weleakinfo.com/) - Service~~ | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: :key: |
 | [Snusbase](https://snusbase.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: | :white_check_mark: :key: |
 | [Leak-Lookup](https://leak-lookup.com/) - Public | Number of search-able breach results | :white_check_mark: (:key:) |
 | [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |

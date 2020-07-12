@@ -75,7 +75,7 @@
 | [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
 | [Scylla.sh](https://scylla.sh/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
 | [Dehashed.sh](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: :key: |
-| [IntelX.io](https://intelx.io/signup) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
+| :new: [IntelX.io](https://intelx.io/signup) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
 
 *:key: - API key required*  
 

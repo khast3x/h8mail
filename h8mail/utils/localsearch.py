@@ -16,7 +16,7 @@ def local_to_targets(targets, local_results, user_args):
     Appends data from local_breach_target objects using existing list of targets.
     Finds corresponding email in dest object list, and adds data to the t.data object variable.
     Full output line is stored in t.data[1] and original found data in t.data[2]
-    
+
     """
     for t in targets:
         for l in local_results:
@@ -130,9 +130,7 @@ def local_search_single(files_to_parse, target_list):
             size = os.stat(file_to_parse).st_size
             lines_no = raw_in_count(file_to_parse)
             c.info_news(
-                "Searching for targets in {file_to_parse} ({size} bytes, {lines_no} lines)".format(
-                    file_to_parse=file_to_parse, size=size, lines_no=lines_no
-                )
+                f"Searching for targets in {file_to_parse} ({size} bytes, {lines_no} lines)"
             )
             for cnt, line in enumerate(fp):
                 lines_left = lines_no - cnt

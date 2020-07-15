@@ -22,7 +22,7 @@ def gzip_worker(filepath, target_list):
     """
     Searches for every email from target_list in every line of filepath.
     Uses python native gzip lib to decompress file line by line.
-    Archives with multiple files are read as long single files. 
+    Archives with multiple files are read as long single files.
     Attempts to decode line using cp437. If it fails, catch and use raw data.
     """
     try:
@@ -101,9 +101,7 @@ def local_search_single_gzip(files_to_parse, target_list):
         with gzip.open(file_to_parse, "r") as fp:
             size = os.stat(file_to_parse).st_size
             c.info_news(
-                "Searching for targets in {file_to_parse} ({size} bytes)".format(
-                    file_to_parse=file_to_parse, size=size
-                )
+                f"Searching for targets in {file_to_parse} ({size} bytes)"
             )
             for cnt, line in enumerate(fp):
                 progress_gzip(cnt)

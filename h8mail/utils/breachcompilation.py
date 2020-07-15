@@ -32,7 +32,7 @@ def breachcomp_check(targets, breachcomp_path):
                         t.pwned += 1
                         t.data.append(("BC_PASS", re.split("[;:]",line)[-1]))
                         c.good_news(
-                            "Found BreachedCompilation entry {line}".format(line=line)
+                            f"Found BreachedCompilation entry {line}"
                         )
         return targets
     except Exception as e:

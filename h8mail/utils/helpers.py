@@ -64,14 +64,14 @@ def print_banner(b_type="intro"):
     elif "warn" in b_type:
         print(
             c.fg.lightgrey,
-            "\t\t  h8mail 2.5.3 release post: \n\t\t  https://khast3x.club/posts/h2-5-3/\n\n",
+            "\t\t  Official h8mail posts: \n\t\t  https://khast3x.club/tags/h8mail/\n\n",
             c.reset,
         )
     elif "version" in b_type:
         print(
             "\t",
             c.fg.pink,
-            "Version " + __version__ + ' - "ROCKSMASSON.3" ',
+            "Version " + __version__ + ' - "ROCKSMASSON.4" ',
             c.reset,
         )
 
@@ -196,7 +196,7 @@ def check_scylla_online():
     # https://github.com/khast3x/h8mail/issues/64
     try:
         re = requests.head(
-            url="https://scylla.sh", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!")
+            url="https://scylla.sh", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"), timeout=10,
         )
         if re.status_code == 200:
             c.good_news("scylla.sh is up")

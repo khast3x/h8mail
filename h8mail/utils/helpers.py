@@ -23,10 +23,10 @@ def find_files(to_parse, pattern=""):
         glob_result = glob.glob(to_parse)
         for g in glob_result:
             allfiles.append(g)
-            c.info_news("Using file {}".format(g))
+            c.info_news(f"Using file {g}")
     if os.path.isfile(to_parse):
         if pattern in to_parse:
-            c.info_news("Using file {}".format(to_parse))
+            c.info_news(f"Using file {to_parse}")
             allfiles.append(to_parse)
     elif os.path.isdir(to_parse):
         for root, _, filenames in os.walk(to_parse):
@@ -59,7 +59,7 @@ def print_banner(b_type="intro"):
             if keep:
                 code += 36
                 keep = False
-            else:   
+            else:
                 keep = True
     elif "warn" in b_type:
         print(

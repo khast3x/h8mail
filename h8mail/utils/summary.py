@@ -21,7 +21,7 @@ def print_summary(start_time, breached_targets):
     print("{:^40} | ".format("Target"), "{:^40}".format("Status"), c.reset)
     print("{:_^90}\n".format(""))
     for t in breached_targets:
-        if t.pwned is not 0:
+        if t.pwned != 0:
             print(
                 f"{t.target:^40} | ",
                 c.fg.green,

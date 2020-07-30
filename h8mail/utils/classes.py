@@ -220,7 +220,7 @@ class target:
             for record in search["records"]:
                 filename = record["systemid"].strip() + ".txt"
                 intel_files.append(filename)
-                if record["media"] is not 24:
+                if record["media"] != 24:
                     c.info_news(
                         "Skipping {name}, not text ({type})".format(
                             type=record["mediah"], name=record["name"]
@@ -415,7 +415,7 @@ class target:
                         self.data.append(("SCYLLA_USERNAME", k))
                         self.pwned += 1
                     elif (
-                        "Email" in field and k is not None and user_query is not "email"
+                        "Email" in field and k is not None and user_query != "email"
                     ):
                         self.data.append(("SCYLLA_EMAIL", k))
                         self.pwned += 1
@@ -467,7 +467,7 @@ class target:
             for e in response["data"]["emails"]:
                 self.data.append(("HUNTER_RELATED", e["value"]))
                 b_counter += 1
-                if self.pwned is not 0:
+                if self.pwned != 0:
                     self.pwned += 1
             c.good_news(
                 "Found {num} related emails for {target} using hunter.io (private)".format(

@@ -17,7 +17,7 @@ def chase(target, user_args):
         print(f"Recursive Chase Stop is at {user_args.chase_limit}" + c.reset)
     if user_args.chase_limit > 0:
         for d in target.data:
-            if len(d) is not 2:
+            if len(d) != 2:
                 continue
 
             if user_args.power_chase:

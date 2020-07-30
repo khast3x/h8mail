@@ -111,9 +111,9 @@ class TestH8mail(unittest.TestCase):
     def test_003_url(self):
         run.print_banner()
         print_test_banner("URL-RAW")
-        user_args_lb = run.parse_args(["-u", "https://pastebin.com/raw/kQ6WNKqY"])
+        user_args_lb = run.parse_args(["-u", "https://raw.githubusercontent.com/khast3x/h8mail/master/tests/test_email.txt"])
         run.h8mail(user_args_lb)
         run.print_banner()
         print_test_banner("URL-MESSY")
-        user_args_lb = run.parse_args(["-u", "https://pastebin.com/kQ6WNKqY"])
+        user_args_lb = run.parse_args(["-u", "https://raw.githubusercontent.com/khast3x/h8mail/master/tests/test_email.txt"])
         run.h8mail(user_args_lb)

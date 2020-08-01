@@ -22,6 +22,7 @@ from .helpers import (
 )
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
+from .localzstdsearch import local_zstd_search, local_search_single_zstd
 from .summary import print_summary
 from .chase import chase
 from .print_results import print_results
@@ -210,6 +211,18 @@ def h8mail(user_args):
                 breached_targets = local_to_targets(
                     breached_targets, local_found, user_args
                 )
+    # Handle zstd search
+    if user_args.local_zstd_src:
+        for arg in user_args.local_zstd_src:
+            res = find_files(arg, "zst")
+            if user_args.single_file:
+                local_found = local_search_single_zstd(res, targets)
+            else:
+                local_found = local_zstd_search(res, targets)
+            if local_found is not None:
+                breached_targets = local_to_targets(
+                    breached_targets, local_found, user_args
+                )
 
     print_results(breached_targets, user_args.hide)
 
@@ -297,6 +310,13 @@ def parse_args(args):
         "--gzip",
         dest="local_gzip_src",
         help="Local tar.gz (gzip) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input, and filepath globing. Looks for 'gz' in filename",
+        nargs="+",
+    )
+    parser.add_argument(
+        "-zs",
+        "--zstd",
+        dest="local_zstd_src",
+        help="Local zst (zstandard) compressed breaches to scans for targets. Uses multiprocesses, one separate process per file. Supports file or folder as input, and filepath globing. Looks for 'zst' in filename",
         nargs="+",
     )
     parser.add_argument(

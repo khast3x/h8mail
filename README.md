@@ -3,9 +3,9 @@
 </h1>
 
 [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/) [![PyPI version](https://badge.fury.io/py/h8mail.svg)](https://badge.fury.io/py/h8mail)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![Downloads](https://pepy.tech/badge/h8mail)](https://pepy.tech/project/h8mail)    [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)   
-[![Docker Pulls](https://img.shields.io/docker/pulls/kh4st3x00/h8mail.svg)](https://hub.docker.com/r/kh4st3x00/h8mail) [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/kh4st3x00/h8mail.svg?color=ok)](https://hub.docker.com/r/kh4st3x00/h8mail/builds)  
-**h8mail** is an email OSINT and breach hunting tool using [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![Downloads](https://pepy.tech/badge/h8mail)](https://pepy.tech/project/h8mail)    [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)
+[![Docker Pulls](https://img.shields.io/docker/pulls/kh4st3x00/h8mail.svg)](https://hub.docker.com/r/kh4st3x00/h8mail) [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/kh4st3x00/h8mail.svg?color=ok)](https://hub.docker.com/r/kh4st3x00/h8mail/builds)
+**h8mail** is an email OSINT and breach hunting tool using [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.
 
 ----
 
@@ -38,11 +38,11 @@
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
 * :earth_africa: Pass URLs to directly find and target emails in pages
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
-* :package: Painless install. Available through `pip`, only requires `requests`
+* :package: Painless install. Available through `pip`, only requires `requests` and `zstandard`
 * :white_check_mark: Bulk file-reading for targeting
 * :memo: Output to CSV file
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
-* :house: Search cleartext and compressed .gz files locally using multiprocessing
+* :house: Search cleartext and compressed .gz, .zst files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"
 * :fire: Get related emails
 * :dragon_face: Chase related emails by adding them to the ongoing search
@@ -75,7 +75,7 @@
 | [Dehashed.sh](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: :key: |
 | :new: [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
 
-*:key: - API key required*  
+*:key: - API key required*
 
 
 
@@ -90,10 +90,11 @@ usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]]
               [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
               [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
-              [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
+              [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]]
+              [-zs LOCAL_ZSTD_SRC [LOCAL_ZSTD_SRC ...]] [-sf]
               [-ch [CHASE_LIMIT]] [--power-chase] [--hide] [--debug]
               [--gen-config]
-              
+
 Email information and password lookup tool
 
 optional arguments:
@@ -136,6 +137,11 @@ optional arguments:
                         targets. Uses multiprocesses, one separate process per
                         file. Supports file or folder as input, and filepath
                         globing. Looks for 'gz' in filename
+  -zs LOCAL_ZSTD_SRC [LOCAL_ZSTD_SRC ...], --zstd LOCAL_ZSTD_SRC [LOCAL_ZSTD_SRC ...]
+                        Local zst (zstandard) compressed breaches to scans for
+                        targets. Uses multiprocesses, one separate process per
+                        file. Supports file or folder as input, and filepath
+                        globing. Looks for 'zst' in filename
   -sf, --single-file    If breach contains big cleartext or tar.gz files, set
                         this flag to view the progress bar. Disables
                         concurrent file searching for stability
@@ -218,10 +224,10 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 * [Snusbase](https://snusbase.com/) for being developer friendly
 * [kodykinzie](https://twitter.com/kodykinzie) for making a nice [introduction and walkthrough article](https://null-byte.wonderhowto.com/how-to/exploit-recycled-credentials-with-h8mail-break-into-user-accounts-0188600/) and [video](https://www.youtube.com/watch?v=z8G_vBBHtfA) on installing and using h8mail
 * [Leak-Lookup](https://leak-lookup.com/) for being developer friendly
-* [WeLeakInfo](https://weleakinfo.com/) for being developer friendly  
+* [WeLeakInfo](https://weleakinfo.com/) for being developer friendly
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
-* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
+* [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)
 * [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 * [IntelX](https://intelx.io) for being developer friendly
 
@@ -250,7 +256,7 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 * Service providers that wish being integrated can send me an email at `k at khast3x dot club` (PGP friendly)
 * h8mail is maintained on my free time. Feedback and war stories are welcomed.
 * Licence is BSD 3 clause
-* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io/ktx) PGP key. You can get it using:  
+* My code is [signed](https://help.github.com/en/articles/signing-commits) with my [Keybase](https://keybase.io/ktx) PGP key. You can get it using:
 ```bash
 # curl + gpg pro tip: import ktx's keys
 curl https://keybase.io/ktx/pgp_keys.asc | gpg --import
@@ -266,4 +272,3 @@ ___
 <h1 align="center">
   <a href="https://twitter.com/kh4st3x"><img src="https://i.imgur.com/S79Nimd.png" width="420" title="Twitter"></a>
 </h1>
-

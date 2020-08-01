@@ -15,11 +15,11 @@ with open("PyPi.rst") as readme_file:
 # with open("HISTORY.rst") as history_file:
 #     history = history_file.read()
 
-requirements = ["requests"]
+requirements = ["requests", "zstandard"]
 
-setup_requirements = ["requests"]
+setup_requirements = ["requests", "zstandard"]
 
-test_requirements = ["requests"]
+test_requirements = ["requests", "zstandard"]
 
 setup(
     author="khast3x",

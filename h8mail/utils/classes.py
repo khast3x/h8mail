@@ -389,7 +389,7 @@ class target:
             response = self.make_request(
                 url,
                 verify=False,
-                auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"),
+                # auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"),
             )
             self.headers.popitem()
 
@@ -401,7 +401,7 @@ class target:
             data = response.json()
             total = 0
             for d in data:
-                for field, k in d["_source"].items():
+                for field, k in d["fields"].items():
                     if k is not None:
                         total += 1
             c.good_news(
@@ -410,28 +410,28 @@ class target:
                 )
             )
             for d in data:
-                for field, k in d["_source"].items():
-                    if "User" in field and k is not None:
+                for field, k in d["fields"].items():
+                    if "user" in field and k is not None:
                         self.data.append(("SCYLLA_USERNAME", k))
                         self.pwned += 1
                     elif (
-                        "Email" in field and k is not None and user_query != "email"
+                        "email" in field and k is not None and user_query != "email"
                     ):
                         self.data.append(("SCYLLA_EMAIL", k))
                         self.pwned += 1
-                    elif "Password" in field and k is not None:
+                    elif "password" in field and k is not None:
                         self.data.append(("SCYLLA_PASSWORD", k))
                         self.pwned += 1
-                    elif "PassHash" in field and k is not None:
+                    elif "passHash" in field and k is not None:
                         self.data.append(("SCYLLA_HASH", k))
                         self.pwned += 1
-                    elif "PassSalt" in field and k is not None:
+                    elif "passSalt" in field and k is not None:
                         self.data.append(("SCYLLA_HASHSALT", k))
                         self.pwned += 1
-                    elif "IP" in field and k is not None:
+                    elif "ip" in field and k is not None:
                         self.data.append(("SCYLLA_LASTIP", k))
                         self.pwned += 1
-                    elif "Domain" in field and k is not None:
+                    elif "domain" in field and k is not None:
                         self.data.append(("SCYLLA_SOURCE", k))
                         self.pwned += 1
         except Exception as ex:

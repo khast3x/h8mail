@@ -72,7 +72,7 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
 | [Scylla.sh](https://scylla.sh/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
-| [Dehashed.sh](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: :key: |
+| [Dehashed.sh](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | :new: [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
 
 *:key: - API key required*  
@@ -169,9 +169,9 @@ $ h8mail -t target@example.com
 $ h8mail -t targets.txt -c config.ini -o pwned_targets.csv
 ```
 
-###### Query a list of targets against local copy of the Breach Compilation, pass API keys for [Snusbase](https://snusbase.com/) from the command line
+###### Query a list of targets against local copy of the Breach Compilation, pass API key for [Snusbase](https://snusbase.com/) from the command line
 ```bash
-$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url=$snusbase_url,snusbase_token=$snusbase_token"
+$ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_token=$snusbase_token"
 ```
 
 ###### Query without making API calls against local copy of the Breach Compilation
@@ -179,7 +179,7 @@ $ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -k "snusbase_url=$sn
 $ h8mail -t targets.txt -bc ../Downloads/BreachCompilation/ -sk
 ```
 
-###### Search every .gz file for targets found in targets.txt locally
+###### Search every .gz file for targets found in targets.txt locally, skip default checks
 
 ```bash
 $ h8mail -t targets.txt -gz /tmp/Collection1/ -sk

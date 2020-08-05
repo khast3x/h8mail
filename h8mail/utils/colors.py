@@ -168,6 +168,21 @@ class colors:
                     colors.reset,
                 )
             )
+        # Underscore to avoid coloring service with "email" in name
+        elif "_EMAIL" in source:
+            print(
+                "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
+                    colors.fg.lightblue,
+                    source,
+                    colors.fg.lightgrey,
+                    colors.fg.pink,
+                    target,
+                    colors.fg.lightgrey,
+                    colors.fg.lightgrey,
+                    data,
+                    colors.reset,
+                )
+            )
         elif "USER" in source:
             print(
                 "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
@@ -184,7 +199,7 @@ class colors:
             )
         elif "SOURCE" in source:
             print(
-                "{}{:15}{}|{}{:>25.25}{} > {}{}{}".format(
+                "{}{:15}{}|{}{:>25.25}{} > {}{}{}\n".format(
                     colors.fg.lightblue,
                     source,
                     colors.fg.lightgrey,

@@ -422,10 +422,10 @@ class target:
                     elif "password" in field and k is not None:
                         self.data.append(("SCYLLA_PASSWORD", k))
                         self.pwned += 1
-                    elif "passHash" in field and k is not None:
+                    elif "passhash" in field and k is not None:
                         self.data.append(("SCYLLA_HASH", k))
                         self.pwned += 1
-                    elif "passSalt" in field and k is not None:
+                    elif "passsalt" in field and k is not None:
                         self.data.append(("SCYLLA_HASHSALT", k))
                         self.pwned += 1
                     elif "ip" in field and k is not None:

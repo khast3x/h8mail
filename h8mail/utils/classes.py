@@ -736,11 +736,6 @@ class target:
 
     def get_dehashed(self, api_email, api_key, user_query):
         try:
-            # New Dehashed API needs fixing, waiting for devs to respond
-            c.bad_news("Dehashed is temporarily unavailable")
-            c.bad_news("This should be fixed in the next updates\n")
-            return
-
             if user_query == "hash":
                 user_query == "hashed_password"
             if user_query == "ip":
@@ -803,11 +798,15 @@ class target:
                                 ("DHASHD_ID", result[tag] + " (type: " + tag + ")")
                             )
                             self.pwned += 1
-
+                    # Documentation and JSON are not synced, using both source keys
                     if "obtained_from" in result and self.not_exists(
                         result["obtained_from"]
                     ):
                         self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
+                    if "database_name" in result and self.not_exists(
+                        result["database_name"]
+                    ):
+                        self.data.append(("DHASHD_SOURCE", result["database_name"]))
 
                 if response["balance"] is not None:
                     self.data.append(

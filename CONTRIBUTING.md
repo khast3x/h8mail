@@ -29,8 +29,8 @@
 ### Ways to contribute
 
 * Bug reports using issues
-* Bug fixes (please open issues for typos)
-* Code refactoring (please open issue beforehand if > 2 lines)
+* Bug fixes *(please open issues for typos)*
+* Code refactoring *(please open issue beforehand if > 2 lines)*
 * Code optimisation
 * New features
 * New API integrations

@@ -228,6 +228,7 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 :purple_heart: **h8mail can be found in:**
 * [BlackArch Linux](https://blackarch.org/recon.html)
 * [Tsurugi DFIR VM](https://tsurugi-linux.org/)
+* [CSI Linux](https://csilinux.com)  
 * [Trace Labs OSINT VM](https://www.tracelabs.org/trace-labs-osint-vm/)
 
 

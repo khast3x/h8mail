@@ -366,22 +366,22 @@ class target:
 
     def get_scylla(self, user_query="email"):
         try:
-            c.info_news("[" + self.target + "]>[scylla.sh]")
+            c.info_news("[" + self.target + "]>[scylla.so]")
             sleep(0.5)
             self.headers.update({"Accept": "application/json"})
             if user_query == "email":
-                uri_scylla = 'Email: "' + self.target + '"'
+                uri_scylla = 'email: "' + self.target + '"'
             elif user_query == "password":
-                uri_scylla = 'Password: "' + self.target + '"'
+                uri_scylla = 'password: "' + self.target + '"'
             elif user_query == "username":
-                uri_scylla = 'User: "' + self.target + '"'
+                uri_scylla = 'name: "' + self.target + '"'
             elif user_query == "ip":
-                uri_scylla = 'IP: "' + self.target + '"'
+                uri_scylla = 'ip: "' + self.target + '"'
             elif user_query == "hash":
-                uri_scylla = 'Hash: "' + self.target + '"'
+                uri_scylla = 'hash: "' + self.target + '"'
             elif user_query == "domain":
-                uri_scylla = 'Email: "*@' + self.target + '"'
-            url = "https://scylla.sh/search?q={}".format(
+                uri_scylla = 'email: "*@' + self.target + '"'
+            url = "https://scylla.so/search?q={}".format(
                 requests.utils.requote_uri(uri_scylla)
             )
 
@@ -411,7 +411,7 @@ class target:
             )
             for d in data:
                 for field, k in d["fields"].items():
-                    if "user" in field and k is not None:
+                    if "name" in field and k is not None:
                         self.data.append(("SCYLLA_USERNAME", k))
                         self.pwned += 1
                     elif (
@@ -820,4 +820,36 @@ class target:
             self.headers.popitem()
         except Exception as ex:
             c.bad_news(f"Dehashed error with {self.target}")
+            print(ex)
+    
+    def get_breachdirectory(self, user, passw):
+        c.info_news("[" + self.target + "]>[breachdirectory]")
+        url = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func=auto&term={target}".format(user=user, passw=passw, target=self.target)
+        try:
+            req = self.make_request(
+                    url, timeout=60
+                )
+            if req.status_code == 200:
+                    response = req.json()
+                    if response["success"] is True:
+                        c.good_news(
+                            "Found {num} entries for {target} using breachdirectory.tk".format(
+                                num=str(response["found"]), target=self.target
+                            )
+                        )
+
+                    for result in response["result"]:
+                        if result["has_password"] is True:
+                            self.data.append(("BREACHDR_PASS", result["password"]))
+                            self.data.append(("BREACHDR_MD5", result["md5"]))
+                            if result["sources"] == "Unverified":
+                                source = result["sources"]
+                            elif len(result["sources"]) > 1:
+                                source = ", ".join(result["sources"])
+                            else:
+                                source = result["sources"][0]
+                            self.data.append(("BREACHDR_SOURCE", source))
+                            self.pwned += 1
+        except Exception as ex:
+            c.bad_news(f"Breachdirectory error with {self.target}")
             print(ex)

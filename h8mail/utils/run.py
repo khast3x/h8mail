@@ -55,8 +55,6 @@ def target_factory(targets, user_args):
     if user_args.skip_defaults is False:
         scylla_up = check_scylla_online()
 
-
-
     for counter, t in enumerate(targets):
         c.info_news("Target factory started for {target}".format(target=t))
         if user_args.debug:
@@ -75,6 +73,13 @@ def target_factory(targets, user_args):
                 #     current_target.get_emailrepio(api_keys["emailrep"])
 
         if api_keys is not None:
+            if (
+                "breachdirectory_user" in api_keys
+                and "breachdirectory_pass" in api_keys
+            ):
+                current_target.get_breachdirectory(
+                    api_keys["breachdirectory_user"], api_keys["breachdirectory_pass"]
+                )
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
             if "emailrep" in api_keys and query == "email":
@@ -141,7 +146,7 @@ def h8mail(user_args):
 
     import warnings
 
-    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+    warnings.filterwarnings("ignore", message="Unverified HTTPS request")
 
     targets = []
     if user_args.user_urls:

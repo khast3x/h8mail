@@ -196,7 +196,7 @@ def check_scylla_online():
     # https://github.com/khast3x/h8mail/issues/64
     try:
         re = requests.head(
-            url="https://scylla.sh", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"), timeout=10,
+            url="https://scylla.so", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"), timeout=10,
         )
         if re.status_code == 200:
             c.good_news("scylla.sh is up")

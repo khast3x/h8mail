@@ -822,34 +822,54 @@ class target:
             c.bad_news(f"Dehashed error with {self.target}")
             print(ex)
     
-    def get_breachdirectory(self, user, passw):
-        c.info_news("[" + self.target + "]>[breachdirectory]")
-        url = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func=auto&term={target}".format(user=user, passw=passw, target=self.target)
+    def get_breachdirectory(self, user, passw, user_query):
+        # Todo: implement password source search when email has answer
+        c.info_news("[" + self.target + "]>[breachdirectory.tk]")
+        if user_query not in ["email", "username", "password"]:
+            c.bad_news("Breachdirectory does not support this option")
+            exit(1)
+        mode = "pastes"
+        url = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode=mode, target=self.target)
         try:
             req = self.make_request(
                     url, timeout=60
                 )
             if req.status_code == 200:
                     response = req.json()
-                    if response["success"] is True:
-                        c.good_news(
-                            "Found {num} entries for {target} using breachdirectory.tk".format(
-                                num=str(response["found"]), target=self.target
-                            )
-                        )
+                    if response["data"] is not None:
+                        for result in response["data"]:
+                            if "password" in result:
+                                self.data.append(("BREACHDR_PASS", result["password"]))
+                                self.data.append(("BREACHDR_SOURCE", result["source"]))
+                                self.pwned += 1
+                    url_src = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
+                    req = self.make_request(
+                        url_src, timeout=60
+                    )
+                    if req.status_code == 200:
+                        response = req.json()
+                        if response["sources"] is not None:
+                            for result in response["sources"]:
+                                self.data.append(("BREACHDR_EXTSRC", result))
+                    ## If using the 'auto' mode instead of pastes
+                    #     c.good_news(
+                    #         "Found {num} entries for {target} using breachdirectory.tk".format(
+                    #             num=str(response["found"]), target=self.target
+                    #         )
+                    #     )
 
-                    for result in response["result"]:
-                        if result["has_password"] is True:
-                            self.data.append(("BREACHDR_PASS", result["password"]))
-                            self.data.append(("BREACHDR_MD5", result["md5"]))
-                            if result["sources"] == "Unverified":
-                                source = result["sources"]
-                            elif len(result["sources"]) > 1:
-                                source = ", ".join(result["sources"])
-                            else:
-                                source = result["sources"][0]
-                            self.data.append(("BREACHDR_SOURCE", source))
-                            self.pwned += 1
+                    # for result in response["result"]:
+                    #     if result["has_password"] is True:
+                    #         self.data.append(("BREACHDR_PASS", result["password"]))
+                    #         self.data.append(("BREACHDR_MD5", result["md5"]))
+                    #         if result["sources"] == "Unverified":
+                    #             source = result["sources"]
+                    #         elif len(result["sources"]) > 1:
+                    #             source = ", ".join(result["sources"])
+                    #         else:
+                    #             source = result["sources"][0]
+                    #         self.data.append(("BREACHDR_SOURCE", source))
+                    #         self.pwned += 1
         except Exception as ex:
             c.bad_news(f"Breachdirectory error with {self.target}")
             print(ex)

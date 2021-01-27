@@ -20,6 +20,7 @@ from .helpers import (
     check_latest_version,
     check_scylla_online,
 )
+from .print_json import save_results_json
 from .localsearch import local_search, local_search_single, local_to_targets
 from .localgzipsearch import local_gzip_search, local_search_single_gzip
 from .summary import print_summary
@@ -78,7 +79,7 @@ def target_factory(targets, user_args):
                 and "breachdirectory_pass" in api_keys
             ):
                 current_target.get_breachdirectory(
-                    api_keys["breachdirectory_user"], api_keys["breachdirectory_pass"]
+                    api_keys["breachdirectory_user"], api_keys["breachdirectory_pass"], query
                 )
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])
@@ -221,7 +222,8 @@ def h8mail(user_args):
     print_summary(start_time, breached_targets)
     if user_args.output_file:
         save_results_csv(user_args.output_file, breached_targets)
-
+    if user_args.output_json:
+        save_results_json(user_args.output_json, breached_targets)
 
 def parse_args(args):
     """
@@ -268,6 +270,9 @@ def parse_args(args):
     )
     parser.add_argument(
         "-o", "--output", dest="output_file", help="File to write CSV output"
+    )
+    parser.add_argument(
+        "-j", "--json", dest="output_json", help="File to write JSON output"
     )
     parser.add_argument(
         "-bc",

@@ -9,13 +9,9 @@ def generate_source_arrays(pwned_data):
     for i in range(len(pwned_data)):
         if len(pwned_data[i]) == 2:
             temp_array.append(pwned_data[i][0] + ":" + pwned_data[i][1])
-            # print("normal append")
-            # print(temp_array)
             no_src += 1
             if "SOURCE" in pwned_data[i][0]:
                 data_array.append(temp_array)
-                # print("data array")
-                # print(data_array)
                 temp_array = []
                 no_src = 0
     if no_src > 0:
@@ -32,10 +28,6 @@ def save_results_json(dest_json, target_obj_list):
         current_target["target"] = t.target
         current_target["pwn_num"] = t.pwned
         current_target["data"] = generate_source_arrays(t.data)
-        print(data)
-        # for i in range(len(t.data)):
-        #     if len(t.data[i]) == 2:
-        #         current_target["data"].append([t.data[i][0], t.data[i][1]])
         data['targets'].append(current_target)
     
     with open(dest_json, 'w') as outfile:

@@ -378,7 +378,7 @@ class target:
             elif user_query == "ip":
                 uri_scylla = 'ip: "' + self.target + '"'
             elif user_query == "hash":
-                uri_scylla = 'hash: "' + self.target + '"'
+                uri_scylla = 'passhash: "' + self.target + '"'
             elif user_query == "domain":
                 uri_scylla = 'email: "*@' + self.target + '"'
             url = "https://scylla.so/search?q={}".format(
@@ -394,7 +394,7 @@ class target:
             self.headers.popitem()
 
             if response.status_code not in [200, 404]:
-                c.bad_news("Could not contact scylla.sh for " + self.target)
+                c.bad_news("Could not contact scylla.so for " + self.target)
                 print(response.status_code)
                 print(response)
                 return
@@ -405,7 +405,7 @@ class target:
                     if k is not None:
                         total += 1
             c.good_news(
-                "Found {num} entries for {target} using scylla.sh ".format(
+                "Found {num} entries for {target} using scylla.so ".format(
                     num=total, target=self.target
                 )
             )
@@ -435,7 +435,7 @@ class target:
                         self.data.append(("SCYLLA_SOURCE", k))
                         self.pwned += 1
         except Exception as ex:
-            c.bad_news("scylla.sh error: " + self.target)
+            c.bad_news("scylla.so error: " + self.target)
             print(ex)
 
     def get_hunterio_public(self):

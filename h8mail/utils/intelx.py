@@ -492,8 +492,8 @@ class intelx:
 		done = False
 		search_id = self.INTEL_SEARCH(term, maxresults, buckets, timeout, datefrom, dateto, sort, media, terminate)
 		if(len(str(search_id)) <= 3):
-			 print(f"[!] intelx.INTEL_SEARCH() Received {self.get_error(search_id)}")
-			 sys.exit()
+			print(f"[!] intelx.INTEL_SEARCH() Received {self.get_error(search_id)}")
+			sys.exit()
 		while done == False:
 			time.sleep(1) # lets give the backend a chance to aggregate our data
 			r = self.query_results(search_id, maxresults)
@@ -515,8 +515,8 @@ class intelx:
 		done = False
 		search_id = self.PHONEBOOK_SEARCH(term, maxresults, buckets, timeout, datefrom, dateto, sort, media, terminate, target)
 		if(len(str(search_id)) <= 3):
-			 print(f"[!] intelx.PHONEBOOK_SEARCH() Received {self.get_error(search_id)}")
-			 sys.exit()
+			print(f"[!] intelx.PHONEBOOK_SEARCH() Received {self.get_error(search_id)}")
+			sys.exit()
 		while done == False:
 			time.sleep(1) # lets give the backend a chance to aggregate our data
 			r = self.query_pb_results(search_id, maxresults)

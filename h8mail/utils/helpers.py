@@ -70,7 +70,7 @@ def print_banner(b_type="intro"):
     elif "version" in b_type:
         print(
             "\t",
-            c.fg.pink,
+            c.fg.cyan,
             "Version " + __version__ + ' - "ROCKSMASSON.5" ',
             c.reset,
         )

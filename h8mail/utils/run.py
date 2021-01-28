@@ -132,7 +132,7 @@ def h8mail(user_args):
     """
     Handles most user arg logic. Creates a list() of targets from user input.
     Starts the target object factory loop; starts local searches after factory if in user inputs
-    Prints results, saves to csv if in user inputs
+    Prints results, saves to csv or JSON if in user inputs
     """
 
     if user_args.user_targets and user_args.user_urls:

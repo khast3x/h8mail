@@ -4,7 +4,7 @@
 
 [![platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20OSX-success.svg)](https://pypi.org/project/h8mail/) [![PyPI version](https://badge.fury.io/py/h8mail.svg)](https://badge.fury.io/py/h8mail)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/h8mail.svg)](https://pypi.org/project/h8mail/) [![Downloads](https://pepy.tech/badge/h8mail)](https://pepy.tech/project/h8mail)    [![travis](https://img.shields.io/travis/khast3x/h8mail.svg)](https://travis-ci.org/khast3x/h8mail)   
-[![Docker Pulls](https://img.shields.io/docker/pulls/kh4st3x00/h8mail.svg)](https://hub.docker.com/r/kh4st3x00/h8mail) [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/kh4st3x00/h8mail.svg?color=ok)](https://hub.docker.com/r/kh4st3x00/h8mail/builds)  
+[![Docker Pulls](https://img.shields.io/docker/pulls/kh4st3x00/h8mail.svg)](https://hub.docker.com/r/kh4st3x00/h8mail)    
 **h8mail** is an email OSINT and breach hunting tool using [different breach and reconnaissance services](#apis), or local breaches such as Troy Hunt's "Collection1" and the infamous "Breach Compilation" torrent.  
 
 ----
@@ -60,7 +60,6 @@
 
 
 ####  APIs
-
 | Service | Functions | Status |
 |-|-|-|
 | [HaveIBeenPwned(v3)](https://haveibeenpwned.com/) | Number of email breaches | :white_check_mark: :key: |
@@ -71,9 +70,10 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Public | Number of search-able breach results | :white_check_mark: (:key:) |
 | [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
-| [Scylla.sh](https://scylla.sh/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
+| [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
 | [Dehashed.com](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
-| :new: [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
+| [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
+| :new: [Breachdirectory.tk](Breachdirectory.tk) - Service (free) | Cleartext passwords, hashs and salts, usernames, domain | :white_check_mark: :key: |
 
 *:key: - API key required*  
 
@@ -222,7 +222,7 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 * h8mail's Pypi integration is strongly based on the work of audreyr's [CookieCutter PyPackage](https://github.com/audreyr/cookiecutter-pypackage)
 * Logo generated using Hatchful by Shopify
 * [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
-* [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.sh available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
+* [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.so available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 * [IntelX](https://intelx.io) for being developer friendly
 
 :purple_heart: **h8mail can be found in:**

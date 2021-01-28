@@ -19,11 +19,17 @@ def intelx_getsearch(target, intelx, maxfile):
             creds=cap["paths"]["/intelligent/search"]["Credit"]
         )
     )
+    available_buckets = []
+    desired_buckets=["leaks.public", "leaks.private", "pastes", "darknet"],
+    for b in cap["buckets"]:
+        if any(b in d for d in desired_buckets):
+            available_buckets.append(b)
+    c.info_news("[" + target + "]>[intelx.io] Available buckets for h8mail:")
+    print(available_buckets)
     c.info_news("[" + target + "]>[intelx.io] Search in progress (max results : "+ str(maxfile) + ")")
     search = intelx.search(
         target,
-        buckets=["leaks.public", "leaks.private", "pastes", "darknet.tor"],
-        # buckets=[],
+        buckets=available_buckets,
         maxresults=maxfile,
         media=24,
     )

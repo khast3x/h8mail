@@ -70,8 +70,8 @@ def print_banner(b_type="intro"):
     elif "version" in b_type:
         print(
             "\t",
-            c.fg.pink,
-            "Version " + __version__ + ' - "ROCKSMASSON.4" ',
+            c.fg.cyan,
+            "Version " + __version__ + ' - "ROCKSMASSON.5" ',
             c.reset,
         )
 
@@ -190,19 +190,19 @@ def check_latest_version():
         c.bad_news("Could not check for updates. Is Github blocking requests?")
 def check_scylla_online():
     """
-    Checks if scylla.sh is online
+    Checks if scylla.so is online
     """
     # Supress SSL Warning on UI
     # https://github.com/khast3x/h8mail/issues/64
     try:
         re = requests.head(
-            url="https://scylla.sh", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"), timeout=10,
+            url="https://scylla.so", verify=False, auth=requests.auth.HTTPBasicAuth("sammy", "BasicPassword!"), timeout=10,
         )
         if re.status_code == 200:
-            c.good_news("scylla.sh is up")
+            c.good_news("scylla.so is up")
             return True
         else:
-            c.info_news("scylla.sh is down, skipping")
+            c.info_news("scylla.so is down, skipping")
         return False
     except Exception:
-        c.info_news("scylla.sh is down, skipping")
+        c.info_news("scylla.so is down, skipping")

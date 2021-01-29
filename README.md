@@ -88,12 +88,13 @@
 usage: h8mail [-h] [-t USER_TARGETS [USER_TARGETS ...]]
               [-u USER_URLS [USER_URLS ...]] [-q USER_QUERY] [--loose]
               [-c CONFIG_FILE [CONFIG_FILE ...]] [-o OUTPUT_FILE]
-              [-bc BC_PATH] [-sk] [-k CLI_APIKEYS [CLI_APIKEYS ...]]
+              [-j OUTPUT_JSON] [-bc BC_PATH] [-sk]
+              [-k CLI_APIKEYS [CLI_APIKEYS ...]]
               [-lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]]
               [-gz LOCAL_GZIP_SRC [LOCAL_GZIP_SRC ...]] [-sf]
               [-ch [CHASE_LIMIT]] [--power-chase] [--hide] [--debug]
               [--gen-config]
-              
+
 Email information and password lookup tool
 
 optional arguments:
@@ -119,11 +120,12 @@ optional arguments:
                         Emailrep, Dehashed and hunterio
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         File to write CSV output
+  -j OUTPUT_JSON, --json OUTPUT_JSON
+                        File to write JSON output
   -bc BC_PATH, --breachcomp BC_PATH
                         Path to the breachcompilation torrent folder. Uses the
                         query.sh script included in the torrent
-  -sk, --skip-defaults  Skips HaveIBeenPwned and HunterIO check. Ideal for
-                        local scans
+  -sk, --skip-defaults  Skips Scylla and HunterIO check. Ideal for local scans
   -k CLI_APIKEYS [CLI_APIKEYS ...], --apikey CLI_APIKEYS [CLI_APIKEYS ...]
                         Pass config options. Supported format: "K=V,K=V"
   -lb LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...], --local-breach LOCAL_BREACH_SRC [LOCAL_BREACH_SRC ...]
@@ -152,6 +154,7 @@ optional arguments:
   --gen-config, -g      Generates a configuration file template in the current
                         working directory & exits. Will overwrite existing
                         h8mail_config.ini file
+
 ```
 
 -----
@@ -224,6 +227,7 @@ $ h8mail -u "https://pastebin.com/raw/kQ6WNKqY" "list_of_urls.txt"
 * [Jake Creps](https://twitter.com/jakecreps) for his [h8mail v2 introduction](https://jakecreps.com/2019/06/21/h8mail/)  
 * [Alejandro Caceres](https://twitter.com/_hyp3ri0n) for making scylla.so available. Be sure to [support](https://www.buymeacoffee.com/Eiw47ImnT) him if you can
 * [IntelX](https://intelx.io) for being developer friendly
+* [Breachdirectory.tk](https://breachdirectory.tk) for being developer friendly
 
 :purple_heart: **h8mail can be found in:**
 * [BlackArch Linux](https://blackarch.org/recon.html)

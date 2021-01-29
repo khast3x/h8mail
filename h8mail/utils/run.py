@@ -284,7 +284,7 @@ def parse_args(args):
         "-sk",
         "--skip-defaults",
         dest="skip_defaults",
-        help="Skips HaveIBeenPwned and HunterIO check. Ideal for local scans",
+        help="Skips Scylla and HunterIO check. Ideal for local scans",
         action="store_true",
         default=False,
     )

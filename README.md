@@ -40,7 +40,7 @@
 * :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
 * :white_check_mark: Bulk file-reading for targeting
-* :memo: Output to CSV file
+* :memo: Output to CSV file or JSON
 * :muscle: Compatible with the "Breach Compilation" torrent scripts
 * :house: Search cleartext and compressed .gz files locally using multiprocessing
   * :cyclone: Compatible with "Collection#1"

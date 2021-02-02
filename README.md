@@ -73,7 +73,7 @@
 | [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
 | [Dehashed.com](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
-| :new: [Breachdirectory.tk](Breachdirectory.tk) - Service (free) | Cleartext passwords, hashs and salts, usernames, domain | :white_check_mark: :key: |
+| :new: [Breachdirectory.tk](https://breachdirectory.tk) - Service (free) | Cleartext passwords, hashs and salts, usernames, domain | :white_check_mark: :key: |
 
 *:key: - API key required*  
 

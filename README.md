@@ -70,7 +70,7 @@
 | [Leak-Lookup](https://leak-lookup.com/) - Public | Number of search-able breach results | :white_check_mark: (:key:) |
 | [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
-| [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: |
+| [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: |
 | [Dehashed.com](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
 | :new: [Breachdirectory.tk](https://breachdirectory.tk) - Service (free) | Cleartext passwords, hashs and salts, usernames, domain | :white_check_mark: :key: |

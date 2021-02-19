@@ -6,11 +6,20 @@ import stat
 from string import printable
 
 
+def check_shell():
+    shell = os.environ['SHELL']
+    print("SHELL IS " + shell)
+    if "bash" not in shell:
+        c.info_news("If you're having issues or not results, be sure to launch h8mail using bash for this operation.")
+        c.info_news("OSX users should read this https://khast3x.club/posts/2021-02-17-h8mail-with-COMB/#targeting-emails\n")
+
+
 def breachcomp_check(targets, breachcomp_path):
     # https://gist.github.com/scottlinux/9a3b11257ac575e4f71de811322ce6b3
     try:
         import subprocess
 
+        check_shell()
         query_bin = os.path.join(breachcomp_path, "query.sh")
         st = os.stat(query_bin)
         os.chmod(query_bin, st.st_mode | stat.S_IEXEC)

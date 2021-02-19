@@ -820,7 +820,7 @@ class target:
                         )
                     )
             else:
-                c.bad_news("Dehashed error: status code " + req.status_code)
+                c.bad_news("Dehashed error: status code " + str(req.status_code))
             self.headers.popitem()
         except Exception as ex:
             c.bad_news(f"Dehashed error with {self.target}")

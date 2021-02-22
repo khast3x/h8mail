@@ -435,9 +435,11 @@ class target:
                     elif "ip" in field and k is not None:
                         self.data.append(("SCYLLA_LASTIP", k))
                         self.pwned += 1
-                    elif "domain" in field and k is not None:
+                    if "domain" in field and k is not None:
                         self.data.append(("SCYLLA_SOURCE", k))
                         self.pwned += 1
+                    else:
+                        self.data.append(("SCYLLA_SOURCE", "N/A"))
         except Exception as ex:
             c.bad_news("scylla.so error: " + self.target)
             print(ex)
@@ -488,53 +490,61 @@ class target:
         try:
             if user_query == "ip":
                 user_query = "lastip"
-            if user_query in ["domain"]:
-                c.bad_news(
-                    f"Snusbase does not support {user_query} search (yet)"
-                )
-                return
+            if user_query == "domain":
+                payload = {"type": "email", "term": "%@" + self.target, "wildcard": "true"}
+            # elif user_query == "hash": If we want hash to search for password instead of reverse searching emails from the hash
+            #     payload = {"hash": self.target}
+            #     api_url = "https://api.snusbase.com/v3/hash"
+            else:
+                payload = {"type": user_query, "term": self.target}
             c.info_news("[" + self.target + "]>[snusbase]")
             url = api_url
-            self.headers.update({"Authorization": api_key})
-            payload = {"type": user_query, "term": self.target}
+            self.headers.update({"authorization": api_key})
+            # payload = {"type": user_query, "term": self.target}
             req = self.make_request(url, meth="POST", data=payload)
             self.headers.popitem()
             response = req.json()
-            c.good_news(
-                "Found {num} entries for {target} using Snusbase".format(
-                    num=len(response["result"]), target=self.target
+            if "error" in response:
+                c.bad_news("[snusbase]> " + response["error"])
+                c.bad_news("[snusbase]> " +  response["reason"])
+                return 1
+            if "size" in response:
+                c.good_news(
+                    "Found {num} entries for {target} using Snusbase".format(
+                        num=response["size"], target=self.target
+                    )
                 )
-            )
-            for result in response["result"]:
-                if result["email"] and self.not_exists(result["email"]):
-                    self.data.append(("SNUS_RELATED", result["email"].strip()))
-                if result["username"]:
-                    self.data.append(("SNUS_USERNAME", result["username"]))
-                    self.pwned += 1
-                if result["password"]:
-                    self.data.append(("SNUS_PASSWORD", result["password"]))
-                    self.pwned += 1
-                if result["hash"]:
-                    if result["salt"]:
-                        self.data.append(
-                            (
-                                "SNUS_HASH_SALT",
-                                result["hash"].strip() + " : " + result["salt"].strip(),
+                for result in response["results"]:
+                    if "email" in result and self.not_exists(result["email"]):
+                        self.data.append(("SNUS_RELATED", result["email"].strip()))
+                    if "username" in result:
+                        self.data.append(("SNUS_USERNAME", result["username"]))
+                        self.pwned += 1
+                    if "password" in result:
+                        self.data.append(("SNUS_PASSWORD", result["password"]))
+                        self.pwned += 1
+                    if "hash" in result:
+                        if "salt" in result:
+                            self.data.append(
+                                (
+                                    "SNUS_HASH_SALT",
+                                    result["hash"].strip() + " : " + result["salt"].strip(),
+                                )
                             )
-                        )
+                            self.pwned += 1
+                        else:
+                            self.data.append(("SNUS_HASH", result["hash"]))
+                            self.pwned += 1
+                    if "lastip" in result:
+                        self.data.append(("SNUS_LASTIP", result["lastip"]))
                         self.pwned += 1
+                    if "name" in result:
+                        self.data.append(("SNUS_NAME", result["name"]))
+                        self.pwned += 1
+                    if "db" in result and self.not_exists(result["db"]):
+                        self.data.append(("SNUS_SOURCE", result["db"]))
                     else:
-                        self.data.append(("SNUS_HASH", result["hash"]))
-                        self.pwned += 1
-                if result["lastip"]:
-                    self.data.append(("SNUS_LASTIP", result["lastip"]))
-                    self.pwned += 1
-                if result["name"]:
-                    self.data.append(("SNUS_NAME", result["name"]))
-                    self.pwned += 1
-                if result["tablenr"] and self.not_exists(result["tablenr"]):
-                    self.data.append(("SNUS_SOURCE", result["tablenr"]))
-
+                        self.data.append(("SNUS_SOURCE", "N/A"))
         except Exception as ex:
             c.bad_news(f"Snusbase error with {self.target}")
             print(ex)
@@ -699,6 +709,8 @@ class target:
                         self.pwned += 1
                     if "Database" in result and self.not_exists(result["Database"]):
                         self.data.append(("WLI_SOURCE", result["Database"]))
+                    else:
+                        self.data.append(("WLI_SOURCE", "N/A"))
         except Exception as ex:
             c.bad_news(
                 f"WeLeakInfo error with {self.target} (private)"
@@ -807,11 +819,12 @@ class target:
                         result["obtained_from"]
                     ):
                         self.data.append(("DHASHD_SOURCE", result["obtained_from"]))
-                    if "database_name" in result and self.not_exists(
+                    elif "database_name" in result and self.not_exists(
                         result["database_name"]
                     ):
                         self.data.append(("DHASHD_SOURCE", result["database_name"]))
-
+                    else:
+                        self.data.append(("DHASHD_SOURCE", "N/A"))
                 if response["balance"] is not None:
                     self.data.append(
                         (
@@ -851,6 +864,8 @@ class target:
                             if "source" in result:
                                 self.data.append(("BREACHDR_SOURCE", result["source"]))
                                 self.pwned += 1
+                            else:
+                                self.data.append(("BREACHDR_SOURCE", "N/A"))
                     # Follow up with an aggregated leak sources query
                     url_src = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
                     req = self.make_request(

@@ -93,7 +93,7 @@ def target_factory(targets, user_args):
                 if "snusbase_url" in api_keys:
                     snusbase_url = api_keys["snusbase_url"]
                 else:
-                    snusbase_url = "http://api.snusbase.com/v2/search"
+                    snusbase_url = "http://api.snusbase.com/v3/search"
                 current_target.get_snusbase(
                     snusbase_url, api_keys["snusbase_token"], query
                 )

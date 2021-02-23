@@ -14,6 +14,25 @@ def check_shell():
         c.info_news("OSX users should read this https://khast3x.club/posts/2021-02-17-h8mail-with-COMB/#targeting-emails\n")
 
 
+def clean_targets(targets):
+    """
+    This function is necessary since local_search performs a loose search.
+    We'll double check results to ensure a second strict cleansing of found targets
+    """
+    for t in targets:
+        cleaned_data = []
+        for d in t.data:
+            if d:
+                found_email = re.split("[;:]",d[1])[0]
+                if found_email == t.target:
+                    remove_email = [d[0], re.split("[;:]",d[1])[-1]]
+                    cleaned_data.append(remove_email)
+                else:
+                    c.info_news("Removing " + d[1] + " (cleaning function")
+        t.data = cleaned_data
+
+    return targets
+
 def breachcomp_check(targets, breachcomp_path):
     # cd into dirs until next letter has no dir
     # stay in last dir that was true
@@ -22,11 +41,11 @@ def breachcomp_check(targets, breachcomp_path):
     for t in targets:
         if len(t.target):
             for i in range(len(t.target)):
-                if t.target[i].isalnum:
+                if t.target[i].isalnum():
                     next_dir_to_test = os.path.join(breachcomp_path, t.target[i])
                 else:
                     next_dir_to_test = os.path.join(breachcomp_path, "symbols")
-
+                print("nextdir is " + next_dir_to_test)
                 if os.path.isdir(next_dir_to_test):
                     breachcomp_path = next_dir_to_test
                 else:
@@ -34,15 +53,14 @@ def breachcomp_check(targets, breachcomp_path):
                         found_list = local_search([next_dir_to_test], [t.target])
                         for f in found_list:
                             t.pwned += 1
-                            t.data.append(("BC_PASS", re.split("[;:]",f.content.strip())[-1]))
+                            t.data.append(("BC_PASS", f.content.strip()))
                     else:
                         c.bad_news(next_dir_to_test + " is neither a file or directory")
                         
                     break
                     #launch search if t[i] is file in confirmed_existing
 
-
-    # t.data.append(("BC_PASS", "toto"))
+    targets = clean_targets(targets)
     return targets
 
 def old_breachcomp_check(targets, breachcomp_path):

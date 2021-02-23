@@ -17,7 +17,7 @@ def check_shell():
 def clean_targets(targets):
     """
     This function is necessary since local_search performs a loose search.
-    We'll double check results to ensure a second strict cleansing of found targets
+    We'll double check results to ensure ONLY target email is present is results
     """
     for t in targets:
         cleaned_data = []
@@ -25,8 +25,9 @@ def clean_targets(targets):
             if d:
                 found_email = re.split("[;:]",d[1])[0]
                 if found_email == t.target:
-                    remove_email = [d[0], re.split("[;:]",d[1])[-1]]
-                    cleaned_data.append(remove_email)
+                    # We rebuild the expected data array ["BC_PASS", "password"]
+                    new_data = [d[0], re.split("[;:]",d[1])[-1]]
+                    cleaned_data.append(new_data)
                 else:
                     c.info_news("Removing " + d[1] + " (cleaning function")
         t.data = cleaned_data
@@ -34,9 +35,6 @@ def clean_targets(targets):
     return targets
 
 def breachcomp_check(targets, breachcomp_path):
-    # cd into dirs until next letter has no dir
-    # stay in last dir that was true
-    # perform local search on file named "last letter that did not have a dir"
     breachcomp_path =  os.path.join(breachcomp_path, "data")
     for t in targets:
         if len(t.target):
@@ -45,7 +43,6 @@ def breachcomp_check(targets, breachcomp_path):
                     next_dir_to_test = os.path.join(breachcomp_path, t.target[i])
                 else:
                     next_dir_to_test = os.path.join(breachcomp_path, "symbols")
-                print("nextdir is " + next_dir_to_test)
                 if os.path.isdir(next_dir_to_test):
                     breachcomp_path = next_dir_to_test
                 else:
@@ -58,7 +55,6 @@ def breachcomp_check(targets, breachcomp_path):
                         c.bad_news(next_dir_to_test + " is neither a file or directory")
                         
                     break
-                    #launch search if t[i] is file in confirmed_existing
 
     targets = clean_targets(targets)
     return targets

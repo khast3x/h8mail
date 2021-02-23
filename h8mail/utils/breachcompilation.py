@@ -29,7 +29,7 @@ def clean_targets(targets):
                     new_data = [d[0], re.split("[;:]",d[1])[-1]]
                     cleaned_data.append(new_data)
                 else:
-                    c.info_news("Removing " + d[1] + " (cleaning function")
+                    c.info_news("Removing " + d[1] + " (cleaning function)")
         t.data = cleaned_data
 
     return targets

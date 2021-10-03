@@ -841,12 +841,12 @@ class target:
     
     def get_breachdirectory(self, user, passw, user_query):
         # Todo: implement password source search when email has answer
-        c.info_news("[" + self.target + "]>[breachdirectory.tk]")
+        c.info_news("[" + self.target + "]>[breachdirectory.org]")
         if user_query not in ["email", "username", "password", "domain"]:
             c.bad_news("Breachdirectory does not support this option")
             exit(1)
         mode = "pastes"
-        url = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode=mode, target=self.target)
+        url = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode=mode, target=self.target)
         try:
             req = self.make_request(
                     url, timeout=60
@@ -867,7 +867,7 @@ class target:
                             else:
                                 self.data.append(("BREACHDR_SOURCE", "N/A"))
                     # Follow up with an aggregated leak sources query
-                    url_src = "https://breachdirectory.tk/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
+                    url_src = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
                     req = self.make_request(
                         url_src, timeout=60
                     )
@@ -878,7 +878,7 @@ class target:
                                 self.data.append(("BREACHDR_EXTSRC", result))
                     ## If using the 'auto' mode instead of pastes
                     #     c.good_news(
-                    #         "Found {num} entries for {target} using breachdirectory.tk".format(
+                    #         "Found {num} entries for {target} using breachdirectory.org".format(
                     #             num=str(response["found"]), target=self.target
                     #         )
                     #     )

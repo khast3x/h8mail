@@ -8,7 +8,7 @@ def generate_source_arrays(pwned_data):
     temp_array = []
     for i in range(len(pwned_data)):
         if len(pwned_data[i]) == 2:
-            temp_array.append(pwned_data[i][0] + ":" + pwned_data[i][1])
+            temp_array.append(pwned_data[i][0] + ":" + str(pwned_data[i][1]))
             no_src += 1
             if "SOURCE" in pwned_data[i][0]:
                 data_array.append(temp_array)

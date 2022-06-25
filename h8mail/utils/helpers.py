@@ -71,7 +71,7 @@ def print_banner(b_type="intro"):
         print(
             "\t",
             c.fg.cyan,
-            "Version " + __version__ + ' - "ROCKSMASSON.5" ',
+            "Version " + __version__ + ' - "ROCKSMASSON.6" ',
             c.reset,
         )
 

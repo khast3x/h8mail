@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .colors import colors as c
 import json
+import os
 
 def generate_source_arrays(pwned_data):
     data_array = []
@@ -30,5 +31,5 @@ def save_results_json(dest_json, target_obj_list):
         current_target["data"] = generate_source_arrays(t.data)
         data['targets'].append(current_target)
     
-    with open(dest_json, 'w') as outfile:
+    with open(os.path.expanduser(dest_json), 'w') as outfile:
         json.dump(data, outfile)

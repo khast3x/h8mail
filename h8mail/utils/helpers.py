@@ -153,7 +153,7 @@ def save_results_csv(dest_csv, target_obj_list):
     Outputs CSV from target object list.
     Dumps the target.data object variable into CSV file.
     """
-    with open(dest_csv, "w", newline="") as csvfile:
+    with open(os.path.expanduser(dest_csv), "w", newline="") as csvfile:
         try:
             writer = csv.writer(csvfile)
 

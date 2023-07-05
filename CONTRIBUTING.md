@@ -18,7 +18,7 @@
 
 * Pull requests should be merged into the latest development branch, not in the main branch
   * If there is no on-going development branch, there should still be the current version's dev branch
-  * If unsure, open an issue and you'll be pointed to the right branch, or a seperate branch can be created for you
+  * If unsure, open an issue and you'll be pointed to the right branch, or a separate branch can be created for you
 
 * Make sure your code passes the included tests. You can run them by using `python3 -m unittest` in h8mail's top level directory
 

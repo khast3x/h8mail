@@ -26,7 +26,7 @@ Features
 --------
 
 * Email pattern matching (reg exp), useful for reading from other tool outputs
-* Loosey patterns for local searchs ("john.smith", "evilcorp") 
+* Loosey patterns for local searches ("john.smith", "evilcorp") 
 * Painless install. Available through `pip`, only requires `requests`
 * Small and fast Alpine Dockerfile available
 * CLI or Bulk file-reading for targeting

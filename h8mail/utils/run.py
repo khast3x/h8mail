@@ -32,7 +32,7 @@ from .url import target_urls
 
 def target_factory(targets, user_args):
     """
-    Receives list of emails and user args. Fetchs API keys from config file using user_args path and cli keys.
+    Receives list of emails and user args. Fetches API keys from config file using user_args path and cli keys.
     For each target, launch target.methods() associated to found config artifacts.
     Handles chase logic with counters from enumerate()
     """
@@ -227,7 +227,7 @@ def h8mail(user_args):
 
 def parse_args(args):
     """
-    Seperate functions to make it easier to run tests
+    Separate functions to make it easier to run tests
     Pass args as an array
     """
     parser = argparse.ArgumentParser(
@@ -257,7 +257,7 @@ def parse_args(args):
     parser.add_argument(
         "--loose",
         dest="loose",
-        help="Allow loose search by disabling email pattern recognition. Use spaces as pattern seperators",
+        help="Allow loose search by disabling email pattern recognition. Use spaces as pattern separators",
         action="store_true",
         default=False,
     )

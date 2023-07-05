@@ -37,7 +37,7 @@
 
 * :mag_right: Email pattern matching (reg exp), useful for reading from other tool outputs
 * :earth_africa: Pass URLs to directly find and target emails in pages
-* :dizzy: Loosey patterns for local searchs ("john.smith", "evilcorp")
+* :dizzy: Loosey patterns for local searches ("john.smith", "evilcorp")
 * :package: Painless install. Available through `pip`, only requires `requests`
 * :white_check_mark: Bulk file-reading for targeting
 * :memo: Output to CSV file or JSON
@@ -66,14 +66,14 @@
 | [HaveIBeenPwned Pastes(v3)](https://haveibeenpwned.com/Pastes) | URLs of text files mentioning targets | :white_check_mark: :key: |
 | [Hunter.io](https://hunter.io/) - Public | Number of related emails | :white_check_mark: |
 | [Hunter.io](https://hunter.io/) - Service (free tier) | Cleartext related emails, Chasing | :white_check_mark: :key: |
-| [Snusbase](https://api.snusbase.com/admin/purchase) - Service | Cleartext passwords, hashs and salts, usernames, IPs - Fast :zap: | :white_check_mark: :key: |
+| [Snusbase](https://api.snusbase.com/admin/purchase) - Service | Cleartext passwords, hashes and salts, usernames, IPs - Fast :zap: | :white_check_mark: :key: |
 | [Leak-Lookup](https://leak-lookup.com/) - Public | Number of search-able breach results | :white_check_mark: (:key:) |
-| [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
+| [Leak-Lookup](https://leak-lookup.com/) - Service | Cleartext passwords, hashes and salts, usernames, IPs, domain | :white_check_mark: :key: |
 | [Emailrep.io](https://emailrep.io/) - Service (free) | Last seen in breaches, social media profiles | :white_check_mark: :key: |
-| [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashs and salts, usernames, IPs, domain | :construction: |
-| [Dehashed.com](https://dehashed.com/) - Service | Cleartext passwords, hashs and salts, usernames, IPs, domain | :white_check_mark: :key: |
-| [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashs and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
-| :new: [Breachdirectory.org](https://breachdirectory.org) - Service (free) | Cleartext passwords, hashs and salts, usernames, domain | :construction: :key: |
+| [scylla.so](https://scylla.so/) - Service (free) | Cleartext passwords, hashes and salts, usernames, IPs, domain | :construction: |
+| [Dehashed.com](https://dehashed.com/) - Service | Cleartext passwords, hashes and salts, usernames, IPs, domain | :white_check_mark: :key: |
+| [IntelX.io](https://intelx.io/signup) - Service (free trial) | Cleartext passwords, hashes and salts, usernames, IPs, domain, Bitcoin Wallets, IBAN | :white_check_mark: :key: |
+| :new: [Breachdirectory.org](https://breachdirectory.org) - Service (free) | Cleartext passwords, hashes and salts, usernames, domain | :construction: :key: |
 
 *:key: - API key required*  
 
@@ -113,7 +113,7 @@ optional arguments:
                         ip, hash, domain. Performs an implicit "loose" search
                         when searching locally
   --loose               Allow loose search by disabling email pattern
-                        recognition. Use spaces as pattern seperators
+                        recognition. Use spaces as pattern separators
   -c CONFIG_FILE [CONFIG_FILE ...], --config CONFIG_FILE [CONFIG_FILE ...]
                         Configuration file for API keys. Accepts keys from
                         Snusbase, WeLeakInfo, Leak-Lookup, HaveIBeenPwned,

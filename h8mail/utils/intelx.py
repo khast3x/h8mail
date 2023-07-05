@@ -249,7 +249,7 @@ class intelx:
 		Return results from an initialized search based on its ID
 
 		status (results status):
-		- 0: Sucess with results.
+		- 0: Success with results.
 		- 1: No more results available.
 		- 2: Search ID not found.
 		- 3: No results yet, but keep trying.
@@ -376,7 +376,7 @@ class intelx:
 		___________________________________________
 		RETURN VALUES
 		status (results status):
-		- 0: Sucess with results.
+		- 0: Success with results.
 		- 1: No more results available.
 		- 2: Search ID not found.
 		- 3: No results yet, but keep trying.
@@ -398,7 +398,7 @@ class intelx:
 
 	def query_pb_results(self, id, limit):
 		"""
-		Query the results fom a phonebook search.
+		Query the results from a phonebook search.
 		Meant for usage within loops.
 		"""
 		results = self.PHONEBOOK_SEARCH_RESULT(id, limit)

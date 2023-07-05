@@ -192,7 +192,7 @@ def check_scylla_online():
     """
     Checks if scylla.so is online
     """
-    # Supress SSL Warning on UI
+    # Suppress SSL Warning on UI
     # https://github.com/khast3x/h8mail/issues/64
     try:
         re = requests.head(

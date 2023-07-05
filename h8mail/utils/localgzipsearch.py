@@ -65,7 +65,7 @@ def local_gzip_search(files_to_parse, target_list):
     """
     Receives list of all files to check for target_list.
     Starts a worker pool, one worker per file.
-    Return list of local_breach_targets objects to be tranformed in target objects.
+    Return list of local_breach_targets objects to be transformed in target objects.
     """
     original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     pool = Pool()
@@ -94,7 +94,7 @@ def local_search_single_gzip(files_to_parse, target_list):
     """
     Single process searching of every target_list emails, in every files_to_parse list.
     To be used when stability for big files is a priority
-    Return list of local_breach_target objects to be tranformed in target objects
+    Return list of local_breach_target objects to be transformed in target objects
     """
     found_list = []
     for file_to_parse in files_to_parse:

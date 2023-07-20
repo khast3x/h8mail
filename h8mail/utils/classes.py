@@ -486,6 +486,54 @@ class target:
             )
             print(ex)
 
+    def get_tomba_counter_private(self, api_key, api_secret):
+        try:
+            c.info_news("[" + self.target + "]>[tomba.io private counter]")
+            target_domain = self.target.split("@")[1]
+            self.headers.update({"X-Tomba-Key":  api_key})
+            self.headers.update({"X-Tomba-Secret":  api_secret})
+            url = f"https://api.tomba.io/v1/email-count?domain={target_domain}"
+            req = self.make_request(url)
+            self.headers.popitem()
+            response = req.json()
+            if response["data"]["total"] != 0:
+                self.data.append(("TOMBA_COUNTER", response["data"]["total"]))
+            c.good_news(
+                "Found {num} related emails for {target} using tomba.io (private)".format(
+                    num=response["data"]["total"], target=self.target
+                )
+            )
+        except Exception as ex:
+            c.bad_news("tomba.io (public API) error: " + self.target)
+            print(ex)
+
+    def get_tomba_search_private(self, api_key, api_secret):
+        try:
+            c.info_news("[" + self.target + "]>[tomba.io private search]")
+            target_domain = self.target.split("@")[1]
+            self.headers.update({"X-Tomba-Key":  api_key})
+            self.headers.update({"X-Tomba-Secret":  api_secret})
+            url = f"https://api.tomba.io/v1/domain-search?domain={target_domain}&limit=10"
+            req = self.make_request(url)
+            self.headers.popitem()
+            response = req.json()
+            b_counter = 0
+            for e in response["data"]["emails"]:
+                self.data.append(("TOMBA_SEARCH", e["email"]))
+                b_counter += 1
+                if self.pwned != 0:
+                    self.pwned += 1
+            c.good_news(
+                "Found {num} related emails for {target} using tomba.io (private)".format(
+                    num=b_counter, target=self.target
+                )
+            )
+        except Exception as ex:
+            c.bad_news(
+                f"tomba.io (private API) error for {self.target}:"
+            )
+            print(ex)
+
     def get_snusbase(self, api_url, api_key, user_query):
         try:
             if user_query == "ip":
@@ -838,7 +886,7 @@ class target:
         except Exception as ex:
             c.bad_news(f"Dehashed error with {self.target}")
             print(ex)
-    
+
     def get_breachdirectory(self, user, passw, user_query):
         # Todo: implement password source search when email has answer
         c.info_news("[" + self.target + "]>[breachdirectory.org]")

@@ -33,6 +33,12 @@ def print_results(results, hide=False):
                     )
                 if "HUNTER_RELATED" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], "HUNTER_RELATED")
+                if "TOMBA_COUNTER" in t.data[i][0]:
+                    c.print_result(
+                        t.target, str(t.data[i][1]) + " RELATED EMAILS", "TOMBA_COUNTER"
+                    )
+                if "TOMBA_SEARCH" in t.data[i][0]:
+                    c.print_result(t.target, t.data[i][1], "TOMBA_SEARCH")
                 if "EMAILREP" in t.data[i][0]:
                     c.print_result(
                         t.target, str(t.data[i][1]), t.data[i][0]
@@ -57,4 +63,4 @@ def print_results(results, hide=False):
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
                 if "BREACHDR" in t.data[i][0]:
                     c.print_result(t.target, t.data[i][1], t.data[i][0])
-    
+

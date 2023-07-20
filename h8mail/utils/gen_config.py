@@ -10,20 +10,22 @@ def gen_config_file():
         config = """[h8mail]
 ; h8mail will automatically detect present keys & launch services accordingly
 ; Uncomment to activate
-;hunterio = 
-;snusbase_token = 
-;;weleakinfo_priv = 
-;;weleakinfo_pub = 
-;hibp = 
+;hunterio =
+;snusbase_token =
+;;weleakinfo_priv =
+;;weleakinfo_pub =
+;hibp =
 ;leak-lookup_pub = 1bf94ff907f68d511de9a610a6ff9263
-;leak-lookup_priv = 
-;emailrep = 
-;dehashed_email = 
+;leak-lookup_priv =
+;emailrep =
+;dehashed_email =
 ;dehashed_key =
 ;intelx_key =
 ;intelx_maxfile = 10
-;breachdirectory_user = 
+;breachdirectory_user =
 ;breachdirectory_pass =
+;tomba_key =
+;tomba_secret =
 """
         dest_config.write(config)
         c.good_news(

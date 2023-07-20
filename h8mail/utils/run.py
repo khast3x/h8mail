@@ -87,6 +87,11 @@ def target_factory(targets, user_args):
                 current_target.get_emailrepio(api_keys["emailrep"])
             if "hunterio" in api_keys and query == "email":
                 current_target.get_hunterio_private(api_keys["hunterio"])
+            if ("tomba_key" in api_keys
+                and "tomba_secret" in api_keys
+            ):
+                current_target.get_tomba_counter_private(api_keys["tomba_key"], api_keys["tomba_secret"])
+                current_target.get_tomba_search_private(api_keys["tomba_key"], api_keys["tomba_secret"])
             if "intelx_key" in api_keys:
                 current_target.get_intelx(api_keys)
             if "snusbase_token" in api_keys:

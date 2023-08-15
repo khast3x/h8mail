@@ -35,8 +35,9 @@ def clean_targets(targets):
     return targets
 
 def breachcomp_check(targets, breachcomp_path):
-    breachcomp_path =  os.path.join(breachcomp_path, "data")
+    rst_breachcomp_path =  os.path.join(breachcomp_path, "data")
     for t in targets:
+        breachcomp_path = rst_breachcomp_path
         if len(t.target):
             for i in range(len(t.target)):
                 if t.target[i].isalnum():

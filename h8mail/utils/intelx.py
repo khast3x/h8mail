@@ -140,10 +140,10 @@ class intelx:
 			if "Could not generate" in r.text:
 				return False
 			return r.text
-		except:
+		except Exception:
 			return False
 
-	def INTEL_SEARCH(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
+	def INTEL_SEARCH(self, term, maxresults=100, buckets=None, timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
 		"""
 		Initialize an intelligent search and return the ID of the task/search for further processing.
 
@@ -344,7 +344,7 @@ class intelx:
 		else:
 			return r.status_code
 	
-	def PHONEBOOK_SEARCH(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
+	def PHONEBOOK_SEARCH(self, term, maxresults=100, buckets=None, timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
 		"""
 		Initialize a phonebook search and return the ID of the task/search for further processing
 		"""
@@ -404,7 +404,7 @@ class intelx:
 		results = self.PHONEBOOK_SEARCH_RESULT(id, limit)
 		return results
 
-	def search(self, term, maxresults=100, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
+	def search(self, term, maxresults=100, buckets=None, timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[]):
 		"""
 		Conduct a simple search based on a search term.
 		Other arguments have default values set, however they can be overridden to complete an advanced search.
@@ -506,7 +506,7 @@ class intelx:
 				done = True
 		return {'records': results}
 
-	def phonebooksearch(self, term, maxresults=1000, buckets=[], timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
+	def phonebooksearch(self, term, maxresults=1000, buckets=None, timeout=5, datefrom="", dateto="", sort=4, media=0, terminate=[], target=0):
 		"""
 		Conduct a phonebook search based on a search term.
 		Other arguments have default values set, however they can be overridden to complete an advanced search.

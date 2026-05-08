@@ -115,7 +115,7 @@ def local_search_single_gzip(files_to_parse, target_list):
                             c.good_news(
                                 f"Found occurrence [{file_to_parse}] Line {cnt}: {decoded}"
                             )
-                        except:
+                        except Exception:
                             c.bad_news(
                                 f"Got a decoding error line {cnt} - file: {file_to_parse}"
                             )

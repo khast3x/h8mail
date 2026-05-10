@@ -24,6 +24,8 @@ def gen_config_file():
 ;intelx_maxfile = 10
 ;breachdirectory_user = 
 ;breachdirectory_pass =
+;breachdirectory_rapidapi_key =
+;breachdirectory_rapidapi_host = breachdirectory.p.rapidapi.com
 """
         dest_config.write(config)
         c.good_news(

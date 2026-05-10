@@ -75,11 +75,21 @@ def target_factory(targets, user_args):
 
         if api_keys is not None:
             if (
-                "breachdirectory_user" in api_keys
-                and "breachdirectory_pass" in api_keys
+                "breachdirectory_rapidapi_key" in api_keys
+                or (
+                    "breachdirectory_user" in api_keys
+                    and "breachdirectory_pass" in api_keys
+                )
             ):
                 current_target.get_breachdirectory(
-                    api_keys["breachdirectory_user"], api_keys["breachdirectory_pass"], query
+                    api_keys.get("breachdirectory_user", ""),
+                    api_keys.get("breachdirectory_pass", ""),
+                    query,
+                    api_keys.get("breachdirectory_rapidapi_key"),
+                    api_keys.get(
+                        "breachdirectory_rapidapi_host",
+                        "breachdirectory.p.rapidapi.com",
+                    ),
                 )
             if "hibp" in api_keys and query == "email":
                 current_target.get_hibp3(api_keys["hibp"])

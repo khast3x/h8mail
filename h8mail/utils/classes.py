@@ -839,43 +839,77 @@ class target:
             c.bad_news(f"Dehashed error with {self.target}")
             print(ex)
     
-    def get_breachdirectory(self, user, passw, user_query):
+    def get_breachdirectory(
+        self,
+        user,
+        passw,
+        user_query,
+        rapidapi_key=None,
+        rapidapi_host="breachdirectory.p.rapidapi.com",
+    ):
         # Todo: implement password source search when email has answer
         c.info_news("[" + self.target + "]>[breachdirectory.org]")
         if user_query not in ["email", "username", "password", "domain"]:
             c.bad_news("Breachdirectory does not support this option")
             exit(1)
         mode = "pastes"
-        url = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode=mode, target=self.target)
+
+        use_rapidapi = rapidapi_key is not None and len(str(rapidapi_key).strip()) > 0
+        if not use_rapidapi and (not user or not passw):
+            c.bad_news("Breachdirectory requires either RapidAPI key or username/password")
+            return
+
         try:
-            req = self.make_request(
-                    url, timeout=60
+            if use_rapidapi:
+                rapid_mode = "auto"
+                self.headers.update({"x-rapidapi-key": str(rapidapi_key).strip()})
+                self.headers.update({"x-rapidapi-host": str(rapidapi_host).strip()})
+                req = self.make_request(
+                    "https://{host}/".format(host=str(rapidapi_host).strip()),
+                    timeout=60,
+                    params={"func": rapid_mode, "term": self.target},
                 )
+                if req.status_code == 404:
+                    req = self.make_request(
+                        "https://{host}/index".format(host=str(rapidapi_host).strip()),
+                        timeout=60,
+                        params={"func": rapid_mode, "term": self.target},
+                    )
+            else:
+                url = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode=mode, target=self.target)
+                req = self.make_request(url, timeout=60)
+
             if req.status_code == 200:
                     response = req.json()
-                    if response["data"] is not None:
-                        for result in response["data"]:
+                    payload = response.get("data") or response.get("result")
+                    if payload is not None:
+                        for result in payload:
                             if "email" in result and "email" not in user_query:
                                 self.data.append(("BREACHDR_EMAIL", result["email"]))
+                                self.pwned += 1
                             if "password" in result:
                                 self.data.append(("BREACHDR_PASS", result["password"]))
+                                self.pwned += 1
                             if "hash" in result:
                                 self.data.append(("BREACHDR_HASH", result["hash"]))
+                                self.pwned += 1
                             if "source" in result:
                                 self.data.append(("BREACHDR_SOURCE", result["source"]))
+                                self.pwned += 1
+                            elif "sources" in result:
+                                self.data.append(("BREACHDR_SOURCE", result["sources"]))
                                 self.pwned += 1
                             else:
                                 self.data.append(("BREACHDR_SOURCE", "N/A"))
                     # Follow up with an aggregated leak sources query
-                    url_src = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
-                    req = self.make_request(
-                        url_src, timeout=60
-                    )
-                    if req.status_code == 200:
-                        response = req.json()
-                        if response["sources"] is not None:
-                            for result in response["sources"]:
-                                self.data.append(("BREACHDR_EXTSRC", result))
+                    if not use_rapidapi:
+                        url_src = "https://breachdirectory.org/api/index?username={user}&password={passw}&func={mode}&term={target}".format(user=user, passw=passw, mode="sources", target=self.target)
+                        req = self.make_request(url_src, timeout=60)
+                        if req.status_code == 200:
+                            response = req.json()
+                            if response.get("sources") is not None:
+                                for result in response["sources"]:
+                                    self.data.append(("BREACHDR_EXTSRC", result))
                     ## If using the 'auto' mode instead of pastes
                     #     c.good_news(
                     #         "Found {num} entries for {target} using breachdirectory.org".format(
@@ -895,6 +929,25 @@ class target:
                     #             source = result["sources"][0]
                     #         self.data.append(("BREACHDR_SOURCE", source))
                     #         self.pwned += 1
+            else:
+                if use_rapidapi and req.status_code == 429:
+                    try:
+                        body = req.json()
+                        msg = body.get("message", "") if isinstance(body, dict) else ""
+                    except Exception:
+                        msg = ""
+                    if "quota" in str(msg).lower() or "monthly" in str(msg).lower():
+                        c.bad_news("Breachdirectory RapidAPI quota exceeded for current plan")
+                    else:
+                        c.bad_news("Breachdirectory RapidAPI rate limit reached (429)")
+                elif self.debug:
+                    c.debug_news("Breachdirectory status code: {code}".format(code=req.status_code))
         except Exception as ex:
             c.bad_news(f"Breachdirectory error with {self.target}")
             print(ex)
+        finally:
+            if use_rapidapi:
+                if "x-rapidapi-host" in self.headers:
+                    del self.headers["x-rapidapi-host"]
+                if "x-rapidapi-key" in self.headers:
+                    del self.headers["x-rapidapi-key"]

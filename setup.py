@@ -7,7 +7,8 @@ from distutils.util import convert_path
 import os
 
 here = os.path.abspath(os.path.dirname(__file__))
-exec(open(os.path.join(here, "h8mail/utils/version.py")).read())
+with open(os.path.join(here, "h8mail/utils/version.py")) as version_file:
+    exec(version_file.read())
 
 with open("PyPi.rst") as readme_file:
     readme = readme_file.read()
@@ -42,7 +43,7 @@ setup(
     include_package_data=True,
     keywords="h8mail",
     name="h8mail",
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests", "tests.*"]),
     entry_points={"console_scripts": ["h8mail = h8mail.__main__:main"]},
     setup_requires=setup_requirements,
     url="https://github.com/khast3x/h8mail",

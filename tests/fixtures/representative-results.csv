@@ -1,0 +1,5 @@
+Target,Type,Data
+john.smith@gmail.com,SOURCE,test-creds.txt
+john.smith@gmail.com,PASS,SecretPASS
+test@evilcorp.com,SOURCE,test-creds.txt
+test@evilcorp.com,PASS,An0therSECRETpassw0rd

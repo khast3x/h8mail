@@ -8,8 +8,8 @@ h8mail
 .. image:: https://img.shields.io/pypi/v/h8mail.svg
         :target: https://pypi.python.org/pypi/h8mail
 
-.. image:: https://img.shields.io/travis/khast3x/h8mail.svg
-        :target: https://travis-ci.org/khast3x/h8mail
+.. image:: https://github.com/khast3x/h8mail/actions/workflows/ci.yml/badge.svg
+        :target: https://github.com/khast3x/h8mail/actions/workflows/ci.yml
 
 
 
@@ -47,4 +47,3 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-

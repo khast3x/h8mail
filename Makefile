@@ -54,11 +54,11 @@ lint: ## check style with flake8
 	black h8mail tests
 
 test: ## run tests quickly with the default Python
-	python3 setup.py test
+	python3 -m unittest discover --verbose
 
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source h8mail setup.py test
+	coverage run --source h8mail -m unittest discover
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html

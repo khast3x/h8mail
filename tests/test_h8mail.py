@@ -5,20 +5,21 @@
 
 
 import unittest
-import sys
-import time
 import tempfile
-import shutil
-import contextlib
 import os
-import tarfile
 import gzip
-import argparse
+import contextlib
+import io
+from pathlib import Path
 from h8mail.utils import run
 from h8mail.utils import classes
 from h8mail.utils import helpers
 from h8mail.utils import localsearch
 from h8mail.utils import localgzipsearch
+from h8mail.utils import print_json
+
+
+FIXTURES = Path(__file__).parent / "fixtures"
 
 def print_test_banner(testname):
     print("========================")
@@ -26,89 +27,185 @@ def print_test_banner(testname):
     print("\tTESTING: "+testname)
     print("========================")
     print("========================")
-
-
-def make_temp_directory():
-    emails = """
-    john.smith@gmail.com
-    john.smith@gmail.com
-    fijsdhkfnhqsdkf
-    fdqfqsdff
-    test@evilcorp.com
-    notfound@email.com
-    """
-    creds = """
-    john.smith@gmail.com:SecretPASS
-    bloblfd
-    fjsdkf,ds
-    test@evilcorp.com:An0therSECRETpassw0rd
-    ddqsdqs
-    """
-    temp_dir = tempfile.mkdtemp()
-    try:
-        fd_emails = open(os.path.join(temp_dir, "test-emails.txt"), "w")
-        fd_emails.writelines(emails)
-        fd_emails.close()
-        fd_creds = open(os.path.join(temp_dir, "test-creds.txt"), "w")
-        fd_creds.writelines(creds)
-        fd_creds.close()
-        tar = tarfile.open(os.path.join(temp_dir, "test-creds.tar.gz"), "w:gz")
-        tar.add(os.path.join(temp_dir, "test-creds.txt"))
-        tar.close()
-
-        return temp_dir
-    except Exception as e:
-        print(e)
-
+    
 
 class TestH8mail(unittest.TestCase):
     """Tests for `h8mail` package."""
 
+    def write_text_file(self, filename, content):
+        """Write content to a text file in temp_dir."""
+        path = os.path.join(self.temp_path, filename)
+        with open(path, "w", encoding="utf-8") as file_handle:
+            file_handle.write(content)
+        return path
+    
+    def write_gzip_file(self, filename, content):
+        """Write content to a gzip file in temp_dir."""
+        path = os.path.join(self.temp_path, filename)
+        with gzip.open(path, "wt", encoding="utf-8") as file_handle:
+            file_handle.write(content)
+        return path
+
     def setUp(self):
-        """Generating local files"""
-        self.temp_dir = make_temp_directory()
-        print("Created Temp Dir: " + self.temp_dir)
-        print(os.listdir(self.temp_dir))
-        self.filetargets = os.path.join(self.temp_dir, "test-emails.txt")
-        self.filetxt = os.path.join(self.temp_dir, "test-creds.txt")
-        self.filegz = os.path.join(self.temp_dir, "test-creds.tar.gz")
-        print("Test files generated in : " + self.temp_dir)
+        """Generating local files with automatic cleanup (Python 3.10+)"""
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_path = self.temp_dir.name
+        print(f"Created Temp Dir: {self.temp_path}")
+        print(f"Registering dir + content for auto cleanup: {self.temp_path}")
+        
+        self.addCleanup(self.temp_dir.cleanup)
 
-        # a = open(self.filetxt, "r")
-        # print(a.readlines())
 
-    def tearDown(self):
-        """Cleaning temp files"""
-        print("Removing dir + content: " + self.temp_dir)
-        shutil.rmtree(self.temp_dir)
+        # --- Dummy Data ---
+        emails = """
+        john.smith@gmail.com
+        test@example.com
+        fijsdhkfnhqsdkf
+        fdqfqsdff
+        test@evilcorp.com
+        notfound@email.com
+        """
 
-    def test_000_simple(self):
-        """Simple test"""
+        creds = """
+        john.smith@gmail.com:SecretPASS
+        bloblfd
+        fjsdkf,ds
+        test@evilcorp.com:An0therSECRETpassw0rd
+        ddqsdqs
+        """
+
+        self.filetargets = self.write_text_file("test-emails.txt", emails)
+        self.filetxt = self.write_text_file("test-creds.txt", creds)
+                
+        self.filegz = self.write_gzip_file("test-creds.txt.gz", creds)
+            
+        print(f"Test files generated in : {self.temp_path}")
+
+
+    @unittest.skipUnless(
+        os.getenv("RUN_INTEGRATION_TEST") == "1",
+        "Skipping integration test by default. Set RUN_INTEGRATION_TEST=1 to run."
+    )
+    def test_000_simple_integration_test(self):
+        """Simple integration test"""
         run.print_banner()
         print_test_banner("VANILLA")
 
         user_args = run.parse_args(["-t", "test@example.com"])
         run.h8mail(user_args)
 
-    def test_002_local_files_txt_gz(self):
-        """Local file search Test"""
-        run.print_banner()
-        print_test_banner("TXT LOCAL")
-        user_args_lb = run.parse_args(["-t", self.filetargets, "-lb", self.filetxt, "-sk"])
-        run.h8mail(user_args_lb)
-        print_test_banner("TXT LOCAL-SINGLFILE")
-        user_args_lb = run.parse_args(["-t", self.filetargets, "-lb", self.filetxt, "-sk", "-sf"])
-        run.h8mail(user_args_lb)
+    def test_001_cleartext_local_search_returns_exact_matches(self):
+        """Clear-text searches return structured matches without network access."""
+        results = localsearch.local_search_single(
+            [self.filetxt],
+            ["john.smith@gmail.com", "missing@example.com"],
+        )
 
-        run.print_banner()
-        print_test_banner("GZ LOCAL")
-        user_args_gz = run.parse_args(["-t", self.filetargets, "-gz", self.filegz, "-sk"])
-        run.h8mail(user_args_gz)
-        print_test_banner("GZ LOCAL-SINGLEFILE")
-        user_args_gz = run.parse_args(["-t", self.filetargets, "-gz", self.filegz, "-sk", "-sf"])
-        run.h8mail(user_args_gz)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].target, "john.smith@gmail.com")
+        self.assertEqual(results[0].filepath, self.filetxt)
+        self.assertEqual(results[0].line, 1)
+        self.assertEqual(
+            results[0].content.strip(),
+            "john.smith@gmail.com:SecretPASS",
+        )
 
-    def test_003_url(self):
+    def test_002_gzip_local_search_returns_exact_matches(self):
+        """Gzip searches return structured matches without network access."""
+        results = localgzipsearch.local_search_single_gzip(
+            [self.filegz],
+            ["test@evilcorp.com", "missing@example.com"],
+        )
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].target, "test@evilcorp.com")
+        self.assertEqual(results[0].filepath, self.filegz)
+        self.assertEqual(results[0].line, 4)
+        self.assertEqual(
+            results[0].content.strip(),
+            "test@evilcorp.com:An0therSECRETpassw0rd",
+        )
+
+    def test_003_local_results_are_added_to_matching_targets_only(self):
+        """Local results preserve their source and update only matching targets."""
+        matched = classes.target("john.smith@gmail.com")
+        unmatched = classes.target("missing@example.com")
+        local_result = classes.local_breach_target(
+            "john.smith@gmail.com",
+            self.filetxt,
+            1,
+            "john.smith@gmail.com:SecretPASS\n",
+        )
+        user_args = run.parse_args(["-t", "john.smith@gmail.com", "-sk"])
+
+        results = localsearch.local_to_targets(
+            [matched, unmatched],
+            [local_result],
+            user_args,
+        )
+
+        self.assertIs(results[0], matched)
+        self.assertEqual(matched.pwned, 1)
+        self.assertEqual(unmatched.pwned, 0)
+        self.assertEqual(
+            matched.data[-1],
+            (
+                "LOCALSEARCH",
+                "[test-creds.txt] Line 1: john.smith@gmail.com:SecretPASS",
+                "john.smith@gmail.com:SecretPASS",
+            ),
+        )
+
+    def test_004_parse_args_accepts_local_search_options(self) -> None:
+        """Verify CLI argument parser correctly assigns local search flags."""
+        arguments = run.parse_args(
+            [
+                "-t",
+                "john.smith@gmail.com",
+                "test@example.com",
+                "-lb",
+                "/tmp/synthetic-breach.txt",
+                "-sk",
+                "-sf",
+            ]
+        )
+
+        self.assertEqual(
+            arguments.user_targets,
+            ["john.smith@gmail.com", "test@example.com"],
+        )
+        self.assertEqual(
+            arguments.local_breach_src,
+            ["/tmp/synthetic-breach.txt"],
+        )
+        self.assertTrue(arguments.skip_defaults)
+        self.assertTrue(arguments.single_file)
+        self.assertIsNone(arguments.user_urls)
+
+    def test_005_parse_args_uses_safe_expected_defaults(self):
+        """Verify CLI argument parser defaults to safe, expected values when given only a target."""
+        arguments = run.parse_args(["-t", "john.smith@gmail.com"])
+        self.assertFalse(arguments.skip_defaults)
+        self.assertFalse(arguments.single_file)
+        self.assertFalse(arguments.loose)
+        self.assertFalse(arguments.debug)
+        self.assertIsNone(arguments.output_file)
+        self.assertIsNone(arguments.output_json)
+
+    def test_006_parse_args_accepts_single_target(self) -> None:
+        """Verify CLI argument parser correctly assigns a single email target."""
+        arguments = run.parse_args(["-t", "john.smith@gmail.com"])
+
+        self.assertEqual(arguments.user_targets, ["john.smith@gmail.com"])
+        self.assertIsNone(arguments.local_breach_src)
+        self.assertIsNone(arguments.user_urls)
+
+    @unittest.skipUnless(
+        os.getenv("RUN_INTEGRATION_TEST") == "1",
+        "Skipping integration test by default. Set RUN_INTEGRATION_TEST=1 to run.",
+    )
+    def test_007_url(self):
+        """Fetch targets from a live URL."""
         run.print_banner()
         print_test_banner("URL-RAW")
         user_args_lb = run.parse_args(["-u", "https://raw.githubusercontent.com/khast3x/h8mail/master/tests/test_email.txt"])
@@ -117,3 +214,96 @@ class TestH8mail(unittest.TestCase):
         print_test_banner("URL-MESSY")
         user_args_lb = run.parse_args(["-u", "https://raw.githubusercontent.com/khast3x/h8mail/master/tests/test_email.txt"])
         run.h8mail(user_args_lb)
+
+    def test_008_help_is_successful_and_documents_supported_inputs(self):
+        """The public parser exposes the supported input and output options."""
+        output = io.StringIO()
+
+        with contextlib.redirect_stdout(output):
+            with self.assertRaises(SystemExit) as raised:
+                run.parse_args(["--help"])
+
+        self.assertEqual(raised.exception.code, 0)
+        help_text = output.getvalue()
+        for option in (
+            "--targets",
+            "--url",
+            "--skip-defaults",
+            "--local-breach",
+            "--gzip",
+            "--output",
+            "--json",
+        ):
+            self.assertIn(option, help_text)
+
+    def test_009_unknown_cli_option_exits_with_usage_error(self):
+        """Unknown CLI options retain argparse's status-2 error contract."""
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as raised:
+                run.parse_args(["--not-a-real-option"])
+
+        self.assertEqual(raised.exception.code, 2)
+
+    def representative_targets(self):
+        """Build deterministic target data shared by output characterizations."""
+        first = classes.target("john.smith@gmail.com")
+        first.pwned = 1
+        first.data.extend(
+            [
+                ("SOURCE", "test-creds.txt"),
+                ("PASS", "SecretPASS"),
+            ]
+        )
+        second = classes.target("test@evilcorp.com")
+        second.pwned = 1
+        second.data.extend(
+            [
+                ("SOURCE", "test-creds.txt"),
+                ("PASS", "An0therSECRETpassw0rd"),
+            ]
+        )
+        return [first, second]
+
+    def test_010_csv_output_matches_characterization_fixture(self):
+        """Representative CSV output remains byte-for-byte compatible."""
+        destination = Path(self.temp_path) / "results.csv"
+
+        helpers.save_results_csv(destination, self.representative_targets())
+        fixture_rows = (
+            FIXTURES / "representative-results.csv"
+        ).read_text(encoding="utf-8").splitlines()
+        expected = ("\r\n".join(fixture_rows) + "\r\n").encode("utf-8")
+
+        self.assertEqual(destination.read_bytes(), expected)
+
+    def test_011_json_output_matches_characterization_fixture(self):
+        """Representative JSON output remains byte-for-byte compatible."""
+        destination = Path(self.temp_path) / "results.json"
+
+        print_json.save_results_json(destination, self.representative_targets())
+        expected = (
+            (FIXTURES / "representative-results.json")
+            .read_text(encoding="utf-8")
+            .rstrip("\n")
+            .encode("utf-8")
+        )
+
+        self.assertEqual(destination.read_bytes(), expected)
+
+    def test_012_search_rejects_missing_input_mode(self):
+        """A search without targets or URLs exits with status 1."""
+        with self.assertRaises(SystemExit) as raised:
+            run.h8mail(run.parse_args([]))
+
+        self.assertEqual(raised.exception.code, 1)
+
+    def test_013_search_rejects_conflicting_input_modes(self):
+        """Targets and URLs are mutually exclusive search inputs."""
+        arguments = run.parse_args(
+            ["-t", "alice@example.com", "-u", "https://example.com"]
+        )
+
+        with self.assertRaises(SystemExit) as raised:
+            run.h8mail(arguments)
+
+        self.assertEqual(raised.exception.code, 1)

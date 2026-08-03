@@ -1,0 +1,1 @@
+{"targets": [{"target": "john.smith@gmail.com", "pwn_num": 1, "data": [["SOURCE:test-creds.txt"], ["PASS:SecretPASS"]]}, {"target": "test@evilcorp.com", "pwn_num": 1, "data": [["SOURCE:test-creds.txt"], ["PASS:An0therSECRETpassw0rd"]]}]}

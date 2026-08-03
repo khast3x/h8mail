@@ -1,0 +1,41 @@
+name: Integration tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 1"
+      timezone: "Europe/London"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: integration-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration:
+    name: Python 3.13
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --editable .
+
+      - name: Run integration tests
+        env:
+          RUN_INTEGRATION_TEST: "1"
+        run: python -m unittest tests.test_h8mail --verbose

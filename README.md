@@ -56,6 +56,15 @@
 
 ### :package: `pip3 install h8mail`
 
+On Linux, [OTinstaller](https://github.com/OSINTVerseHQ/OTinstaller), a third-party tool manager, can install the PyPI release into its own virtualenv; it saves each run's output under `./results/`. It isn't maintained by the h8mail authors, so please report problems with it [on the OTinstaller tracker](https://github.com/OSINTVerseHQ/OTinstaller/issues).
+
+```bash
+$ pipx install otinstaller
+$ otinstaller init
+$ otinstaller install h8mail
+$ otinstaller run h8mail -- -t target@example.com   # same as: h8mail -t target@example.com
+```
+
 -----
 
 
